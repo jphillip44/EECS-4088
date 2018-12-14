@@ -1,35 +1,27 @@
 #!/usr/bin/python3
 
 from flask import Flask, request, render_template
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, join_room, emit
 import json
 
+# initialize Flask
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 socketio = SocketIO(app)
+ROOMS = {} # dict to track active rooms
 
-@app.route('/test/')
-def front():
-    return '<h1>Hello World</h1>'
+@app.route('/')
+def index():
+    """Serve the index HTML"""
+    return render_template('index3.html')
 
-def messageReceived(methods=['GET', 'POST']):
-    print('message was received!!!')
-
-@app.route('/cl/', methods=['POST'])
-def cl_index():
-    jsondata = request.get_json()
-    data = json.loads(jsondata)
-    print(data['input']['topic1'])
-    print(data['input']['topic2'])
-
-    result = {'escalate': True}
-    return json.dumps(result) 
-
-@socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
-    print('received my event: ' + str(json))
-    socketio.emit('my response', json, callback=messageReceived)
-
+@socketio.on('create')
+def on_create(data):
+    """Create a game lobby"""
+    print(data + " has logged in")
+    room = 'controller'
+    ROOMS[room] = 'controller'
+    join_room(room)
+    emit('join_room', {'room': room})
 
 if __name__ == '__main__':
     socketio.run(app)
