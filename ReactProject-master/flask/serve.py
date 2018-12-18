@@ -8,22 +8,26 @@ import json
 app = Flask(__name__)
 socketio = SocketIO(app)
 ROOMS = {} # dict to track active rooms
-USERS = {}
 
-@app.route('/')
-def index():
-    """Serve the index HTML"""
+users = []
+chatlog = []
+
+# This is a catch-all route, this allow for react to do client-side
+# routing and stoping flasks routing
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
     return render_template('index.html')
 
 @socketio.on('create')
 def on_create(data):
     """Create a game lobby"""
     print(data + " has logged in")
+    users.append(data)
     room = 'controller'
     ROOMS[room] = 'controller'
-    USERS[data] = 0
     join_room(room)
-    emit('join_room', USERS)
+    emit('join_room', {'room': users})
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app)
