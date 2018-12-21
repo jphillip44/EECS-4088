@@ -5,7 +5,7 @@ class UsernamePicker extends React.Component {
     constructor(props) {
         super(props);
         this.usernameInput = React.createRef();
-        this.socket = io('http://localhost:5000');
+        this.socket = io();
     }
 
     state = {
