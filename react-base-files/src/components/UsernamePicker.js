@@ -10,7 +10,7 @@ class UsernamePicker extends React.Component {
 
     state = {
         username: '',
-        userValid: false,
+        userValid: true,
         socketId: ''
       };
 
@@ -26,6 +26,11 @@ class UsernamePicker extends React.Component {
         this.socket.on('userInvalid', data => {
             this.setState({ userValid: data.userValid });
             this.props.updateUserValid(data.userValid);
+        });
+
+        this.socket.on('username', data => {
+            console.log(data.username);
+            this.props.history.push("/room");
         });
     }
     // Submits user data to server and updates usernamePicker and app component

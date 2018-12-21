@@ -2,6 +2,7 @@
 
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
+from uuid import uuid4
 import json
 
 # initialize Flask
@@ -11,17 +12,6 @@ ROOMS = {} # dict to track active rooms
 
 users = {}
 chatlog = {}
-
-# check inputed username against users list on server, emit true for non 
-# duplicate name 
-def checkUser(userData):
-    for user in users:
-        if user == userData["username"]:
-            return emit("userInvalid", {"userValid": False})
-    users[userData["username"]] = userData["socketId"]
-    return emit("userValid", {"userValid": True})
-
-
 
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
@@ -35,13 +25,18 @@ def index(path):
 def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
+    userInfo["username"] += (" #" + uuid4().hex)
     print(userInfo["username"] + " has logged in")
-    checkUser(userInfo)
+    emit('username', {'username': userInfo["username"]})
 
 # When the client disconnects from the socket
 @socketio.on('disconnect')
 def red():
     print("disconnected")
 
+@socketio.on('connect')
+def red():
+    print("connected")
+
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host="0.0.0.0")
