@@ -2,7 +2,6 @@
 
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
-from uuid import uuid4
 import json
 
 # initialize Flask
@@ -25,9 +24,9 @@ def index(path):
 def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
-    users[userInfo["socketId"]] = userInfo["username"]
-    print(users.get(userInfo["socketId"]) + " #" + userInfo["socketId"][:4]  + " has logged in")
-    emit('username', {'username': userInfo["username"]})
+    users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
+    print(users.get(userInfo["socketId"])  + " has logged in")
+    emit('username', {'username': users[userInfo["socketId"]]})
 
 # When the client disconnects from the socket
 @socketio.on('disconnect')
