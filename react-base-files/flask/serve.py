@@ -25,14 +25,14 @@ def index(path):
 def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
-    userInfo["username"] += (" #" + uuid4().hex)
-    print(userInfo["username"] + " has logged in")
+    users[userInfo["socketId"]] = userInfo["username"]
+    print(users.get(userInfo["socketId"]) + " #" + userInfo["socketId"][:4]  + " has logged in")
     emit('username', {'username': userInfo["username"]})
 
 # When the client disconnects from the socket
 @socketio.on('disconnect')
-def red():
-    print("disconnected")
+def dc():
+    print(users)
 
 @socketio.on('connect')
 def red():
