@@ -13,11 +13,16 @@ import NotFound from './NotFound';
 class App extends Component {
   state = {
     username: '',
+    userValid: false,
     socketId: ''
   };
 
   updateUsername = (username) => {
     this.setState({ username: username });
+  };
+
+  updateUserValid = (userValid) => {
+    this.setState({ userValid: userValid });
   };
 
   updateSocketId = (socketId) => {
@@ -34,6 +39,7 @@ class App extends Component {
                 render={(props) => <UsernamePicker {...props}
                   userState={this.state}
                   updateUsername={this.updateUsername}
+                  updateUserValid={this.updateUserValid}
                   updateSocketId={this.updateSocketId}  
                 />} 
               />

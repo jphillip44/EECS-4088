@@ -11,7 +11,7 @@ class Room extends React.Component {
                     <div className="container">
                         <div className="columns is-centered">
                             <div className="column is-6 has-text-centered">
-                                <h2>Room</h2>
+                                <h1 class="title is-1 has-text-white">Room</h1>
                                 <GameList />
                                 <ChatLog />
                                 <UserList />

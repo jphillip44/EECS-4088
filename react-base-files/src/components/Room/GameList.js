@@ -6,16 +6,20 @@ import Game4 from '../Games/Game4';
 import Game5 from '../Games/Game5';
 
 
-class GameList extends React.Component {
+class GameList extends React.Component { 
     render() {
         return (
-            <div>
-                <h2>Games</h2>
-                <Game1 />
-                <Game2 />
-                <Game3 />
-                <Game4 />
-                <Game5 />
+            <div className="card">
+                <header className="card-header">
+                    <p className="card-header-title">Games</p>
+                </header>
+                <div className="card-content">
+                    <Game1 />
+                    <Game2 />
+                    <Game3 />
+                    <Game4 />
+                    <Game5 /> 
+                </div>          
             </div>
         );
     }

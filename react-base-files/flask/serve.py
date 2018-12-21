@@ -12,9 +12,16 @@ ROOMS = {} # dict to track active rooms
 users = {}
 chatlog = {}
 
+# check inputed username against users list on server, emit true for non 
+# duplicate name 
 def checkUser(userData):
-    for username in userData:
-        print(username)
+    for user in users:
+        if user == userData["username"]:
+            return emit("userInvalid", {"userValid": False})
+    users[userData["username"]] = userData["socketId"]
+    return emit("userValid", {"userValid": True})
+
+
 
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
@@ -28,12 +35,8 @@ def index(path):
 def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
-    print(userInfo['username'])
-    print(userInfo['socketId'])
-    print(data + " has logged in")
-    #checkUser(data)
-    #emit('userValid', {'room': users})
-    #emit('userInvalid', {'room': users})
+    print(userInfo["username"] + " has logged in")
+    checkUser(userInfo)
 
 # When the client disconnects from the socket
 @socketio.on('disconnect')

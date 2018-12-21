@@ -8,20 +8,43 @@ class UsernamePicker extends React.Component {
         this.socket = io('http://localhost:5000');
     }
 
-    componentDidMount() {
-        this.socket.on('join_room', data => {
-            console.log(JSON.stringify(data));
-        })
-    }
+    state = {
+        username: '',
+        userValid: false,
+        socketId: ''
+      };
 
+    componentDidMount() {
+    // Username is valid, updates app and usernamepick state to true, and go
+    // to /room
+        this.socket.on('userValid', data => {
+            this.setState({ userValid: data.userValid });
+            this.props.updateUserValid(data.userValid);
+            this.props.history.push("/room");
+        });
+    // Username is invalid, updates app and usernamepick state to false   
+        this.socket.on('userInvalid', data => {
+            this.setState({ userValid: data.userValid });
+            this.props.updateUserValid(data.userValid);
+        });
+    }
+    // Submits user data to server and updates usernamePicker and app component
+    // state
     checkUsername = (event) => {
         event.preventDefault();
         this.props.updateUsername(this.usernameInput.current.value);
+        this.props.updateUserValid(this.state.userValid);
         this.props.updateSocketId(this.socket.id);
-        this.socket.emit('joinServer', JSON.stringify({
+        this.setState({
             username: this.usernameInput.current.value,
             socketId: this.socket.id
-        }));
+        }, () => {
+            this.socket.emit('joinServer', JSON.stringify({
+                username: this.state.username,
+                socketId: this.state.socketId
+            }));
+        });
+        
         // Clear the username input field
         this.usernameInput.current.value = '';
     } 
@@ -40,6 +63,11 @@ class UsernamePicker extends React.Component {
                                         <label className="label">Pick your username</label>
                                         <div className="field">
                                             <div className="control">
+                                                <div className="message is-danger is-small">
+                                                    <div className="message-body">
+                                                        {(this.state.userValid === false) ? `${this.state.username} is already being used` : ``}
+                                                    </div>
+                                                </div>
                                                 <input
                                                     className="input"
                                                     type="text"
