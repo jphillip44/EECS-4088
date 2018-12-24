@@ -1,24 +1,17 @@
 import React from 'react';
-import Game1 from '../Games/Game1';
-import Game2 from '../Games/Game2';
-import Game3 from '../Games/Game3';
-import Game4 from '../Games/Game4';
-import Game5 from '../Games/Game5';
-
+import { Link } from 'react-router-dom';
 
 class GameList extends React.Component { 
     render() {
         return (
-            <div className="card">
-                <header className="card-header">
-                    <p className="card-header-title">Games</p>
-                </header>
-                <div className="card-content">
-                    <Game1 />
-                    <Game2 />
-                    <Game3 />
-                    <Game4 />
-                    <Game5 /> 
+            <div className="box">
+                <h1 className="title">Games</h1>
+                <div className="content">
+                    <Link to="/Game1">Game1</Link>
+                    <Link to="/Game2">Game2</Link>
+                    <Link to="/Game3">Game3</Link>
+                    <Link to="/Game4">Game4</Link>
+                    <Link to="/Game5">Game5</Link>
                 </div>          
             </div>
         );

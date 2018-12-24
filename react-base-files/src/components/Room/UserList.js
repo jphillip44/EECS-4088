@@ -3,9 +3,13 @@ import React from 'react';
 class UserList extends React.Component {
     render() {
         return (
-            <div className="card">
-                <h2>Users</h2>
-                <p>sssadfd</p>
+            <div className="box">
+                <h1 className="title">Users</h1>
+                <div className="content">
+                    {this.props.users.map((item) => (
+                        <p key={item}>{item}</p>
+                    ))}                    
+                </div>             
             </div>
         );
     }

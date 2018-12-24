@@ -1,16 +1,17 @@
 import React from 'react';
 import io from 'socket.io-client';
+import UsernameNotification from './UsernameNotification';
 
 class UsernamePicker extends React.Component {
     constructor(props) {
         super(props);
         this.usernameInput = React.createRef();
-        this.socket = io();
+        this.socket = io('http://localhost:5000');
     }
 
     state = {
         username: '',
-        userValid: true,
+        userValid: null,
         socketId: ''
       };
 
@@ -18,25 +19,35 @@ class UsernamePicker extends React.Component {
     // Username is valid, updates app and usernamepick state to true, and go
     // to /room
         this.socket.on('userValid', data => {
-            this.setState({ userValid: data.userValid });
-            this.props.updateUserValid(data.userValid);
-            this.props.history.push("/room");
-        });
-    // Username is invalid, updates app and usernamepick state to false   
-        this.socket.on('userInvalid', data => {
-            this.setState({ userValid: data.userValid });
-            this.props.updateUserValid(data.userValid);
-        });
+            if(data.userValid) {
+                console.log(1111111111111111111111);
+                this.setState({ userValid: data.userValid });
+                this.props.updateUserValid(data.userValid);
 
-        this.socket.on('username', data => {
-            console.log(data.username);
-            this.props.history.push("/room");
+                this.props.history.push("/room");
+            } else {
+               console.log(222222222222222222);
+                this.setState({ userValid: data.userValid });
+                this.props.updateUserValid(data.userValid); 
+            }          
         });
+    }
+    componentWillUnmount() {
+        this.socket.emit('sendToServer', {
+            type: 'deleteUsers',
+            username: window.localStorage.getItem('username'),
+            socketId: this.socket.id,
+            message: "" 
+        });
+        console.log('DELETE');
     }
     // Submits user data to server and updates usernamePicker and app component
     // state
     checkUsername = (event) => {
         event.preventDefault();
+        // Save username to localstorage for persistance
+        window.localStorage.setItem('username', this.usernameInput.current.value);
+
         this.props.updateUsername(this.usernameInput.current.value);
         this.props.updateUserValid(this.state.userValid);
         this.props.updateSocketId(this.socket.id);
@@ -54,7 +65,7 @@ class UsernamePicker extends React.Component {
         this.usernameInput.current.value = '';
     } 
 
-    render() {   
+    render() {
         return (
             <div className="hero is-fullheight">
                 <div className="hero-body">
@@ -68,11 +79,7 @@ class UsernamePicker extends React.Component {
                                         <label className="label">Pick your username</label>
                                         <div className="field">
                                             <div className="control">
-                                                <div className="message is-danger is-small">
-                                                    <div className="message-body">
-                                                        {(this.state.userValid === false) ? `${this.state.username} is already being used` : ``}
-                                                    </div>
-                                                </div>
+                                                {this.state.userValid === false && <UsernameNotification />}
                                                 <input
                                                     className="input"
                                                     type="text"
@@ -85,10 +92,7 @@ class UsernamePicker extends React.Component {
                                         </div>
                                         <div className="field">
                                             <div className="control">
-                                                <button 
-                                                    type="submit"
-                                                    className="button is-info is-fullwidth"
-                                                >
+                                                <button type="submit" className="button is-info is-fullwidth">
                                                     Submit
                                                 </button>
                                             </div>
