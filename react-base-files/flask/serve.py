@@ -4,7 +4,6 @@ from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
 import json
 
-from games import *
 from factory import Factory
 
 # initialize Flask
@@ -35,8 +34,14 @@ def joinServer(data):
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
+    emit('games', {'games': Factory().list_games()})
     # game = Factory().set_game(g)
     # game.foo()
+
+@socketio.on('createGame')
+def createGame(data):
+    game = Factory().set_game(data)
+
 
 def background():
     i = 0
