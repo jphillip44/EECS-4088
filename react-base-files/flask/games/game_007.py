@@ -5,7 +5,6 @@ class _007(Game):
     state = {}
     attack_queue = Queue()
 
-
     def play(self):
         self.set_state(self.players.values())
         print(self.state)
