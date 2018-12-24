@@ -5,6 +5,7 @@ from flask_socketio import SocketIO, join_room, emit
 import json
 
 from games import *
+from factory import Factory
 
 # initialize Flask
 app = Flask(__name__)
@@ -27,14 +28,14 @@ def index(path):
 def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
-    # test = userInfo["username"]
+    # if userInfo["username"] == '454':
+    #     g = "Game1"
+    # else:
+    #     g = "Game2"
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
-    # if test == "454":
-    #     game = Game1()
-    # else:
-    #     game = Game2()
+    # game = Factory().set_game(g)
     # game.foo()
 
 def background():
