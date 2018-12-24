@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+# from eventlet import monkey_patch
+# monkey_patch()
+
 from threading import Thread
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
@@ -26,18 +29,20 @@ def index(path):
 @socketio.on('joinServer')
 def joinServer(data):
     """Create a game lobby"""
+    print("test")
     userInfo = json.loads(data)
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
+    emit('username', {'username': "test"})
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
     emit('games', {'games': GameList().list_games()})
-    # if userInfo["username"] == '454':
-    #     g = "Game1"
-    # else:
-    #     g = "Game2"
-    # game = GameList.select_game(g)
-    # game.foo()
-    # print(GameList().list_games())
+    if userInfo["username"] == '454':
+        g = "_007"
+    else:
+        g = "Hot_Potatoe"
+    game = GameList.select_game(g, users)
+    game.play()
+    print(GameList().list_games())
 
 @socketio.on('createGame')
 def createGame(data):
@@ -57,13 +62,14 @@ def background():
 #     print("a")
 
 # When the client disconnects from the socket
-# @socketio.on('disconnect')
+@socketio.on('disconnect')
 def dc():
-    del users[request.sid]
+    # del users[request.sid]
+    print("dc " + request.sid)
 
-# @socketio.on('connect')
-# def con():
-#     # print("con " + request.sid)
+@socketio.on('connect')
+def con():
+    print("con " + request.sid) 
 #     gm = game.Start(socketio)
 
 

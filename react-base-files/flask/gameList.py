@@ -2,9 +2,9 @@ from games import *
 from singleton import Singleton
 
 class GameList(Singleton):
-    
-    def select_game(type):
-        return eval(type)
+
+    def select_game(type, users):
+        return eval(type + '('+str(users)+')')
 
     def list_games(self):
         return [game.__name__ for game in Game.__subclasses__()]

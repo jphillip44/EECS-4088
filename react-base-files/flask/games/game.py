@@ -3,13 +3,10 @@ from abc import ABC, abstractmethod
 
 class Game(ABC):
 
-    def __init__(self):
-        # self.value = values
+    def __init__(self, players):
+        self.players = players
         super().__init__()
 
     @abstractmethod
-    def foo():
+    def play(self):
         pass
-
-    def eval(self):
-        return eval(self)

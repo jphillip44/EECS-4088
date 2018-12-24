@@ -1,6 +1,6 @@
 from game import Game
 
-class Game2(Game):
+class Hot_Potatoe(Game):
 
-    def foo():
+    def play(self):
         print("bar")
