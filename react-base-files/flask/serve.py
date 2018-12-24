@@ -10,6 +10,7 @@ from factory import Factory
 app = Flask(__name__)
 socketio = SocketIO(app)
 ROOMS = {} # dict to track active rooms
+global game
 
 users = {}
 chatlog = {}
@@ -27,21 +28,14 @@ def index(path):
 def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
-    # if userInfo["username"] == '454':
-    #     g = "Game1"
-    # else:
-    #     g = "Game2"
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
     emit('games', {'games': Factory().list_games()})
-    # game = Factory().set_game(g)
-    # game.foo()
 
 @socketio.on('createGame')
 def createGame(data):
-    game = Factory().set_game(data)
-
+    game = Factory().set_game(g)
 
 def background():
     i = 0

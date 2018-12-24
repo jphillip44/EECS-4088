@@ -1,7 +1,7 @@
 import games
 import os
 
-class Factory(games.Game):
+class Factory():
 
     def set_game(self, type):
         if type == "Game1": return games.Game1()
@@ -14,6 +14,3 @@ class Factory(games.Game):
                 games_list.append(file.split('.')[0])
         return games_list
         
-
-    def foo(self):
-        pass
