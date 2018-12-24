@@ -4,10 +4,6 @@ from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
 import json
 
-# import glob
-# modules = glob.glob('games/*.py')
-# from games import *
-# from games import *
 from games import *
 
 # initialize Flask
@@ -31,15 +27,15 @@ def index(path):
 def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
-    test = userInfo["username"]
+    # test = userInfo["username"]
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
-    if test == "454":
-        game = Game1()
-    else:
-        game = Game2()
-    game.foo()
+    # if test == "454":
+    #     game = Game1()
+    # else:
+    #     game = Game2()
+    # game.foo()
 
 def background():
     i = 0
