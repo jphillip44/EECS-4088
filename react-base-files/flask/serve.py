@@ -31,12 +31,13 @@ def joinServer(data):
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
     emit('games', {'games': GameList().list_games()})
-    if userInfo["username"] == '454':
-        g = "Game1"
-    else:
-        g = "Game2"
-    game = GameList.select_game(g)
-    game.foo()
+    # if userInfo["username"] == '454':
+    #     g = "Game1"
+    # else:
+    #     g = "Game2"
+    # game = GameList.select_game(g)
+    # game.foo()
+    # print(GameList().list_games())
 
 @socketio.on('createGame')
 def createGame(data):

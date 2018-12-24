@@ -10,3 +10,6 @@ class Game(ABC):
     @abstractmethod
     def foo():
         pass
+
+    def eval(self):
+        return eval(self)

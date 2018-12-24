@@ -1,15 +1,12 @@
 from games import *
-import os
+from singleton import Singleton
 
-class GameList():
-
+class GameList(Singleton):
+    
     def select_game(type):
         return eval(type)
 
     def list_games(self):
-        games_list = []
-        for file in os.listdir('games'):
-            if file != 'game.py' and file[0] != '_':
-                games_list.append(file.split('.')[0])
-        return games_list
+        return [game.__name__ for game in Game.__subclasses__()]
+
         
