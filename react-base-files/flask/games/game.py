@@ -8,5 +8,5 @@ class Game(ABC):
         super().__init__()
 
     @abstractmethod
-    def foo(self):
+    def foo():
         pass

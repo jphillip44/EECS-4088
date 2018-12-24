@@ -4,13 +4,12 @@ from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
 import json
 
-from factory import Factory
+from gameList import GameList
 
 # initialize Flask
 app = Flask(__name__)
 socketio = SocketIO(app)
 ROOMS = {} # dict to track active rooms
-global game
 
 users = {}
 chatlog = {}
@@ -31,11 +30,18 @@ def joinServer(data):
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
-    emit('games', {'games': Factory().list_games()})
+    emit('games', {'games': GameList().list_games()})
+    if userInfo["username"] == '454':
+        g = "Game1"
+    else:
+        g = "Game2"
+    game = GameList.select_game(g)
+    game.foo()
 
 @socketio.on('createGame')
 def createGame(data):
-    game = Factory().set_game(g)
+    global game
+    game = GameList().select_game(data)
 
 def background():
     i = 0
