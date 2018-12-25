@@ -18,7 +18,7 @@ class _007(Game):
 
     def set_state(self, players):
         for player in players:
-            self.state[player] = {'lives' :3, 'ap':1, 'defend': 'none'}
+            self.state[player] = {'lives' : 3, 'ap': 1, 'defend': 'none'}
 
     def defend(self, player):
         self.state[player]['defend'] = "all"
@@ -34,11 +34,11 @@ class _007(Game):
     def attack(self, player, other):
         if self.state[other]['defend'] == "all":
             self.state[other]['ap'] += 1
-            self.state[player]['ap'] -=1
+            self.state[player]['ap'] -= 1
         elif self.state[other]['defend'] == player:
-            self.state[player]['ap'] -=1
+            self.state[player]['ap'] -= 1
         else:
-            self.state[other]['lives'] -=1
+            self.state[other]['lives'] -= 1
 
     def action(self, data):
         if data['action'] == "attack":
@@ -50,7 +50,7 @@ class _007(Game):
     def handle_queues(self):
         while not self.other_queue.empty():
             action = self.other_queue.get()
-            exec(".".join(["self", action[1]]) + str(action[0]).join(['(\'','\')']))
+            exec('self.' + action[1] + "(\'" + str(action[0] + '\')'))
         while not self.target_queue.empty():
             action = self.target_queue.get()
             self.target(action[0], action[1])
@@ -63,11 +63,11 @@ class _007(Game):
         def check_dead():
             for player, stats in self.state.items():
                 if stats['lives'] != 'dead' and stats['lives'] <= 0:
-                    dead.put((-stats['ap'], player))
+                    dead.put((stats['ap'], player))
                     self.state[player]['lives'] = 'dead'
-                while not dead.empty():
-                    player = dead.get()
-                    self.ranks.put(player[1])
+            while not dead.empty():
+                player = dead.get()
+                self.ranks.put(player[1])
 
         def check_alive():
             for player, stats in self.state.items():
@@ -84,20 +84,6 @@ class _007(Game):
             while not self.ranks.empty():
                 print(str(i) + ": " + self.ranks.get())
                 i += 1
-                
-
-
-
-    def check_endgame(self):
-        def check_alive():
-            for player in self.state.values():
-                if player['lives']:
-                    yield player
-
-        if len(list(check_alive())) < 2:
-            for player, vals in self.state.items():
-                print(': '.join([player, str(vals['ap'] + vals['lives'])]))
-
 
 def main():
     game = _007(['A','B', 'C'])
@@ -133,10 +119,34 @@ def main():
     game.handle_queues()    # should trigger end game
     game.display()
 
-    game = _007(['A','B', 'C', 'D'])
+    game = _007(['A','B', 'C'])
     game.play()
     game.display()
-
+    game.action({'player': 'A', 'action': 'reload'})
+    game.action({'player': 'C', 'action': 'defend'})
+    game.action({'player': 'B', 'action': 'reload'})
+    game.handle_queues()
+    game.display()
+    game.action({'player': 'A', 'action': 'defend'})
+    game.action({'player': 'C', 'action': 'reload'})
+    game.action({'player': 'B', 'action': 'reload'})
+    game.handle_queues()
+    game.display()
+    game.action({'player': "C",'action': 'attack', "other": "A"})
+    game.action({'player': "B",'action': 'attack', "other": 'C'})
+    game.action({'player': "A",'action': 'attack', 'other':'B'})
+    game.handle_queues()
+    game.display()
+    game.action({'player': "C",'action': 'attack', "other": "A"})
+    game.action({'player': "B",'action': 'attack', "other": 'C'})
+    game.action({'player': "A",'action': 'attack', 'other':'B'})
+    game.handle_queues()
+    game.display()
+    game.action({'player': "C",'action': 'attack', "other": "A"})
+    game.action({'player': "B",'action': 'attack', "other": 'C'})
+    game.action({'player': "A",'action': 'attack', 'other':'B'})
+    game.handle_queues()    #triple kill
+    game.display() 
 if __name__ == '__main__':
     main()
 
