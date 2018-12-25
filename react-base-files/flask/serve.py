@@ -36,7 +36,7 @@ def joinServer(data):
     emit('username', {'username': users[userInfo["socketId"]]})
     emit('games', {'games': GameList().list_games()})
     if userInfo["username"] == '454':
-        g = "_007"
+        g = "Double07"
     else:
         g = "Hot_Potatoe"
     GameList.select_game(g, list(users.values())).play()
