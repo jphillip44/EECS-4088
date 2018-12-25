@@ -39,7 +39,7 @@ def joinServer(data):
         g = "_007"
     else:
         g = "Hot_Potatoe"
-    GameList.select_game(g, users).play()
+    GameList.select_game(g, list(users.values())).play()
     print(GameList().list_games())
 
 @socketio.on('createGame')
