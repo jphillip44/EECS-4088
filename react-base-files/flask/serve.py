@@ -29,7 +29,6 @@ def index(path):
 @socketio.on('joinServer')
 def joinServer(data):
     """Create a game lobby"""
-    print("test")
     userInfo = json.loads(data)
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
     emit('username', {'username': "test"})
@@ -40,8 +39,7 @@ def joinServer(data):
         g = "_007"
     else:
         g = "Hot_Potatoe"
-    game = GameList.select_game(g, users)
-    game.play()
+    GameList.select_game(g, users).play()
     print(GameList().list_games())
 
 @socketio.on('createGame')
