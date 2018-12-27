@@ -7,6 +7,11 @@ import io from 'socket.io-client';
 class Room extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            users: [],
+            chatLog: []
+        }
+
         this.socket = io('http://localhost:5000');
 
         this.socket.on('clients', (data) => {
@@ -14,18 +19,14 @@ class Room extends React.Component {
         });
         
         this.socket.on('userList', (data) => {
+            console.log("UserList: " + data);
             this.setState({ users: data });
         });
 
         this.socket.on('chatMessageFromServer', (data) => {
-            console.log(data);
+            console.log("chatMessageFromServer: " + data);
             this.setState({ chatLog: data });
         });
-    }
-
-    state = {
-        users: [],
-        chatLog: []
     }
 
     componentDidMount() {

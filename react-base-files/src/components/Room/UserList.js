@@ -6,8 +6,8 @@ class UserList extends React.Component {
             <div className="box">
                 <h1 className="title">Users</h1>
                 <div className="content">
-                    {this.props.users.map((item) => (
-                        <p key={item}>{item}</p>
+                    {this.props.users.map((user) => (
+                        <p key={user.socketId}>{user.username}</p>
                     ))}                    
                 </div>             
             </div>

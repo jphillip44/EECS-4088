@@ -55,10 +55,10 @@ class UsernamePicker extends React.Component {
             username: this.usernameInput.current.value,
             socketId: this.socket.id
         }, () => {
-            this.socket.emit('joinServer', JSON.stringify({
+            this.socket.emit('joinServer', {
                 username: this.state.username,
                 socketId: this.state.socketId
-            }));
+            });
         });
         
         // Clear the username input field
