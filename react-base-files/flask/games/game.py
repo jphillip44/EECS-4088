@@ -19,7 +19,6 @@ class Game(ABC):
     #     Each game defines its own play function and calls the necessary startup functions as needed.
     #     Is called at __init__.
     #     '''
-    #     pass
 
     @abstractmethod
     def action(self, data):
@@ -28,5 +27,4 @@ class Game(ABC):
         Each game can defines its own action function and parses `data' specifically as needed.
         The `data' field is a dictionary that can be loaded as json data.
         '''
-        pass
         
