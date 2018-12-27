@@ -8,7 +8,6 @@ class Double07(Game):
         the queue methods are used to sequence game moves by priority, not timing.
         __ranks is used to compute the winner.
     '''
-    __state = {}
     __attack_queue = Queue()
     __target_queue = Queue()
     __other_queue = Queue()
@@ -19,8 +18,8 @@ class Double07(Game):
         Sets up the games default parameters.
         '''
         super().__init__(players)
-        print("New "+self.__name__+" Started")
         self.__set_state(self._Game__players)
+        self.__input_timer = 15
 
     def action(self, data):
         '''
@@ -32,6 +31,21 @@ class Double07(Game):
             self.__target_queue.put((data['player'], data['other']))
         else:
             self.__other_queue.put((data['player'], data['action']))
+
+    def end_round(self):
+        '''
+        Inherited from Game. Handles game at the end of a round.
+        Processes the queues one at a time to prioritize actions.
+        First two queues setup defenses and reloads (not exclusively).
+        Last queue handles attacks.
+        '''
+        while not self.__other_queue.empty():
+            player, action = self.__other_queue.get()
+            getattr(self, '_'+self.__name__+'__' + action)(player)
+        while not self.__target_queue.empty():
+            self.__target(*self.__target_queue.get())
+        while not self.__attack_queue.empty():
+            self.__attack(*self.__attack_queue.get())
 
     def display(self):
         '''
@@ -82,20 +96,6 @@ class Double07(Game):
         else:
             self.__state[other]['hp'] -= 1
 
-    def __handle_queues(self):
-        '''
-        Processes the queues one at a time to prioritize actions.
-        First two queues setup defenses and reloads (not exclusively).
-        Last queue handles attacks.
-        '''
-        while not self.__other_queue.empty():
-            player, action = self.__other_queue.get()
-            getattr(self, '_'+self.__name__+'__' + action)(player)
-        while not self.__target_queue.empty():
-            self.__target(*self.__target_queue.get())
-        while not self.__attack_queue.empty():
-            self.__attack(*self.__attack_queue.get())
-
     def __rank_players(self):
         '''
         Ranks players based on order of death.
@@ -143,6 +143,7 @@ class Double07(Game):
             for player in alive:
                 self.__ranks.put(player) 
             print_standings(alive)
+            self.end_game()
 
 
 
@@ -153,31 +154,31 @@ def main():
     game.action({'player': "C", 'action': 'defend'})
     game.action({'player': "B", 'action': 'reload'})
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()    #test hit
+    game.end_round()    #test hit
     game.display()
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
     game.action({'player': "B", 'action': 'defend'})
     game.action({'player': "C", 'action': 'reload'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()    # test defend
+    game.end_round()    # test defend
     game.display()
     game.action({'player': "A", 'action': 'reload'})
     game.action({'player': "B", 'action': 'attack', 'other': 'C'})
     game.action({'player': "C", 'action': 'attack', 'other': 'B'})
-    getattr(game, "_"+game.__name__+"__handle_queues")() # test simultaneous fire
+    game.end_round() # test simultaneous fire
     game.display()
     game.action({'player': "C", 'action': 'reload'})
     game.action({'player': "B", 'action': 'attack', "other": 'C'})
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()    # test hit
+    game.end_round()    # test hit
     game.display()
     game.action({'player': "C", 'action': 'attack', "other": 'A'})
     game.action({'player': "B", 'action': 'attack', "other": 'C'})
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()    # test 3 way hit and death
+    game.end_round()    # test 3 way hit and death
     game.display()
     game.action({'player': "A", 'action': 'attack', 'other':'C'})
     game.action({'player': "C", 'action': 'reload'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()    # should trigger end game
+    game.end_round()    # should trigger end game
     game.display()
 
     game = Double07(['A','B', 'C'])
@@ -185,27 +186,27 @@ def main():
     game.action({'player': "A", 'action': 'reload'})
     game.action({'player': "C", 'action': 'defend'})
     game.action({'player': "B", 'action': 'reload'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()
+    game.end_round()
     game.display()
     game.action({'player': "A", 'action': 'defend'})
     game.action({'player': "C", 'action': 'reload'})
     game.action({'player': "B", 'action': 'reload'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()
+    game.end_round()
     game.display()
     game.action({'player': "C", 'action': 'attack', "other": 'A'})
     game.action({'player': "B", 'action': 'attack', "other": 'C'})
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()
+    game.end_round()
     game.display()
     game.action({'player': "C", 'action': 'attack', "other": 'A'})
     game.action({'player': "B", 'action': 'attack', "other": 'C'})
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()
+    game.end_round()
     game.display()
     game.action({'player': "C", 'action': 'attack', "other": 'A'})
     game.action({'player': "B", 'action': 'attack', "other": 'C'})
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
-    getattr(game, "_"+game.__name__+"__handle_queues")()    #triple kill
+    game.end_round()    #triple kill
     game.display() 
 
     # game = Double07([chr(c) for c in range(ord('A'), ord('Z') + 1)])

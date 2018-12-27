@@ -46,6 +46,23 @@ def joinServer(data):
 def createGame(data):
     global game
     game = GameList().select_game(data)
+    runGame()
+
+def runGame():
+    if game.is_active():
+        emit('state', {'state' : game.get_state()})
+        socketio.sleep(game.timed_event())
+        emit('timer')
+
+@socketio.on('endRound')
+    def endRound():
+        game.end_round()
+        game.display()
+        runGame()
+
+@socketio.on('button')
+    def action(data):
+        game.action(data)
 
 def background():
     i = 0
