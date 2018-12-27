@@ -37,15 +37,16 @@ class Double07(Game):
         '''
         Displays the game state to the console.
         '''
-        print(self.__state, end='\n')
+        print(self.__state)
         self.__rank_players()
 
     def __set_state(self, players):
         '''
         Setups the game state for each player with default parameters.
         '''
+        self.__state = {}
         for player in players:
-            self.__state[player] = {'lives' : 3, 'ap': 1, 'defend': 'none'}
+            self.__state[player] = {'hp' : 3, 'ap': 1, 'defend': 'none'}
 
     def __defend(self, player):
         '''
@@ -79,7 +80,7 @@ class Double07(Game):
         elif self.__state[other]['defend'] == player:
             self.__state[player]['ap'] -= 1
         else:
-            self.__state[other]['lives'] -= 1
+            self.__state[other]['hp'] -= 1
 
     def __handle_queues(self):
         '''
@@ -99,7 +100,7 @@ class Double07(Game):
         '''
         Ranks players based on order of death.
         Simultaneous deaths are tie-broken by the player with greater AP.
-            If that is tied, it is broken arbitrarily(pretty sure alphabetical order kicks in)
+            If that is tied, it is broken arbitrarily (pretty sure reverse alphabetical order kicks in)
         '''
         dead = PriorityQueue()
         def check_dead():
@@ -108,9 +109,9 @@ class Double07(Game):
             Adds players to ranking queue if they are dead.
             '''
             for player, stats in self.__state.items():
-                if stats['lives'] != 'dead' and stats['lives'] <= 0:
+                if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     dead.put((stats['ap'], player))
-                    self.__state[player]['lives'] = 'dead'
+                    self.__state[player]['hp'] = 'dead'
             while not dead.empty(): 
                 self.__ranks.put(dead.get()[1])
 
@@ -120,7 +121,7 @@ class Double07(Game):
             Returns a list of living players.
             '''
             for player, stats in self.__state.items():
-                if stats['lives'] != 'dead':
+                if stats['hp'] != 'dead':
                     yield player
 
         def print_standings(alive):
@@ -206,6 +207,10 @@ def main():
     game.action({'player': "A", 'action': 'attack', 'other': 'B'})
     getattr(game, "_"+game.__name__+"__handle_queues")()    #triple kill
     game.display() 
+
+    # game = Double07([chr(c) for c in range(ord('A'), ord('Z') + 1)])
+    game = Double07(map(chr, range(ord('a'),ord('z')+1)))
+    game.display()
     
 if __name__ == '__main__':
     main()
