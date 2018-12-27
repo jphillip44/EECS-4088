@@ -26,5 +26,6 @@ class Game(ABC):
         The action function represents a generic construct for handling inputs from a controller.
         Each game can defines its own action function and parses `data' specifically as needed.
         The `data' field is a dictionary that can be loaded as json data.
+        WARNING: will not run if this is not defined in the inherited class.
         '''
         
