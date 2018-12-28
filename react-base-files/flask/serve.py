@@ -51,9 +51,9 @@ def runGame():
     if game.is_active():
         emit('state', game.get_state())
         if game.timed_event():
-            emit('timerExpired')
+            emit('timerExpired', "")
     else:
-        emit('gameOver')
+        emit('gameOver', "")
 
 @socketio.on('endRound')
     def endRound():
@@ -61,7 +61,7 @@ def runGame():
         game.display()
         runGame()
 
-@socketio.on('button')
+@socketio.on('buttonPress')
     def action(data):
         game.action(data)
 
