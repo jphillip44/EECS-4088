@@ -48,18 +48,16 @@ def createGame(data):
     runGame()
 
 def runGame():
-    if game.is_active():
+    while game.is_active():
         emit('state', game.get_state())
         if game.timed_event():
             emit('timerExpired', "")
+        socketio.sleep(5)
+        game.end_round()
+        game.display()
     else:
         emit('gameOver', "")
 
-@socketio.on('endRound')
-    def endRound():
-        game.end_round()
-        game.display()
-        runGame()
 
 @socketio.on('buttonPress')
     def action(data):
@@ -90,6 +88,6 @@ def con():
 
 
 if __name__ == '__main__':
-    # Thread(target=background).start()
+    Thread(target=background).start()
     socketio.run(app, host="0.0.0.0")
     # wsgi.server(eventlet.listen(('0.0.0.0', 5000)), app)
