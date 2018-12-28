@@ -49,11 +49,11 @@ def createGame(data):
 
 def runGame():
     if game.is_active():
-        emit('state', {'state' : game.get_state()})
-        for i in game.timed_event():
-            print(i)
-            socketio.sleep(1)
-        emit('timer')
+        emit('state', game.get_state())
+        if game.timed_event():
+            emit('timerExpired')
+    else:
+        emit('gameOver')
 
 @socketio.on('endRound')
     def endRound():

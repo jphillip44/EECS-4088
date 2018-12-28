@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
+from time import sleep
 
 class Game(ABC):
     __state = {}
@@ -49,7 +50,10 @@ class Game(ABC):
         '''
         Allows setting of custom timer events for a game
         '''
-        return range(self.__input_timer, 0, -1)
+        for i in range(self.__input_timer, 0, -1):
+            print(i)
+            sleep(1)
+            return self.__input_timer > 0
 
     def get_state(self):
         '''
