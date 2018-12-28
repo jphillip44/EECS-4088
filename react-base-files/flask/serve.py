@@ -50,8 +50,8 @@ def createGame(data):
 def runGame():
     while game.is_active():
         emit('state', game.get_state())
-        if game.timed_event():
-            emit('timerExpired', "")
+        game.timed_event()
+        emit('timerExpired', "")
         socketio.sleep(5)
         game.end_round()
         game.display()

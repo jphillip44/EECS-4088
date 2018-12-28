@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
 from time import sleep
+from collections import OrderedDict
 
 class Game(ABC):
     __state = {}
@@ -46,14 +47,19 @@ class Game(ABC):
         '''
         return self.__active_game
 
-    def timed_event(self):
+    def timed_event(self, timer=None):
         '''
         Allows setting of custom timer events for a game
         '''
-        for i in range(self.__input_timer, 0, -1):
+        if timer is None:
+            timer = self.__input_timer
+        for i in range(timer, 0, -1):
             print(i)
             sleep(1)
-            return self.__input_timer > 0
+        print(0)
+
+    def set_timer(self, time):
+        self.__input_timer = time
 
     def get_state(self):
         '''

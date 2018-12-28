@@ -209,7 +209,6 @@ def main():
     game.end_round()    #triple kill
     game.display() 
 
-    # game = Double07([chr(c) for c in range(ord('A'), ord('Z') + 1)])
     game = Double07(map(chr, range(ord('a'),ord('z')+1)))
     game.display()
     
