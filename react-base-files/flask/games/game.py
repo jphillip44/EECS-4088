@@ -49,7 +49,7 @@ class Game(ABC):
         '''
         Allows setting of custom timer events for a game
         '''
-        return self.__input_timer
+        return range(self.__input_timer, 0, -1)
 
     def get_state(self):
         '''

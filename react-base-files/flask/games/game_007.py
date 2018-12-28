@@ -27,8 +27,8 @@ class Double07(Game):
         In Double07, passes off input to a series of queues for later processing.
         '''
         if data['action'] == "attack":
-            self.__attack_queue.put((data['player'], data['other']))
-            self.__target_queue.put((data['player'], data['other']))
+            self.__attack_queue.put((data['player'], data['target']))
+            self.__target_queue.put((data['player'], data['target']))
         else:
             self.__other_queue.put((data['player'], data['action']))
 
@@ -76,25 +76,25 @@ class Double07(Game):
         self.__state[player]['defend'] = "none"
         self.__state[player]['ap'] += 1
 
-    def __target(self, player, other):
+    def __target(self, player, target):
         '''
         Handles defend logic for attack action.
         Sets defense to attacker to prevent double attacks.
         '''
-        self.__state[player]['defend'] = other
+        self.__state[player]['defend'] = target
 
-    def __attack(self, player, other):
+    def __attack(self, player, target):
         '''
         Handles logic attack action.
         Handles different cases of success/failure.
         '''
-        if self.__state[other]['defend'] == "all":
-            self.__state[other]['ap'] += 1
+        if self.__state[target]['defend'] == "all":
+            self.__state[target]['ap'] += 1
             self.__state[player]['ap'] -= 1
-        elif self.__state[other]['defend'] == player:
+        elif self.__state[target]['defend'] == player:
             self.__state[player]['ap'] -= 1
         else:
-            self.__state[other]['hp'] -= 1
+            self.__state[target]['hp'] -= 1
 
     def __rank_players(self):
         '''
@@ -153,30 +153,30 @@ def main():
     game.display()
     game.action({'player': "C", 'action': 'defend'})
     game.action({'player': "B", 'action': 'reload'})
-    game.action({'player': "A", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    #test hit
     game.display()
-    game.action({'player': "A", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.action({'player': "B", 'action': 'defend'})
     game.action({'player': "C", 'action': 'reload'})
     game.end_round()    # test defend
     game.display()
     game.action({'player': "A", 'action': 'reload'})
-    game.action({'player': "B", 'action': 'attack', 'other': 'C'})
-    game.action({'player': "C", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "B", 'action': 'attack', 'target': 'C'})
+    game.action({'player': "C", 'action': 'attack', 'target': 'B'})
     game.end_round() # test simultaneous fire
     game.display()
     game.action({'player': "C", 'action': 'reload'})
-    game.action({'player': "B", 'action': 'attack', "other": 'C'})
-    game.action({'player': "A", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "B", 'action': 'attack', '"other"': 'C'})
+    game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    # test hit
     game.display()
-    game.action({'player': "C", 'action': 'attack', "other": 'A'})
-    game.action({'player': "B", 'action': 'attack', "other": 'C'})
-    game.action({'player': "A", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "C", 'action': 'attack', '"other"': 'A'})
+    game.action({'player': "B", 'action': 'attack', '"other"': 'C'})
+    game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    # test 3 way hit and death
     game.display()
-    game.action({'player': "A", 'action': 'attack', 'other':'C'})
+    game.action({'player': "A", 'action': 'attack', 'target':'C'})
     game.action({'player': "C", 'action': 'reload'})
     game.end_round()    # should trigger end game
     game.display()
@@ -193,19 +193,19 @@ def main():
     game.action({'player': "B", 'action': 'reload'})
     game.end_round()
     game.display()
-    game.action({'player': "C", 'action': 'attack', "other": 'A'})
-    game.action({'player': "B", 'action': 'attack', "other": 'C'})
-    game.action({'player': "A", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "C", 'action': 'attack', '"other"': 'A'})
+    game.action({'player': "B", 'action': 'attack', '"other"': 'C'})
+    game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()
     game.display()
-    game.action({'player': "C", 'action': 'attack', "other": 'A'})
-    game.action({'player': "B", 'action': 'attack', "other": 'C'})
-    game.action({'player': "A", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "C", 'action': 'attack', '"other"': 'A'})
+    game.action({'player': "B", 'action': 'attack', '"other"': 'C'})
+    game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()
     game.display()
-    game.action({'player': "C", 'action': 'attack', "other": 'A'})
-    game.action({'player': "B", 'action': 'attack', "other": 'C'})
-    game.action({'player': "A", 'action': 'attack', 'other': 'B'})
+    game.action({'player': "C", 'action': 'attack', '"other"': 'A'})
+    game.action({'player': "B", 'action': 'attack', '"other"': 'C'})
+    game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    #triple kill
     game.display() 
 

@@ -31,16 +31,15 @@ def joinServer(data):
     """Create a game lobby"""
     userInfo = json.loads(data)
     users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
-    emit('username', {'username': "test"})
     print(users.get(userInfo["socketId"])  + " has logged in")
     emit('username', {'username': users[userInfo["socketId"]]})
     emit('games', {'games': GameList().list_games()})
-    if userInfo["username"] == '454':
-        g = "Double07"
-    else:
-        g = "Hot_Potatoe"
-    GameList.select_game(g, list(users.values())).play()
-    print(GameList().list_games())
+    # if userInfo["username"] == '454':
+    #     g = "Double07"
+    # else:
+    #     g = "Hot_Potatoe"
+    # GameList.select_game(g, list(users.values())).play()
+    # print(GameList().list_games())
 
 @socketio.on('createGame')
 def createGame(data):
@@ -51,7 +50,9 @@ def createGame(data):
 def runGame():
     if game.is_active():
         emit('state', {'state' : game.get_state()})
-        socketio.sleep(game.timed_event())
+        for i in game.timed_event():
+            print(i)
+            socketio.sleep(1)
         emit('timer')
 
 @socketio.on('endRound')
