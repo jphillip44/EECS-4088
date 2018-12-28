@@ -60,8 +60,8 @@ def runGame():
 
 
 @socketio.on('buttonPress')
-    def action(data):
-        game.action(data)
+def action(data):
+    game.action(data)
 
 def background():
     i = 0
@@ -88,6 +88,6 @@ def con():
 
 
 if __name__ == '__main__':
-    Thread(target=background).start()
+    # Thread(target=background).start()
     socketio.run(app, host="0.0.0.0")
     # wsgi.server(eventlet.listen(('0.0.0.0', 5000)), app)
