@@ -65,10 +65,8 @@ def disconnect():
 
 # ----------------- 007 GAME ------------------
 
-# opponents stores username, socket id, lives, action points of opponents
-opponents = []
-# player stores username, socket id, lives, action points of the player
-player = {}
+# players stores username, socket id, lives, action points of all players
+players = {}
 # actions stores each users actions in the current round
 actions = []
 # function endOfRound cycles through the actions list and applies those actions
@@ -76,31 +74,19 @@ actions = []
 
 # broadcast is set to true so that when a user joins a game, it tells all other users
 # in the game an updated opponents list
-@socketio.on('initializeOpponentsStats')
-def initializeOpponentsStats(data):
-    # reset array on load
-    opponents = []
-    for user in users:
-        if user["username"] != data:
-            opponents.append({
-                "username": user["username"],
-                "socketId": user["socketId"],
-                "hp": 3,
-                "ap": 1
-            })
-    emit("opponentStats", opponents, broadcast=True) 
 
-@socketio.on('initializeplayerStats')
-def initializeplayerStats(data):
-   for user in users:
-        if user["username"] == data:
-            print('SOCKETS MATCH')
-            emit("playerStats", {
-                "username": user["username"],
-                "socketId": user["socketId"],
-                "hp": 3,
-                "ap": 1
-            }) 
+@socketio.on('initializePlayers')
+def initializePlayers():
+    # reset array on load
+    players = []
+    for user in users:
+        players.append({
+            "username": user["username"],
+            "socketId": user["socketId"],
+            "hp": 3,
+            "ap": 1
+        })
+    emit("allPlayers", players, broadcast=True) 
 
 @socketio.on('endOfRound')
 def endOfRound(data):
