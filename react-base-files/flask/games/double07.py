@@ -19,7 +19,7 @@ class Double07(Game):
         '''
         super().__init__(players)
         self.__set_state(self._Game__players)
-        self.__input_timer = 15
+        super().set_timer(15)
 
     def action(self, data):
         '''
@@ -31,6 +31,8 @@ class Double07(Game):
             self.__target_queue.put((data['player'], data['target']))
         else:
             self.__other_queue.put((data['player'], data['action']))
+        return False
+
 
     def end_round(self):
         '''
@@ -148,7 +150,7 @@ class Double07(Game):
 
 
 
-def main():
+if __name__ == '__main__':
     game = Double07(['A','B', 'C'])
     game.display()
     game.action({'player': "C", 'action': 'defend'})
@@ -211,8 +213,6 @@ def main():
 
     game = Double07(map(chr, range(ord('a'),ord('z')+1)))
     game.display()
-    
-if __name__ == '__main__':
-    main()
+
 
 

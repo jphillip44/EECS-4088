@@ -27,40 +27,45 @@ def index(path):
 @socketio.on('joinServer')
 def joinServer(data):
     "Create a game lobby"
-    #userInfo = json.loads(data)
-    userInfo = data
-    users[userInfo["socketId"]] = userInfo["username"] + " #" + userInfo["socketId"][:4]
-    print(users.get(userInfo["socketId"])  + " has logged in")
-    emit('username', {'username': users[userInfo["socketId"]]})
-    emit('games', {'games': GameList().list_games()})
-    # if userInfo["username"] == '454':
-    #     g = "Double07"
-    # else:
-    #     g = "Hot_Potatoe"
-    # GameList.select_game(g, list(users.values())).play()
-    # print(GameList().list_games())
+    users[data["socketId"]] = data["username"] + " #" + data["socketId"][:4]
+    print(users.get(data["socketId"])  + " has logged in")
+    emit('username', {'username': users[data["socketId"]]})
+    emit('games', {'games': GameList.list_games()})
 
 @socketio.on('createGame')
 def createGame(data):
     global game
-    game = GameList().select_game(data)
+    print(users)
+    if data == '007':
+        temp = "Double07"
+    if data == 'Hot Potato':
+        temp = "Hot_Potato"
+    game = GameList.select_game(temp, users.values())
+    emit('gameStarted', game.__name__)
     runGame()
 
 def runGame():
     while game.is_active():
         emit('state', game.get_state())
-        game.timed_event()
-        emit('timerExpired', "")
-        socketio.sleep(5)
+        for i in range(game.get_timer(), 0, -1):
+            print(i)
+            socketio.sleep(1)
+        if game.get_timer():
+            emit('timerExpired', "")
+            print("Waiting for inputs")
+            socketio.sleep(5)
+            print("Times up")
         game.end_round()
         game.display()
     else:
         emit('gameOver', "")
 
 
-@socketio.on('buttonPress')
+@socketio.on('endOfRound')
 def action(data):
-    game.action(data)
+    print(data)
+    if game.action(data):
+        emit('action', "")
 
 def background():
     i = 0

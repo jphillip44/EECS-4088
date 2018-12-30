@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
 from time import sleep
-from collections import OrderedDict
 
 class Game(ABC):
     __state = {}
@@ -27,6 +26,7 @@ class Game(ABC):
         WARNING: will not run if this is not defined in the child class. 
         '''
 
+
     @abstractmethod
     def end_round(self):
         pass
@@ -47,19 +47,22 @@ class Game(ABC):
         '''
         return self.__active_game
 
-    def timed_event(self, timer=None):
+    def set_timer(self, time):
+        self.__input_timer = time
+
+    def get_timer(self):
+        return self.__input_timer
+
+    def timed_event(self, timer=get_timer):
         '''
         Allows setting of custom timer events for a game
         '''
-        if timer is None:
-            timer = self.__input_timer
+        if type(timer) is not int:
+            timer = timer(self)
         for i in range(timer, 0, -1):
             print(i)
             sleep(1)
-        print(0)
-
-    def set_timer(self, time):
-        self.__input_timer = time
+        return timer
 
     def get_state(self):
         '''

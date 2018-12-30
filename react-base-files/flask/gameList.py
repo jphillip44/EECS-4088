@@ -1,17 +1,18 @@
-from games import *
-from singleton import Singleton
-import sys
+import games
 
-class GameList(Singleton):
+class GameList():
 
     def select_game(type, users):
-        return getattr(sys.modules[__name__], type)(users)
+        return getattr(games, type)(users)
 
-    def list_games(self):
-        return [game.__name__ for game in Game.__subclasses__()]
+    def list_games():
+        return [game.__name__ for game in games.Game.__subclasses__()]
 
 if __name__ == '__main__':
+    print(GameList.list_games())
     game = GameList.select_game("Double07", {"A", "B"})
     game.display()
+
+
 
         
