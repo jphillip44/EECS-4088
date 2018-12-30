@@ -75,7 +75,7 @@ def createGame(data):
 def action(data):
     print(data)
     if game.action(data):
-        emit('action', game.get_state())
+        game.end_round()
 
 # def background():
 #     i = 0
