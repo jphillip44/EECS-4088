@@ -17,7 +17,8 @@ class Hot_Potato(Game):
         return True
 
     def end_round(self):
-        return self.__state['next']
+        emit('state', self.get_state())
+        # return self.__state['next']
 
     def display(self):
         print("timer: " + str(self.__state['timer']), end = ", ")
@@ -56,26 +57,24 @@ class Hot_Potato(Game):
 if __name__ == '__main__':
     game = Hot_Potato(['A', 'B', 'C'])
     game.display()
-    game.action({'player': game.end_round(), 'time': 5})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 5})
     game.display()
-    game.action({'player': game.end_round(), 'time': 9})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 9})
     game.display()
-    game.action({'player': game.end_round(), 'time': 1})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 1})
     game.display()
-    game.action({'player': game.end_round(), 'time': 6})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 6})
     game.display()
-    game.action({'player': game.end_round(), 'time': 3})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 3})
     game.display()
-    game.action({'player': game.end_round(), 'time': 8})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 8})
     game.display()
-    game.action({'player': game.end_round(), 'time': 2})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 2})
     game.display()
-    game.action({'player': game.end_round(), 'time': 9})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 9})
     game.display()
-    game.action({'player': game.end_round(), 'time': 3})
+    game.action({'player': game._Hot_Potato__state['next'], 'time': 3})
     game.display()
-    if game.timed_event():
-        print("foo")
     game = Hot_Potato(map(chr, range(ord('a'),ord('z')+1)))
     game.display()
 
