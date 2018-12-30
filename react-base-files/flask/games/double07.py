@@ -1,4 +1,4 @@
-from game import Game
+from __game import Game
 from queue import Queue, PriorityQueue, LifoQueue
 
 class Double07(Game):

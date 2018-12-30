@@ -1,4 +1,4 @@
-from game import Game
+from __game import Game
 
 class Hot_Potato(Game):
 
