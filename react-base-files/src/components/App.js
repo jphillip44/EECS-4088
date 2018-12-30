@@ -8,9 +8,22 @@ import Game3 from './Games/Game3';
 import Game4 from './Games/Game4';
 import Game5 from './Games/Game5';
 import NotFound from './NotFound';
+import io from 'socket.io-client';
 
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.socket = io('http://localhost:5000', {
+            'reconnection delay': 2500,
+            'secure':true,
+            'max reconnection attempts': 10,
+            'reconnection':true       
+        });
+  }
+
+  
   state = {
     username: '',
     userValid: false,
@@ -38,18 +51,26 @@ class App extends Component {
                 path="/"
                 render={(props) => <UsernamePicker {...props}
                   userState={this.state}
+                  socket={this.socket}
                   updateUsername={this.updateUsername}
                   updateUserValid={this.updateUserValid}
-                  updateSocketId={this.updateSocketId}  
+                  updateSocketId={this.updateSocketId} 
                 />} 
               />
               <Route
                 path="/room"
                 render={(props) => <Room {...props}
                   userState={this.state}
+                  socket={this.socket}
+              />}
+              />
+              <Route
+                path="/game1" 
+                render={(props) => <Game1 {...props}
+                userState={this.state}
+                socket={this.socket}
                 />}
               />
-              <Route path="/game1" component={Game1} />
               <Route path="/game2" component={Game2} />
               <Route path="/game3" component={Game3} />
               <Route path="/game4" component={Game4} />

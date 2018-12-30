@@ -1,63 +1,35 @@
 import React from 'react';
-import io from 'socket.io-client';
 
 class Game1 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            users: [],
-            opponents: [],
+            allTargets: [],
+            showTargets: false,
+            showSingleTarget: false,
             action: '',
-            target: '',
+            target: {},
             player: {},
-            hp: '',
-            ap: '',
-            timeLeft: 15
         }
-        this.socket = io('http://localhost:5000'); 
-        this.socket.on('clients', (data) => {
-            console.log(data + " : " + this.socket.id);
-        });
-        
-        this.socket.on('userList', (data) => {
-            this.setState({ users: data });
-        });
-        
-        this.socket.on('opponentStats', (data) => {
-            console.log("Opponent Stats: " + data);
-            this.setState({ opponents: data });
-        });
-
-        this.socket.on('playerStats', (data) => {
-            console.log("Player Stats: " + data);
-            this.setState({ player: data });
-        });
-
-        this.socket.on('updateTimer', (data) => {
-            this.setState({ timeLeft: data });
+        // Separate the entire player list into a target list and the user
+        this.props.socket.on('allPlayers', (data) => {
+            let i;
+            let targetList = [];
+            let player = {};
+            for(i = 0; i < data.length; i++ ) {
+                if(data[i].socketId !== this.props.socket.id) {
+                    targetList.push(data[i]);
+                } else {
+                    player = data[i];
+                }    
+            };
+            this.setState({ allTargets: targetList });
+            this.setState({ player: player });
         });
     }
-
+    
     componentDidMount() {
-        this.socket.emit('sendToServer', {
-            type: 'retrieveUsers',
-            username: window.localStorage.getItem('username'),
-            socketId: this.socket.id,
-            message: "" 
-        });
-
-        this.socket.emit('initializeOpponentsStats', window.localStorage.getItem('username'));
-        this.socket.emit('initializeplayerStats', window.localStorage.getItem('username'));
-    }
-
-    componentWillUnmount() {
-        this.socket.emit('sendToServer', {
-            type: 'deleteUsers',
-            username: window.localStorage.getItem('username'),
-            socketId: this.socket.id,
-            message: "" 
-        });
-        console.log('DELETE');
+        this.props.socket.emit('initializePlayers');
     }
 
     sendActionToServer = (action) => {
@@ -70,15 +42,33 @@ class Game1 extends React.Component {
     }
     // Used to be able to toggle selecting a targeted player
     choosePlayer = (user) => {
-        if(this.state.target === user) {
-            this.setState({ target: '' });
-        } else {
-            this.setState({ target: user });
-        }   
+        let i;
+        for(i = 0; i < this.state.allTargets.length; i++) {
+            if(this.state.allTargets[i].username === user) {
+                this.setState({
+                    target: this.state.allTargets[i],
+                    showTargets: false,
+                    showSingleTarget: true
+                });
+            }
+        }; 
     }
 
     chooseAction = (data) => {
-        this.setState({ action: data });
+        // Update showTargets so modal of targets pops up on screen
+        if(data === "attack") {
+            this.setState({
+                action: data,
+                showTargets: true
+            });
+        } else if (data === "defend" || data === "reload") {
+            // Reset target when defend or reload is selected
+            this.setState({
+                action: data,
+                showSingleTarget: false,
+                target: {}
+            });
+        }    
     }
 
     endOfRound = (data) => {
@@ -90,8 +80,7 @@ class Game1 extends React.Component {
         
         this.setState({
             action: '',
-            target: '',
-            timeLeft: 15
+            target: ''
         });
     }
     
@@ -102,38 +91,19 @@ class Game1 extends React.Component {
                     <div className="container has-text-centered">
                         <div className="columns is-centered">
                             <div className="column is-5">
-                            <button onClick={this.endOfRound}>End of Round</button>
-                                <div className="box">                                   
-                                    <h5 className="title is-5">Players</h5>
-                                    {this.state.opponents.map((user) => (
-                                        <div 
-                                            className={this.state.target === user.username ? "button level is-mobile is-danger" : "button level is-mobile is-dark"}
-                                            key={user.socketId}
-                                            onClick={() => this.choosePlayer(user.username)}
-                                        >
-                                            <div className="level-item">
-                                                <span>{user.username}</span>
-                                            </div>
-                                            <div className="level-item">
-                                                <span>{user.hp} Hp</span>
-                                            </div>
-                                            <div className="level-item">
-                                                <span>{user.ap} AP</span>  
-                                            </div>                                          
-                                        </div> 
-                                    ))} 
+                                <h1 className="title is-1 has-text-white">007</h1>
+                                <div className={this.state.showSingleTarget ? "box" : "box is-hidden"}>
+                                    <h5 className="title is-5">Target</h5>
+                                    <p>{this.state.target.username}</p>
                                 </div>
                                 <div className="box">
-                                    <h5 className="title is-5">{window.localStorage.getItem('username')}</h5>
+                                    <h5 className="title is-5">{this.state.player.username}</h5>
                                     <div className="level is-mobile">
                                         <div className="level-item">
-                                            <button className="button">Hp: {this.state.player.hp}</button>
+                                            <button className="button">Health Points: {this.state.player.hp}</button>
                                         </div>
                                         <div className="level-item">
-                                            <button className="button">Ap: {this.state.player.ap}</button>
-                                        </div>
-                                        <div className="level-item">
-                                            <button className="button">Time Left: {this.state.timeLeft}</button>
+                                            <button className="button">Action Points: {this.state.player.ap}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -154,13 +124,37 @@ class Game1 extends React.Component {
                                             onClick={() => this.chooseAction("reload")}>
                                             Reload
                                         </button>
-                                    </div>
-                                    
-                                </div>                  
+                                    </div> 
+                                </div>                                                                                
                             </div>
                         </div>
                     </div>
                 </div>  
+                <div className={this.state.showTargets ? "modal is-active" : "modal"}>
+                    <div className="modal-background"></div>
+                        <div className="modal-content">
+                            <div className="box has-text-centered">                                   
+                                <h5 className="title is-5">Choose a Target</h5>
+                                {this.state.allTargets.map((user, index) => (
+                                    <div 
+                                        className={this.state.target.username === user.username ? "button level is-mobile is-danger" : "button level is-mobile is-dark"}
+                                        key={index}
+                                        onClick={() => this.choosePlayer(user.username)}
+                                    >
+                                        <div className="level-item">
+                                            <span>{user.username}</span>
+                                        </div>
+                                        <div className="level-item">
+                                            <span>{user.hp} Hp</span>
+                                        </div>
+                                        <div className="level-item">
+                                            <span>{user.ap} AP</span>  
+                                        </div>                                          
+                                    </div>
+                                ))} 
+                            </div>
+                        </div>
+                </div>
             </div>
         );
     }

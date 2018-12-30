@@ -1,68 +1,44 @@
 import React from 'react';
-import io from 'socket.io-client';
 import UsernameNotification from './UsernameNotification';
 
 class UsernamePicker extends React.Component {
     constructor(props) {
         super(props);
         this.usernameInput = React.createRef();
-        this.socket = io('http://localhost:5000');
     }
 
     state = {
         username: '',
         userValid: null,
         socketId: ''
-      };
+    };
 
-    componentDidMount() {
-    // Username is valid, updates app and usernamepick state to true, and go
-    // to /room
-        this.socket.on('userValid', data => {
-            if(data.userValid) {
-                console.log(1111111111111111111111);
-                this.setState({ userValid: data.userValid });
-                this.props.updateUserValid(data.userValid);
-
-                this.props.history.push("/room");
-            } else {
-               console.log(222222222222222222);
-                this.setState({ userValid: data.userValid });
-                this.props.updateUserValid(data.userValid); 
-            }          
-        });
-    }
-    componentWillUnmount() {
-        this.socket.emit('sendToServer', {
-            type: 'deleteUsers',
-            username: window.localStorage.getItem('username'),
-            socketId: this.socket.id,
-            message: "" 
-        });
-        console.log('DELETE');
-    }
     // Submits user data to server and updates usernamePicker and app component
     // state
-    checkUsername = (event) => {
+    submitUsername = (event) => {
         event.preventDefault();
         // Save username to localstorage for persistance
         window.localStorage.setItem('username', this.usernameInput.current.value);
 
         this.props.updateUsername(this.usernameInput.current.value);
-        this.props.updateUserValid(this.state.userValid);
-        this.props.updateSocketId(this.socket.id);
+        
+        //this.props.updateUserValid(this.state.userValid);
+        //this.props.updateSocketId(this.socket.id);
         this.setState({
             username: this.usernameInput.current.value,
-            socketId: this.socket.id
+            socketId: this.props.socket.id//this.socket.id
         }, () => {
-            this.socket.emit('joinServer', {
+            this.props.socket.emit('joinServer', {
                 username: this.state.username,
-                socketId: this.state.socketId
-            });
-        });
+                socketId: this.props.socket.id//Tthis.state.socketId
         
-        // Clear the username input field
-        this.usernameInput.current.value = '';
+            });
+
+            // Clear the username input field
+            this.usernameInput.current.value = '';
+
+            this.props.history.push("/room");
+        });
     } 
 
     render() {
@@ -75,7 +51,7 @@ class UsernamePicker extends React.Component {
                         <div className="columns is-centered">
                             <div className="column is-4">
                                 <div className="box">
-                                    <form onSubmit={this.checkUsername}>
+                                    <form onSubmit={this.submitUsername}>
                                         <label className="label">Pick your username</label>
                                         <div className="field">
                                             <div className="control">
