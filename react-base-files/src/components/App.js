@@ -15,6 +15,11 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      username: '',
+      socket: this.socket
+    };
+
     this.socket = io('http://localhost:5000', {
             'reconnection delay': 2500,
             'secure':true,
@@ -23,23 +28,8 @@ class App extends Component {
         });
   }
 
-  
-  state = {
-    username: '',
-    userValid: false,
-    socketId: ''
-  };
-
   updateUsername = (username) => {
     this.setState({ username: username });
-  };
-
-  updateUserValid = (userValid) => {
-    this.setState({ userValid: userValid });
-  };
-
-  updateSocketId = (socketId) => {
-    this.setState({ socketId: socketId });
   };
 
   render() {
@@ -53,8 +43,6 @@ class App extends Component {
                   userState={this.state}
                   socket={this.socket}
                   updateUsername={this.updateUsername}
-                  updateUserValid={this.updateUserValid}
-                  updateSocketId={this.updateSocketId} 
                 />} 
               />
               <Route

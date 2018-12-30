@@ -83,9 +83,13 @@ def sendToServer(data):
     if data["type"] == "chat":
         chatLog.append(data)
         # broadcast allows for all connected socket to receive the message
-        emit('chatMessageFromServer', chatLog, broadcast=True)
+        emit('chatLogFromServer', chatLog, broadcast=True)
+    elif data["type"] == "chatLog":
+        emit('chatLogFromServer', chatLog, broadcast=True)
     elif data["type"] == "retrieveUsers":
         emit('userList', users, broadcast=True)
+    elif data["type"] == "retrieveUsername":
+        emit('username', users[request.sid])
 
 # ----------------- 007 GAME ------------------
 
@@ -122,6 +126,8 @@ def endOfRound(data):
 @socketio.on('disconnect')
 def dc():
     del users[request.sid]
+    # let every user know when a user disconnects
+    emit("userDisconnected", request.sid, broadcast=True)
     print("dc " + request.sid)
 
 @socketio.on('connect')

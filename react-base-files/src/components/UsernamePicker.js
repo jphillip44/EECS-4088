@@ -9,7 +9,6 @@ class UsernamePicker extends React.Component {
 
     state = {
         username: '',
-        userValid: null,
         socketId: ''
     };
 
@@ -21,16 +20,14 @@ class UsernamePicker extends React.Component {
         window.localStorage.setItem('username', this.usernameInput.current.value);
 
         this.props.updateUsername(this.usernameInput.current.value);
-        
-        //this.props.updateUserValid(this.state.userValid);
-        //this.props.updateSocketId(this.socket.id);
+
         this.setState({
             username: this.usernameInput.current.value,
-            socketId: this.props.socket.id//this.socket.id
+            socketId: this.props.socket.id
         }, () => {
             this.props.socket.emit('joinServer', {
                 username: this.state.username,
-                socketId: this.props.socket.id//Tthis.state.socketId
+                socketId: this.props.socket.id
         
             });
 

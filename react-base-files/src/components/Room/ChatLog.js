@@ -8,7 +8,6 @@ class ChatLog extends React.Component {
 
     sendMessage = (event) => {
         event.preventDefault();
-        console.log('ChatLog: ' + this.chatInput.current.value);
         this.props.sendMessage(this.chatInput.current.value);
         // Clear the username input field
         this.chatInput.current.value = '';
