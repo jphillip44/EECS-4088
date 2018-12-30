@@ -1,6 +1,5 @@
-from __game import Game
+from __game import Game, emit
 from queue import Queue, PriorityQueue, LifoQueue
-from flask_socketio import emit
 
 class Double07(Game):
     '''

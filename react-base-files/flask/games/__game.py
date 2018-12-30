@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
+from flask_socketio import emit
 
 class Game(ABC):
     __state = {}
