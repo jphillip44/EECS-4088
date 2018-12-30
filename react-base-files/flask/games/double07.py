@@ -1,5 +1,6 @@
 from __game import Game
 from queue import Queue, PriorityQueue, LifoQueue
+from flask_socketio import emit
 
 class Double07(Game):
     '''
@@ -54,7 +55,23 @@ class Double07(Game):
         Displays the game state to the console.
         '''
         print(self.__state)
-        self.__rank_players()
+
+    def run_game(self, socketio):
+        emit('state', self.get_state())
+        while self.is_active():
+            for i in range(self.get_timer(), 0, -1):
+                print(i)
+                socketio.sleep(1)
+            emit('timerExpired', "")
+            print("Waiting for inputs")
+            socketio.sleep(5)
+            print("Times up")
+            self.end_round()
+            self.display()
+            self.__rank_players()
+        else:
+            print("Game Over")
+            emit('gameOver', "")
 
     def __set_state(self, players):
         '''
@@ -145,7 +162,7 @@ class Double07(Game):
             for player in alive:
                 self.__ranks.put(player) 
             print_standings(alive)
-            self.end_game()
+            super().end_game()
 
 
 

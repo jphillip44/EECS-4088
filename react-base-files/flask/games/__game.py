@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
-from time import sleep
 
 class Game(ABC):
     __state = {}
@@ -35,6 +34,10 @@ class Game(ABC):
     def display(self):
         pass
 
+    @abstractmethod
+    def run_game(socketio):
+        pass
+
     def end_game(self):
         '''
         Signal for ending a game.
@@ -53,16 +56,16 @@ class Game(ABC):
     def get_timer(self):
         return self.__input_timer
 
-    def timed_event(self, timer=get_timer):
-        '''
-        Allows setting of custom timer events for a game
-        '''
-        if type(timer) is not int:
-            timer = timer(self)
-        for i in range(timer, 0, -1):
-            print(i)
-            sleep(1)
-        return timer
+    # def timed_event(self, timer=get_timer):
+    #     '''
+    #     Allows setting of custom timer events for a game
+    #     '''
+    #     if type(timer) is not int:
+    #         timer = timer(self)
+    #     for i in range(timer, 0, -1):
+    #         print(i)
+    #         sleep(1)
+    #     return timer
 
     def get_state(self):
         '''

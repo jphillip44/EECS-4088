@@ -24,6 +24,9 @@ class Hot_Potato(Game):
         print("next: " + self.__state['next'], end=', ')
         print(*self.__state['players'].items())
 
+    def run_game(self, socketio):
+        emit('state', self.get_state())
+
     def __set_state(self, players):
         self.__state = {}
         self.__state['timer'] = self.__potato_timer
