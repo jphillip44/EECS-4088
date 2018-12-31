@@ -54,7 +54,6 @@ class UsernamePicker extends React.Component {
                                         <label className="label">Pick your username</label>
                                         <div className="field">
                                             <div className="control">
-                                                {this.state.userValid === false && <UsernameNotification />}
                                                 <input
                                                     className="input"
                                                     type="text"
