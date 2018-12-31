@@ -31,7 +31,7 @@ class Hot_Potato(Game):
         print(*self.__state['players'].items())
 
     def run_game(self, socketio):
-        emit('state', self.get_state())
+        emit('state', self.__state)
 
     def __set_state(self, players):
         self.__state = {}

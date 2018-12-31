@@ -41,12 +41,7 @@ def joinServer(data):
 def createGame(data):
     global game
     print(users)
-#    if data == '007':
-#        temp = "Double07"
-#    if data == 'Hot Potato':
-#        temp = "Hot_Potato"
     if game is None or not game.is_active():
-        # game = GameList.select_game(temp, users.values())
         game = GameList.select_game(data, users.values())
         emit('gameStarted', game.__name__, broadcast=True)
         game.run_game(socketio)
