@@ -23,6 +23,7 @@ class Room extends React.Component {
         this.props.socket.on('username', (data) => this.setState({ username: data }));
 
         this.props.socket.on('gameStarted', (data) => {
+            console.log(data);
             this.props.history.push(`/${data}`);
         });
 
@@ -36,7 +37,6 @@ class Room extends React.Component {
                 tempUsers.push({
                     username: data[keys[i]],
                     socketId: keys[i]
-              
                 });
             };
             this.setState({ users: tempUsers });

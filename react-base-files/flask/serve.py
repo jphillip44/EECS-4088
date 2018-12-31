@@ -48,7 +48,7 @@ def createGame(data):
     if game is None or not game.is_active():
         # game = GameList.select_game(temp, users.values())
         game = GameList.select_game(data, users.values())
-        emit('gameStarted', game.__name__)
+        emit('gameStarted', game.__name__, broadcast=True)
         game.run_game(socketio)
 
 # def runGame():

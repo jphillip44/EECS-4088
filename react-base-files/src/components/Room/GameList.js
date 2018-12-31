@@ -9,14 +9,13 @@ class GameList extends React.Component {
                 <div className="content">
                     <div className="buttons">
                         {this.props.gameList.map((user, index) => (
-                            <Link
+                            <button
                                 className="button"
                                 key={index}
                                 onClick={() => this.props.goToGame(user)}
-                                to={`/user`}
                             >
                                 {user}
-                            </Link>
+                            </button>
                         ))}   
                     </div>            
                 </div>          
