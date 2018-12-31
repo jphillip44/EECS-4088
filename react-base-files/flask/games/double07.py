@@ -1,5 +1,5 @@
 from __game import Game, emit
-from queue import Queue, PriorityQueue, LifoQueue
+from queue import Queue, PriorityQueue
 
 class Double07(Game):
     '''
@@ -11,7 +11,6 @@ class Double07(Game):
     __attack_queue = Queue()
     __target_queue = Queue()
     __other_queue = Queue()
-    __ranks = LifoQueue()
 
     def __init__(self, players):
         '''
@@ -48,6 +47,9 @@ class Double07(Game):
             self.__target(*self.__target_queue.get())
         while not self.__attack_queue.empty():
             self.__attack(*self.__attack_queue.get())
+        self.__rank_players()
+        if not self.is_active():
+           self.print_standings()
 
     def display(self):
         '''
@@ -56,7 +58,7 @@ class Double07(Game):
         print(self.__state)
 
     def run_game(self, socketio):
-        emit('state', self.get_state())
+        emit('state', self.__state)
         while self.is_active():
             for i in range(self.get_timer(), 0, -1):
                 print(i)
@@ -67,7 +69,6 @@ class Double07(Game):
             print("Times up")
             self.end_round()
             self.display()
-            self.__rank_players()
         else:
             print("Game Over")
             emit('gameOver', "")
@@ -131,7 +132,7 @@ class Double07(Game):
                     dead.put((stats['ap'], player))
                     self.__state[player]['hp'] = 'dead'
             while not dead.empty(): 
-                self.__ranks.put(dead.get()[1])
+                self.add_ranks(dead.get()[1])
 
         def check_alive():
             '''
@@ -142,25 +143,11 @@ class Double07(Game):
                 if stats['hp'] != 'dead':
                     yield player
 
-        def print_standings(alive):
-            '''
-            A local function to __rank_players().
-            Prints standings.
-            '''
-
-            i = 1
-            print("Standings")
-            while not self.__ranks.empty():
-                print(str(i) + ": " + self.__ranks.get())
-                i += 1
-
-
         check_dead()
         alive = list(check_alive())
         if len(alive) < 2:
             for player in alive:
-                self.__ranks.put(player) 
-            print_standings(alive)
+                self.add_ranks(player) 
             super().end_game()
 
 

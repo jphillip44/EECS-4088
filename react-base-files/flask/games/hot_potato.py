@@ -2,10 +2,12 @@ from __game import Game, emit
 from collections import OrderedDict
 from random import randint
 from itertools import cycle
+from queue import PriorityQueue
 
 class Hot_Potato(Game):
     __potato_timer = 0
     __next = None
+
     
     def __init__(self, players):
         super().__init__(players)
@@ -14,10 +16,13 @@ class Hot_Potato(Game):
 
     def action(self, data):
         self.__hold(data['player'], data['time'])
+        if self.__state['players'][data['player']]['score'] > 20:
+            self.__rank_players()
+            self.print_standings()
         return True
 
     def end_round(self):
-        emit('state', self.get_state())
+        emit('state', self.__state)
         # return self.__state['next']
 
     def display(self):
@@ -53,6 +58,13 @@ class Hot_Potato(Game):
 
     def __new_potato_timer(self):
         self.__potato_timer = randint(10, 20)
+
+    def __rank_players(self):
+        results = PriorityQueue()
+        for player, stats in self.__state['players'].items():
+            results.put((stats['score'], player))
+        while not results.empty():
+            self.add_ranks(results.get()[1])
 
 if __name__ == '__main__':
     game = Hot_Potato(['A', 'B', 'C'])

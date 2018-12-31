@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
 from flask_socketio import emit
+from queue import LifoQueue
 
 class Game(ABC):
     __state = {}
     __active_game = False
     __input_timer = 0
+    __ranks = LifoQueue()
 
     def __init__(self, players):
         '''
@@ -68,10 +70,23 @@ class Game(ABC):
     #         sleep(1)
     #     return timer
 
-    def get_state(self):
+    # def get_state(self):
+    #     '''
+    #     Query to get game estate
+    #     '''
+    #     return self.__state
+
+    def print_standings(self):
         '''
-        Query to get game estate
+        Prints standings.
         '''
-        return self.__state
+        i = 1
+        print("Standings")
+        while not self.__ranks.empty():
+            print(str(i) + ": " + self.__ranks.get())
+            i += 1
+
+    def add_ranks(self, data):
+        self.__ranks.put(data)
 
         
