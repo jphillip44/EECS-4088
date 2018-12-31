@@ -1,5 +1,4 @@
 import React from 'react';
-import UsernameNotification from './UsernameNotification';
 
 class UsernamePicker extends React.Component {
     constructor(props) {
