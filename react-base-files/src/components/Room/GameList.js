@@ -8,31 +8,16 @@ class GameList extends React.Component {
                 <h1 className="title">Games</h1>
                 <div className="content">
                     <div className="buttons">
-                        <Link 
-                            className="button" 
-                            onClick={() => this.props.goToGame("007")} 
-                            to="/Game1">007
-                        </Link>
-                        <Link 
-                            className="button" 
-                            onClick={() => this.props.goToGame("Hot Potato")} 
-                            to="/Game2">Hot Potato
-                        </Link>
-                        <Link 
-                            className="button" 
-                            onClick={() => this.props.goToGame("game3")} 
-                            to="/Game3">Game3
-                        </Link>
-                        <Link 
-                            className="button" 
-                            onClick={() => this.props.goToGame("game4")} 
-                            to="/Game4">Game4
-                        </Link>
-                        <Link 
-                            className="button" 
-                            onClick={() => this.props.goToGame("game5")} 
-                            to="/Game5">Game5
-                        </Link>    
+                        {this.props.gameList.map((user, index) => (
+                            <Link
+                                className="button"
+                                key={index}
+                                onClick={() => this.props.goToGame(user)}
+                                to={`/user`}
+                            >
+                                {user}
+                            </Link>
+                        ))}   
                     </div>            
                 </div>          
             </div>

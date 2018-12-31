@@ -4,38 +4,41 @@ import UsernameNotification from './UsernameNotification';
 class UsernamePicker extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            username: '',
+            socketId: ''    
+        };
+
         this.usernameInput = React.createRef();
-    }
 
-    state = {
-        username: '',
-        socketId: ''
-    };
+        this.props.socket.on('games', (data) => {
+            this.props.updateGameList(data.games);
+            console.log(data.games);
+        });
 
-    // Submits user data to server and updates usernamePicker and app component
-    // state
-    submitUsername = (event) => {
-        event.preventDefault();
-        // Save username to localstorage for persistance
-        window.localStorage.setItem('username', this.usernameInput.current.value);
-
-        this.props.updateUsername(this.usernameInput.current.value);
-
-        this.setState({
-            username: this.usernameInput.current.value,
-            socketId: this.props.socket.id
-        }, () => {
-            this.props.socket.emit('joinServer', {
-                username: this.state.username,
+        this.props.socket.on('username', (data) => {
+            this.props.updateUsername(data);
+            this.props.updateSocketId(this.props.socket.id);
+            // Save username to localstorage for persistance
+            window.localStorage.setItem('username', data);
+            this.setState({
+                username: data,
                 socketId: this.props.socket.id
-        
             });
-
-            // Clear the username input field
-            this.usernameInput.current.value = '';
 
             this.props.history.push("/room");
         });
+    }
+
+    // Submits user data to server and updates usernamePicker and app component state
+    submitUsername = (event) => {
+        event.preventDefault();
+        this.props.socket.emit('joinServer', {
+            username: this.usernameInput.current.value,
+            socketId: this.props.socket.id  
+        });
+        // Clear the username input field
+        this.usernameInput.current.value = '';
     } 
 
     render() {

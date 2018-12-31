@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Game1 extends React.Component {
+class Double07 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -97,7 +97,7 @@ class Game1 extends React.Component {
                                     <p>{this.state.target.username}</p>
                                 </div>
                                 <div className="box">
-                                    <h5 className="title is-5">{this.state.player.username}</h5>
+                                    <h5 className="title is-5">{this.props.userState.username}</h5>
                                     <div className="level is-mobile">
                                         <div className="level-item">
                                             <button className="button">Health Points: {this.state.player.hp}</button>
@@ -160,4 +160,4 @@ class Game1 extends React.Component {
     }
 }
 
-export default Game1;
+export default Double07;

@@ -19,6 +19,7 @@ socketio = SocketIO(app)
 ROOMS = {} # dict to track active rooms
 
 users = {}
+game = None
 
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
@@ -32,25 +33,21 @@ def index(path):
 def joinServer(data):
     "Create a game lobby"
     users[data["socketId"]] = data["username"] + " #" + data["socketId"][:4]
-    print(users.get(data["socketId"])  + " has logged in")
-    emit('username', {'username': users[data["socketId"]]})
+    print(users.get(data["socketId"])  + " has logged in")   
     emit('games', {'games': GameList.list_games()})
+    emit('username', {'username': users[data["socketId"]]})  
 
 @socketio.on('createGame')
 def createGame(data):
     global game
-    try:
-        game.is_active()
-    except NameError:
-        game = None
     print(users)
-    if data == '007':
-        temp = "Double07"
-    if data == 'Hot Potato':
-        temp = "Hot_Potato"
+#    if data == '007':
+#        temp = "Double07"
+#    if data == 'Hot Potato':
+#        temp = "Hot_Potato"
     if game is None or not game.is_active():
-        game = GameList.select_game(temp, users.values())
-        # game = GameList.select_game(data, users.values())
+        # game = GameList.select_game(temp, users.values())
+        game = GameList.select_game(data, users.values())
         emit('gameStarted', game.__name__)
         game.run_game(socketio)
 

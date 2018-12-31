@@ -22,6 +22,10 @@ class Room extends React.Component {
 
         this.props.socket.on('username', (data) => this.setState({ username: data }));
 
+        this.props.socket.on('gameStarted', (data) => {
+            this.props.history.push(`/${data}`);
+        });
+
         // gets the keys from the object returned from the server and loops through
         // the array using the previously gotten keys to get the values
         this.props.socket.on('userList', (data) => {
@@ -73,6 +77,7 @@ class Room extends React.Component {
                             <div className="column is-6 has-text-centered">
                                 <h1 className="title is-1 has-text-white">Room</h1>                               
                                 <GameList
+                                    gameList={this.props.userState.gameList}
                                     goToGame={this.goToGame}
                                 />
                                 <ChatLog 
