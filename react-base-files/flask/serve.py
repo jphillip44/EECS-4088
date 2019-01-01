@@ -34,7 +34,6 @@ game = None
 def index(path):
     return render_template('index.html')
 
-
 @socketio.on('joinServer')
 def joinServer(data):
     "Create a game lobby"
@@ -50,7 +49,11 @@ def createGame(data):
     if game is None or not game.is_active():
         game = GameList.select_game(data, users.values())
         emit('gameStarted', game.__name__, broadcast=True)
-        game.run_game(socketio)
+        Thread(target=runner).start()
+        # game.run_game(socketio)
+
+def runner():
+    game.run_game(socketio)
 
 # def runGame():
 #     while game.is_active():
@@ -67,7 +70,6 @@ def createGame(data):
 #         game.display()
 #     else:
 #         emit('gameOver', "")
-
 
 @socketio.on('endOfRound')
 def action(data):

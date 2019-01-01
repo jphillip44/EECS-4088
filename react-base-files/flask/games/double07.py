@@ -60,19 +60,20 @@ class Double07(Game):
     def run_game(self, socketio):
         #emit('state', self.__state, broadcast=True)
         while self.is_active():
-            emit('state', self.__state, broadcast=True)
+            socketio.emit('state', self.__state, broadcast=True)
             for i in range(self.get_timer(), 0, -1):
+            # for i in range(2, 0, -1):
                 print(i)
                 socketio.sleep(1)
-            emit('timerExpired', broadcast=True)
+            socketio.emit('timerExpired', broadcast=True)
             print("Waiting for inputs")
-            socketio.sleep(5)
+            socketio.sleep(2)
             print("Times up")
             self.end_round()
             self.display()
         else:
             print("Game Over")
-            emit('gameOver', broadcast=True)
+            socketio.emit('gameOver', broadcast=True)
 
     def __set_state(self, players):
         '''
