@@ -1,14 +1,8 @@
 import React from 'react';
 
 class Double07 extends React.Component {
-
-    componentWillUnmount(){
-        console.log("DESTROY?")
-    }
-
     constructor(props) {
         super(props);
-        console.log("NEW?")
         this.state = {
             allTargets: [],
             showTargets: false,
