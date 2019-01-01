@@ -12,7 +12,6 @@ class UsernamePicker extends React.Component {
 
         this.props.socket.on('games', (data) => {
             this.props.updateGameList(data.games);
-            console.log(data.games);
         });
 
         this.props.socket.on('username', (data) => {

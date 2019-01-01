@@ -22,15 +22,12 @@ class Room extends React.Component {
 
         this.props.socket.on('username', (data) => this.setState({ username: data }));
 
-        this.props.socket.on('gameStarted', (data) => {
-            console.log(data);
-            this.props.history.push(`/${data}`);
-        });
+        this.props.socket.on('gameStarted', (data) => { this.props.history.push(`/${data}`); });
 
         // gets the keys from the object returned from the server and loops through
         // the array using the previously gotten keys to get the values
         this.props.socket.on('userList', (data) => {
-            let keys = Object.keys(data)
+            let keys = Object.keys(data);
             let tempUsers = [];
             let i;
             for(i = 0; i < keys.length; i++) {

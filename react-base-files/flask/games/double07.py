@@ -58,8 +58,9 @@ class Double07(Game):
         print(self.__state)
 
     def run_game(self, socketio):
-        emit('state', self.__state, broadcast=True)
+        #emit('state', self.__state, broadcast=True)
         while self.is_active():
+            emit('state', self.__state, broadcast=True)
             for i in range(self.get_timer(), 0, -1):
                 print(i)
                 socketio.sleep(1)

@@ -7,10 +7,56 @@ class Double07 extends React.Component {
             allTargets: [],
             showTargets: false,
             showSingleTarget: false,
-            action: '',
+            action: 'defend',
             target: {},
             player: {},
         }
+        // Wait for players data from server and convert it to list of players
+        this.props.socket.on('state', (data) => {
+            let keys = Object.keys(data)
+            let targetList = [];
+            let player = {};
+            let i;
+            for(i = 0; i < keys.length; i++) {
+                if(keys[i] === this.props.userState.username) {
+                    player = {
+                        username: keys[i],
+                        hp: data[keys[i]].hp,
+                        ap:  data[keys[i]].ap    
+                    };
+                    console.log("PLAYER: " + player.username + " HP: " + player.hp + " AP: " + player.ap);
+                } else {
+                    targetList.push({
+                        username: keys[i],
+                        hp: data[keys[i]].hp,
+                        ap: data[keys[i]].ap 
+                    });
+                    console.log("TARGET: " + keys[i] + " HP: " + data[keys[i]].hp + " AP: " + data[keys[i]].ap );
+                }
+            };
+
+            this.setState({ allTargets: targetList });
+            this.setState({ player: player });
+        });
+
+        this.props.socket.on('timerExpired', () => {
+            this.props.socket.emit('endOfRound', {
+                target: this.state.target.username,
+                action: this.state.action,
+                player: this.state.player.username
+            });
+            
+            this.setState({
+                action: 'defend',
+                target: {},
+                showSingleTarget: false
+            });
+        });
+        
+        this.props.socket.on('gameOver', () => {
+            this.props.history.push(`/room`);
+        });
+
         // Separate the entire player list into a target list and the user
         this.props.socket.on('allPlayers', (data) => {
             let i;
@@ -27,19 +73,7 @@ class Double07 extends React.Component {
             this.setState({ player: player });
         });
     }
-    
-    componentDidMount() {
-        this.props.socket.emit('initializePlayers');
-    }
 
-    sendActionToServer = (action) => {
-        this.socket.emit("sendActionToServer", {
-            action: action,
-            username: window.localStorage.getItem('username'),
-            socketId: this.socket.id,
-            message: "" 
-        });
-    }
     // Used to be able to toggle selecting a targeted player
     choosePlayer = (user) => {
         let i;
@@ -69,19 +103,6 @@ class Double07 extends React.Component {
                 target: {}
             });
         }    
-    }
-
-    endOfRound = (data) => {
-        this.socket.emit('endOfRound', {
-            target: this.state.target,
-            action: this.state.action,
-            user: window.localStorage.getItem('username')
-        });
-        
-        this.setState({
-            action: '',
-            target: ''
-        });
     }
     
     render() {
