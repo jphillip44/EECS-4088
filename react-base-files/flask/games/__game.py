@@ -4,7 +4,6 @@ from flask_socketio import emit
 from queue import LifoQueue
 
 class Game(ABC):
-    __state = {}
     __active_game = False
     __input_timer = 0
     __ranks = LifoQueue()
@@ -27,7 +26,6 @@ class Game(ABC):
         The `data' field is a dictionary that can be loaded as json data.
         WARNING: will not run if this is not defined in the child class. 
         '''
-
 
     @abstractmethod
     def end_round(self):
@@ -53,6 +51,9 @@ class Game(ABC):
         '''
         return self.__active_game
 
+    def get_players(self):
+        return self.__players
+
     def set_timer(self, time):
         self.__input_timer = time
 
@@ -70,11 +71,12 @@ class Game(ABC):
     #         sleep(1)
     #     return timer
 
-    # def get_state(self):
-    #     '''
-    #     Query to get game estate
-    #     '''
-    #     return self.__state
+    
+    def get_state(self):
+        '''
+        Query to get game estate
+        '''
+        return self.__state
 
     def print_standings(self):
         '''

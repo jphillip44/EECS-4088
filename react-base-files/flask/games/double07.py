@@ -17,7 +17,7 @@ class Double07(Game):
         Sets up the games default parameters.
         '''
         super().__init__(players)
-        self.__set_state(self._Game__players)
+        self.__set_state(super().get_players())
         super().set_timer(15)
 
     def action(self, data):

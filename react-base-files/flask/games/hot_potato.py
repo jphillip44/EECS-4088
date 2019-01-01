@@ -5,18 +5,20 @@ from itertools import cycle
 from queue import PriorityQueue
 
 class Hot_Potato(Game):
-    __potato_timer = 0
+    # __potato_timer = 0
     __next = None
+    __state = {}
 
     
     def __init__(self, players):
         super().__init__(players)
-        self.__new_potato_timer()
-        self.__set_state(self._Game__players)
+        self.__set_state(super().get_players())
+
 
     def action(self, data):
         self.__hold(data['player'], data['time'])
         if self.__state['players'][data['player']]['score'] > 20:
+            super().end_game()
             self.__rank_players()
             self.print_standings()
         return True
@@ -34,21 +36,19 @@ class Hot_Potato(Game):
         emit('state', self.__state)
 
     def __set_state(self, players):
-        self.__state = {}
-        self.__state['timer'] = self.__potato_timer
+        self.__state['timer'] = self.__new_potato_timer()
         self.__state['players'] = OrderedDict()
         for player in players:
             self.__state['players'][player] = {'score': 0}
         self.__state['next'] = self.__get_turn()
 
     def __hold(self, player, time):
-        if time < self.__potato_timer:
+        if time < self.__state['timer']:
             self.__state['players'][player]['score'] += time
-            self.__potato_timer -= time
+            self.__state['timer'] -= time
         else:
             self.__state['players'][player]['score'] = 0
-            self.__new_potato_timer()
-        self.__state['timer'] = self.__potato_timer
+            self.__state['timer'] = self.__new_potato_timer()
         self.__state['next'] = self.__get_turn()
 
     def __get_turn(self):
@@ -57,7 +57,7 @@ class Hot_Potato(Game):
         return next(self.__next)
 
     def __new_potato_timer(self):
-        self.__potato_timer = randint(10, 20)
+        return randint(10, 20)
 
     def __rank_players(self):
         results = PriorityQueue()

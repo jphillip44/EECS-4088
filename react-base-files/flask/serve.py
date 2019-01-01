@@ -2,8 +2,14 @@
 try:
     from eventlet import monkey_patch
     monkey_patch()
+    print("Running Eventlet Server")
 except ModuleNotFoundError:
-    pass
+    try:
+        from gevent import monkey
+        monkey.patch_all()
+        print("Running Gevent Server")
+    except ModuleNotFoundError:
+        print("Running Flask Server")
 
 from threading import Thread
 from flask import Flask, request, render_template
