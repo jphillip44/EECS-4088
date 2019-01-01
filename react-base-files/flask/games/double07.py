@@ -25,12 +25,12 @@ class Double07(Game):
         Inherited from Game. Handles controller input.
         In Double07, passes off input to a series of queues for later processing.
         '''
+        print(data)
         if data['action'] == "attack":
             self.__attack_queue.put((data['player'], data['target']))
             self.__target_queue.put((data['player'], data['target']))
         else:
             self.__other_queue.put((data['player'], data['action']))
-        return False
 
 
     def end_round(self):
@@ -48,26 +48,25 @@ class Double07(Game):
         while not self.__attack_queue.empty():
             self.__attack(*self.__attack_queue.get())
         self.__rank_players()
-        if not self.is_active():
-           self.print_standings()
 
     def display(self):
         '''
         Displays the game state to the console.
         '''
         print(self.__state)
+        if not self.is_active():
+           self.print_standings()
+
 
     def run_game(self, socketio):
-        #emit('state', self.__state, broadcast=True)
+        socketio.on_event('endOfRound', self.action)
         while self.is_active():
             socketio.emit('state', self.__state, broadcast=True)
             # for i in range(self.get_timer(), 0, -1):
-            for i in range(2, 0, -1):
+            for i in range(4, 0, -1):
                 print(i)
                 socketio.sleep(1)
-                # socketio.emit('timerExpired', broadcast=True)
-            for player in self.__state.keys():
-                socketio.emit('timerExpired', room=player)
+            socketio.emit('timerExpired', broadcast=True)
             print("Waiting for inputs")
             socketio.sleep(2)
             print("Times up")
@@ -76,6 +75,7 @@ class Double07(Game):
         else:
             print("Game Over")
             socketio.emit('gameOver', broadcast=True)
+            return
 
     def __set_state(self, players):
         '''

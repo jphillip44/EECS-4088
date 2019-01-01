@@ -11,7 +11,6 @@ except ModuleNotFoundError:
     except ModuleNotFoundError:
         print("Running Flask Server")
 
-from threading import Thread
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
 import json
@@ -50,12 +49,12 @@ def createGame(data):
     if game is None or not game.is_active():
         game = GameList.select_game(data, users.values())
         emit('gameStarted', game.__name__, broadcast=True)
-        Thread(target=game_thread).start()
-        # game.run_game(socketio)
+        socketio.start_background_task(game.run_game, socketio)
+        return
 
-def game_thread():
-    game.run_game(socketio)
-    return
+# def game_thread():
+#     game.run_game(socketio)
+#     return
 
 # def runGame():
 #     while game.is_active():
@@ -73,11 +72,11 @@ def game_thread():
 #     else:
 #         emit('gameOver', "")
 
-@socketio.on('endOfRound')
-def action(data):
-    print(data)
-    if game.action(data):
-        game.end_round()
+# @socketio.on('endOfRound')
+# def action(data):
+#     print(users[request.sid], data)
+#     if game.action(data):
+#         game.end_round()
 
 # def background():
 #     i = 0
