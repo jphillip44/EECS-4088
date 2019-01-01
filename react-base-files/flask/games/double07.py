@@ -61,11 +61,13 @@ class Double07(Game):
         #emit('state', self.__state, broadcast=True)
         while self.is_active():
             socketio.emit('state', self.__state, broadcast=True)
-            for i in range(self.get_timer(), 0, -1):
-            # for i in range(2, 0, -1):
+            # for i in range(self.get_timer(), 0, -1):
+            for i in range(2, 0, -1):
                 print(i)
                 socketio.sleep(1)
-            socketio.emit('timerExpired', broadcast=True)
+                # socketio.emit('timerExpired', broadcast=True)
+            for player in self.__state.keys():
+                socketio.emit('timerExpired', room=player)
             print("Waiting for inputs")
             socketio.sleep(2)
             print("Times up")

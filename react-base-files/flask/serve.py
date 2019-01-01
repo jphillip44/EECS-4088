@@ -40,7 +40,8 @@ def joinServer(data):
     users[data["socketId"]] = data["username"] + " #" + data["socketId"][:4]
     print(users.get(data["socketId"])  + " has logged in")   
     emit('games', {'games': GameList.list_games()})
-    emit('username', {'username': users[data["socketId"]]})  
+    emit('username', {'username': users[data["socketId"]]})
+    join_room(users[data["socketId"]])  
 
 @socketio.on('createGame')
 def createGame(data):
@@ -49,11 +50,12 @@ def createGame(data):
     if game is None or not game.is_active():
         game = GameList.select_game(data, users.values())
         emit('gameStarted', game.__name__, broadcast=True)
-        Thread(target=runner).start()
+        Thread(target=game_thread).start()
         # game.run_game(socketio)
 
-def runner():
+def game_thread():
     game.run_game(socketio)
+    return
 
 # def runGame():
 #     while game.is_active():
