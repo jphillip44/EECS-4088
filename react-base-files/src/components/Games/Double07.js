@@ -1,13 +1,19 @@
 import React from 'react';
 
 class Double07 extends React.Component {
+
+    componentWillUnmount(){
+        console.log("DESTROY?")
+    }
+
     constructor(props) {
         super(props);
+        console.log("NEW?")
         this.state = {
             allTargets: [],
             showTargets: false,
             showSingleTarget: false,
-            action: 'defend',
+            action: 'reload',
             target: {},
             player: {},
         }
@@ -47,7 +53,7 @@ class Double07 extends React.Component {
             });
             
             this.setState({
-                action: 'defend',
+                action: 'reload',
                 target: {},
                 showSingleTarget: false
             });

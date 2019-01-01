@@ -20,9 +20,13 @@ class Room extends React.Component {
         // Get chatlog when room loads
         this.props.socket.emit('sendToServer', { type: 'chatLog' });
 
-        this.props.socket.on('username', (data) => this.setState({ username: data }));
+        this.props.socket.on('username', (data) => this.setState({ 
+            username: data 
+        }));
 
-        this.props.socket.on('gameStarted', (data) => { this.props.history.push(`/${data}`); });
+        this.props.socket.on('gameStarted', (data) => {
+            this.props.history.push(`/${data}`); 
+        });
 
         // gets the keys from the object returned from the server and loops through
         // the array using the previously gotten keys to get the values

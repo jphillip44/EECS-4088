@@ -50,7 +50,6 @@ def createGame(data):
         game = GameList.select_game(data, users.values())
         emit('gameStarted', game.__name__, broadcast=True)
         socketio.start_background_task(game.run_game, socketio)
-        return
 
 # def game_thread():
 #     game.run_game(socketio)

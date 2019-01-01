@@ -75,7 +75,6 @@ class Double07(Game):
         else:
             print("Game Over")
             socketio.emit('gameOver', broadcast=True)
-            return
 
     def __set_state(self, players):
         '''
