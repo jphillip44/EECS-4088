@@ -6,9 +6,14 @@ from itertools import cycle
 class Match(Game):
     __state = {}
     __next = None
+    __p1 = None
+    __p2 = None
 
-    def __init__(self, players, pairs=20):
-        super().__init__(players)
+    def __init__(self, players, pairs=20, socketio=None):
+        super().__init__(players, socketio)
+        if socketio:
+            self.socketio.on_event('player1', self.set_p1)
+            self.socketio.on_event('player2', self.set_p2)
         self.__set_state(super().get_players(), pairs)
 
     def __set_state(self, players, pairs):
@@ -24,14 +29,31 @@ class Match(Game):
         for i in range(4):
             print(self.__state['board'][i*10:i*10+10])
 
-    def action():
-        pass
+    def set_p1(self, data):
+        self.__p1 = data
+        if self.__p2:
+            self.is_match()           
 
-    def end_round():
-        emit('state', self.__state)
+    def set_p2(delf, data):
+        self.__p2 = data
+        if self.__p1:
+            self.is_match()
+
+    def is_match(self):
+        if self.__p1 == self.__p2:
+            # flip cards
+            pass
+        else:
+            # don't flip cards
+            pass
+        self.__p1 = None
+        self.__p2 = None
+
+    # def end_round():
+    #     emit('state', self.__state)
     
-    def run_game():
-        emit('state', self.__state)
+    # def run_game():
+    #     emit('state', self.__state)
 
     def __get_turn(self):
         if self.__next is None:

@@ -8,11 +8,13 @@ class Game(ABC):
     __input_timer = 0
     __ranks = LifoQueue()
 
-    def __init__(self, players):
+    def __init__(self, players, socketio=None):
         '''
         Sets up the games default parameters.
         '''
         super().__init__()
+        if socketio:
+            self.socketio = socketio
         self.__players = players
         self.__name__ = self.__class__.__name__
         print("New "+self.__name__+" Started")

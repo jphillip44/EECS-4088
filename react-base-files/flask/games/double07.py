@@ -12,11 +12,13 @@ class Double07(Game):
     __target_queue = Queue()
     __other_queue = Queue()
 
-    def __init__(self, players):
+    def __init__(self, players, socketio=None):
         '''
         Sets up the games default parameters.
         '''
-        super().__init__(players)
+        super().__init__(players, socketio)
+        if socketio:
+            self.socketio.on_event('endOfRound', self.action)
         self.__set_state(super().get_players())
         super().set_timer(15)
 
@@ -60,21 +62,20 @@ class Double07(Game):
            self.print_standings()
 
 
-    def run_game(self, socketio):
-        socketio.on_event('endOfRound', self.action)
+    def run_game(self):
         while self.is_active():
-            socketio.emit('state', self.__state, broadcast=True)
+            self.socketio.emit('state', self.__state, broadcast=True)
             for i in range(self.get_timer(), 0, -1):
                 print(i)
-                socketio.sleep(1)
-            socketio.emit('timerExpired', broadcast=True)
+                self.socketio.sleep(1)
+            self.socketio.emit('timerExpired', broadcast=True)
             print("Waiting for inputs")
-            socketio.sleep(2)
+            self.socketio.sleep(2)
             print("Times up")
             self.end_round()
         else:
             print("Game Over")
-            socketio.emit('gameOver', broadcast=True)
+            self.socketio.emit('gameOver', broadcast=True)
 
     def __set_state(self, players):
         '''

@@ -42,18 +42,23 @@ def join_server(data):
     emit('games', {'games': GameList.list_games()})
     emit('username', {'username': users[data["socketId"]]})
     join_room(users[data["socketId"]])  
+    display()
 
 @socketio.on('createGame')
 def create_game(data):
     global game
     print(users)
     if game is None or not game.is_active():
-        game = GameList.select_game(data, users.values())
+        game = GameList.select_game(data, users.values(), socketio)
         emit('gameStarted', game.__name__, broadcast=True)
         global game_thread
         if game_thread is None or not game_thread.isAlive():
-            game_thread = Thread(target=game.run_game, args=[socketio])
+            game_thread = Thread(target=game.run_game)
             game_thread.start()
+
+def display():
+    print("users")
+    print(*users.values(), sep='\n')
 
 # ----------------- Chat ------------------
 

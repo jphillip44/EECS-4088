@@ -2,8 +2,8 @@ import games
 
 class GameList():
 
-    def select_game(type, users):
-        return getattr(games, type)(users)
+    def select_game(type, users, socketio):
+        return getattr(games, type)(users, socketio)
 
     def list_games():
         return [game.__name__ for game in games.Game.__subclasses__()]

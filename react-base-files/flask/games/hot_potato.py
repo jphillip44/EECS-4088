@@ -9,8 +9,10 @@ class Hot_Potato(Game):
     __state = {}
     __hold_potato = False
 
-    def __init__(self, players):
-        super().__init__(players)
+    def __init__(self, players, socketio=None):
+        super().__init__(players, socketio)
+        if socketio:
+            self.socketio.on_event('endOfTurn', self.action)
         self.__set_state(super().get_players())
 
     def action(self, data):
@@ -31,23 +33,21 @@ class Hot_Potato(Game):
         else:
             self.print_standings()
 
-    def run_game(self, socketio):
-        socketio.on_event('endOfTurn', self.action)
+    def run_game(self):
         while self.is_active():
-            socketio.emit('state', self.__state, broadcast=True)
             self.__hold_potato = True
             while self.__hold_potato:
                 if self.__state['timer'] > 0:
                     print(self.__state['timer'])
-                    socketio.sleep(1)
+                    self.socketio.sleep(1)
                     self.__state['timer'] -= 1
                 else:
-                    socketio.emit('explode', broadcast=True)
-                    socketio.sleep(2)
+                    self.socketio.emit('explode', broadcast=True)
+                    self.socketio.sleep(2)
                     # self.__hold_potato = False
         else:
             print("Game Over")
-            socketio.emit('gameOver', broadcast=True)
+            self.socketio.emit('gameOver', broadcast=True)
 
     def __set_state(self, players):
         self.__state['timer'] = self.__new_potato_timer()
