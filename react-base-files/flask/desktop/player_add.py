@@ -75,15 +75,15 @@ class PlayerUI ():
         self.setup()
           
            
+def main():
+    kek = PlayerUI()
+    mainloop()
 
-                    
+    kek.AddPlayer("P20")
+    mainloop()
+
+    #kek.window.reset()
+    #mainloop()               
                 
-
-kek = PlayerUI()
-mainloop()
-
-kek.AddPlayer("P20")
-mainloop()
-
-#kek.window.reset()
-#mainloop()
+if __name__ == '__main__':
+    main()
