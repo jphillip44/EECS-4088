@@ -5,35 +5,43 @@ from itertools import cycle
 from queue import PriorityQueue
 
 class Hot_Potato(Game):
-    # __potato_timer = 0
     __next = None
     __state = {}
+    __move = True
 
-    
     def __init__(self, players):
         super().__init__(players)
         self.__set_state(super().get_players())
 
-
     def action(self, data):
-        self.__hold(data['player'], data['time'])
-        if self.__state['players'][data['player']]['score'] > 20:
-            super().end_game()
-            self.__rank_players()
-            self.print_standings()
-        return True
+        if self.is_active():
+            print(data)
+            self.__hold(data['player'], data['time'])
+            self.__move = True
+            if self.__state['players'][data['player']]['score'] > 20:
+                super().end_game()
+                self.__rank_players()
+            self.display()
 
-    def end_round(self):
-        emit('state', self.__state)
-        # return self.__state['next']
+
 
     def display(self):
-        print("timer: " + str(self.__state['timer']), end = ", ")
-        print("next: " + self.__state['next'], end=', ')
-        print(*self.__state['players'].items())
+        if self.is_active():
+            print("timer: " + str(self.__state['timer']), end = ", ")
+            print("next: " + self.__state['next'], end=', ')
+            print(*self.__state['players'].items())
+        else:
+            self.print_standings()
 
     def run_game(self, socketio):
-        emit('state', self.__state)
+        socketio.on_event('endOfTurn', self.action)
+        while self.is_active():
+            if self.__move:
+                socketio.emit('state', self.__state, broadcast=True)
+                self.__move = False
+        else:
+            print("Game Over")
+            socketio.emit('gameOver', broadcast=True)
 
     def __set_state(self, players):
         self.__state['timer'] = self.__new_potato_timer()
@@ -70,23 +78,14 @@ if __name__ == '__main__':
     game = Hot_Potato(['A', 'B', 'C'])
     game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 5})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 9})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 1})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 6})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 3})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 8})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 2})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 9})
-    game.display()
     game.action({'player': game._Hot_Potato__state['next'], 'time': 3})
-    game.display()
     game = Hot_Potato(map(chr, range(ord('a'),ord('z')+1)))
     game.display()
 

@@ -48,6 +48,8 @@ class Double07(Game):
         while not self.__attack_queue.empty():
             self.__attack(*self.__attack_queue.get())
         self.__rank_players()
+        self.display()
+
 
     def display(self):
         '''
@@ -71,7 +73,6 @@ class Double07(Game):
             socketio.sleep(2)
             print("Times up")
             self.end_round()
-            self.display()
         else:
             print("Game Over")
             socketio.emit('gameOver', broadcast=True)
@@ -163,59 +164,47 @@ if __name__ == '__main__':
     game.action({'player': "B", 'action': 'reload'})
     game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    #test hit
-    game.display()
     game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.action({'player': "B", 'action': 'defend'})
     game.action({'player': "C", 'action': 'reload'})
     game.end_round()    # test defend
-    game.display()
     game.action({'player': "A", 'action': 'reload'})
     game.action({'player': "B", 'action': 'attack', 'target': 'C'})
     game.action({'player': "C", 'action': 'attack', 'target': 'B'})
     game.end_round() # test simultaneous fire
-    game.display()
     game.action({'player': "C", 'action': 'reload'})
     game.action({'player': "B", 'action': 'attack', 'target': 'C'})
     game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    # test hit
-    game.display()
     game.action({'player': "C", 'action': 'attack', 'target': 'A'})
     game.action({'player': "B", 'action': 'attack', 'target': 'C'})
     game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    # test 3 way hit and death
-    game.display()
     game.action({'player': "A", 'action': 'attack', 'target':'C'})
     game.action({'player': "C", 'action': 'reload'})
     game.end_round()    # should trigger end game
-    game.display()
 
     game = Double07(['A','B', 'C'])
-    game.display()
     game.action({'player': "A", 'action': 'reload'})
     game.action({'player': "C", 'action': 'defend'})
     game.action({'player': "B", 'action': 'reload'})
     game.end_round()
-    game.display()
     game.action({'player': "A", 'action': 'defend'})
     game.action({'player': "C", 'action': 'reload'})
     game.action({'player': "B", 'action': 'reload'})
     game.end_round()
-    game.display()
     game.action({'player': "C", 'action': 'attack', 'target': 'A'})
     game.action({'player': "B", 'action': 'attack', 'target': 'C'})
     game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()
-    game.display()
     game.action({'player': "C", 'action': 'attack', 'target': 'A'})
     game.action({'player': "B", 'action': 'attack', 'target': 'C'})
     game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()
-    game.display()
     game.action({'player': "C", 'action': 'attack', 'target': 'A'})
     game.action({'player': "B", 'action': 'attack', 'target': 'C'})
     game.action({'player': "A", 'action': 'attack', 'target': 'B'})
     game.end_round()    #triple kill
-    game.display() 
 
     game = Double07(map(chr, range(ord('a'),ord('z')+1)))
     game.display()
