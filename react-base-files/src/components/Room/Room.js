@@ -9,7 +9,7 @@ class Room extends React.Component {
         this.state = {
             username: '',
             users: [],
-            chatLog: []
+            chatLog: [],
         }
     }
 
@@ -20,13 +20,9 @@ class Room extends React.Component {
         // Get chatlog when room loads
         this.props.socket.emit('sendToServer', { type: 'chatLog' });
 
-        this.props.socket.on('username', (data) => this.setState({ 
-            username: data 
-        }));
+        this.props.socket.on('username', (data) => this.setState({ username: data }));
 
-        this.props.socket.on('gameStarted', (data) => {
-            this.props.history.push(`/${data}`); 
-        });
+        this.props.socket.on('gameStarted', (data) => { this.props.history.push(`/${data}`); });
 
         // gets the keys from the object returned from the server and loops through
         // the array using the previously gotten keys to get the values
@@ -66,7 +62,8 @@ class Room extends React.Component {
     };
 
     goToGame = (game) => {
-        this.props.socket.emit('createGame', game);
+        console.log("CREATEGAME");
+        this.props.socket.emit('createGame', game);       
     };
     
     render() {

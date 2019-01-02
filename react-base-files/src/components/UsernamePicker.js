@@ -6,10 +6,11 @@ class UsernamePicker extends React.Component {
         this.state = {
             username: '',
             socketId: ''    
-        };
+        }; 
+        this.usernameInput = React.createRef();         
+    }
 
-        this.usernameInput = React.createRef();
-
+    componentDidMount() {
         this.props.socket.on('games', (data) => {
             this.props.updateGameList(data.games);
         });

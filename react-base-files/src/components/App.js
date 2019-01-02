@@ -21,12 +21,7 @@ class App extends Component {
             gameList: []
         };
 
-        this.socket = io('http://localhost:5000', {
-            'reconnection delay': 2500,
-            'secure':true,
-            'max reconnection attempts': 10,
-            'reconnection':true       
-        });
+        this.socket = io('http://localhost:5000');
     }
 
     updateUsername = (username) => {
