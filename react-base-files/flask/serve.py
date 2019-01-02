@@ -16,7 +16,7 @@ from flask_socketio import SocketIO, join_room, emit
 from threading import Thread
 import json
 
-from gameList import GameList
+from game_list import GameList
 import desktop
 
 # initialize Flask
