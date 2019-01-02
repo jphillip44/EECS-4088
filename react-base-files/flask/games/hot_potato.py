@@ -11,7 +11,7 @@ class Hot_Potato(Game):
 
     def __init__(self, players, **kwargs):
         super().__init__(players, **kwargs)
-        if self.socketio:
+        if self.__dict__.get('socketio'):
             self.socketio.on_event('endOfTurn', self.action)
         self.__set_state(super().get_players())
 
@@ -24,8 +24,8 @@ class Hot_Potato(Game):
                 super().end_game()
                 self.__rank_players()
             self.display()
-            if self.display_game:
-                self.display_game.update(self)
+        if self.__dict__.get('display_game'):
+            self.display_game.update(self)
 
     def display(self):
         if self.is_active():

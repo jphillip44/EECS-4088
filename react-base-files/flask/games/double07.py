@@ -17,7 +17,7 @@ class Double07(Game):
         Sets up the games default parameters.
         '''
         super().__init__(players, **kwargs)
-        if self.socketio:
+        if self.__dict__.get('socketio'):
             self.socketio.on_event('endOfRound', self.action)
         self.__set_state(super().get_players())
         super().set_timer(15)
@@ -51,7 +51,7 @@ class Double07(Game):
             self.__attack(*self.__attack_queue.get())
         self.__rank_players()
         self.display()
-        if self.display_game:
+        if self.__dict__.get('display_game'):
             self.display_game.update(self)
 
 

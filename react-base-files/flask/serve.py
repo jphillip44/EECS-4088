@@ -53,7 +53,7 @@ def create_game(data):
     global game
     print(users)
     if game is None or not game.is_active():
-        game = GameList.select_game(data, users.values(), socketio=socketio, display=DisplayGame)
+        game = GameList.select_game(data, users.values(), socketio=socketio, display_game=DisplayGame)
         emit('gameStarted', game.__name__, broadcast=True)
         global game_thread
         if game_thread is None or not game_thread.isAlive():

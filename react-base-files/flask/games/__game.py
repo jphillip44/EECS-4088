@@ -13,8 +13,7 @@ class Game(ABC):
         Sets up the games default parameters.
         '''
         super().__init__()
-        self.socketio = kwargs.get('socketio')
-        self.display_game = kwargs.get('display')
+        self.__dict__.update(kwargs)
         self.__players = players
         self.__name__ = self.__class__.__name__
         print("New "+self.__name__+" Started")

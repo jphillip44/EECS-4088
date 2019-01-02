@@ -11,7 +11,7 @@ class Match(Game):
 
     def __init__(self, players, pairs=20, **kwargs):
         super().__init__(players, **kwargs)
-        if self.socketio:
+        if self.__dict__.get('socketio'):
             self.socketio.on_event('player1', self.set_p1)
             self.socketio.on_event('player2', self.set_p2)
         self.__set_state(super().get_players(), pairs)
@@ -56,6 +56,8 @@ class Match(Game):
         self.__p2 = None
         self.__state['next'] = (self.__get_turn(), self.__get_turn())
         self.display()
+        if self.__dict__.get('display_game'):
+            self.display_game.update(self)
     
     def run_game():
         pass
