@@ -17,6 +17,7 @@ from threading import Thread
 import json
 
 from gameList import GameList
+import desktop
 
 # initialize Flask
 
