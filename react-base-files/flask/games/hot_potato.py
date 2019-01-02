@@ -7,23 +7,21 @@ from queue import PriorityQueue
 class Hot_Potato(Game):
     __next = None
     __state = {}
-    __move = True
+    __hold_potato = False
 
     def __init__(self, players):
         super().__init__(players)
         self.__set_state(super().get_players())
 
     def action(self, data):
+        self.__hold_potato = False
         if self.is_active():
             print(data)
             self.__hold(data['player'], data['time'])
-            self.__move = True
             if self.__state['players'][data['player']]['score'] > 20:
                 super().end_game()
                 self.__rank_players()
             self.display()
-
-
 
     def display(self):
         if self.is_active():
@@ -36,9 +34,17 @@ class Hot_Potato(Game):
     def run_game(self, socketio):
         socketio.on_event('endOfTurn', self.action)
         while self.is_active():
-            if self.__move:
-                socketio.emit('state', self.__state, broadcast=True)
-                self.__move = False
+            socketio.emit('state', self.__state, broadcast=True)
+            self.__hold_potato = True
+            while self.__hold_potato:
+                if self.__state['timer'] > 0:
+                    print(self.__state['timer'])
+                    socketio.sleep(1)
+                    self.__state['timer'] -= 1
+                else:
+                    socketio.emit('explode', broadcast=True)
+                    socketio.sleep(2)
+                    # self.__hold_potato = False
         else:
             print("Game Over")
             socketio.emit('gameOver', broadcast=True)
@@ -51,9 +57,8 @@ class Hot_Potato(Game):
         self.__state['next'] = self.__get_turn()
 
     def __hold(self, player, time):
-        if time < self.__state['timer']:
+        if self.__state['timer'] > 0:
             self.__state['players'][player]['score'] += time
-            self.__state['timer'] -= time
         else:
             self.__state['players'][player]['score'] = 0
             self.__state['timer'] = self.__new_potato_timer()
