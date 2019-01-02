@@ -17,7 +17,7 @@ class Hot_Potato(Game):
         self.__hold_potato = False
         if self.is_active():
             print(data)
-            self.__hold(data['player'], data['time'])
+            self.__hold(data['player'], data.get('time'))
             if self.__state['players'][data['player']]['score'] > 20:
                 super().end_game()
                 self.__rank_players()
@@ -57,7 +57,7 @@ class Hot_Potato(Game):
         self.__state['next'] = self.__get_turn()
 
     def __hold(self, player, time):
-        if self.__state['timer'] > 0:
+        if time and self.__state['timer'] > 0:
             self.__state['players'][player]['score'] += time
         else:
             self.__state['players'][player]['score'] = 0
