@@ -13,6 +13,7 @@ except ModuleNotFoundError:
 
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
+from threading import Thread
 import json
 
 from gameList import GameList
@@ -25,6 +26,7 @@ ROOMS = {} # dict to track active rooms
 
 users = {}
 game = None
+game_thread = None
 
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
@@ -34,7 +36,7 @@ def index(path):
     return render_template('index.html')
 
 @socketio.on('joinServer')
-def joinServer(data):
+def join_server(data):
     "Create a game lobby"
     users[data["socketId"]] = data["username"] + " #" + data["socketId"][:4]
     print(users.get(data["socketId"])  + " has logged in")   
@@ -43,17 +45,18 @@ def joinServer(data):
     join_room(users[data["socketId"]])  
 
 @socketio.on('createGame')
-def createGame(data):
+def create_game(data):
+    # emit('gameStarted', 'Double07', broadcast=True)
+    # emit('gameOver', broadcast=True)
     global game
     print(users)
     if game is None or not game.is_active():
         game = GameList.select_game(data, users.values())
         emit('gameStarted', game.__name__, broadcast=True)
-        socketio.start_background_task(game.run_game, socketio)
-
-# def game_thread():
-#     game.run_game(socketio)
-#     return
+        global game_thread
+        if game_thread is None or not game_thread.isAlive():
+            game_thread = Thread(target=game.run_game, args=[socketio])
+            game_thread.start()
 
 # def runGame():
 #     while game.is_active():
@@ -94,7 +97,7 @@ def createGame(data):
 chatLog = []
 
 @socketio.on('sendToServer')
-def sendToServer(data):
+def send_to_server(data):
     if data["type"] == "chat":
         chatLog.append(data)
         # broadcast allows for all connected socket to receive the message
@@ -156,6 +159,6 @@ def con():
 
 
 if __name__ == '__main__':
-    # Thread(target=background).start()
+    # game_thread(target=background).start()
     socketio.run(app, host="0.0.0.0")
     # wsgi.server(eventlet.listen(('0.0.0.0', 5000)), app)

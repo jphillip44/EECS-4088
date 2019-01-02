@@ -64,8 +64,7 @@ class Double07(Game):
         socketio.on_event('endOfRound', self.action)
         while self.is_active():
             socketio.emit('state', self.__state, broadcast=True)
-            # for i in range(self.get_timer(), 0, -1):
-            for i in range(4, 0, -1):
+            for i in range(self.get_timer(), 0, -1):
                 print(i)
                 socketio.sleep(1)
             socketio.emit('timerExpired', broadcast=True)
