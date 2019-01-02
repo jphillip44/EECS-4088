@@ -3,7 +3,7 @@ import games
 
 class DisplayGame():
 
-    def switch(self, obj):
+    def update(self, obj):
         getattr(self, obj.__class__.__name__)(obj)
 
     def list(self, obj):
@@ -18,9 +18,9 @@ class DisplayGame():
 
 if __name__ == '__main__':
     player_list = ['player1', 'player2']
-    DisplayGame().switch(player_list)
+    DisplayGame().update(player_list)
     game = games.Double07(['A', 'B'])
-    DisplayGame().switch(game)
+    DisplayGame().update(game)
     game = games.Hot_Potato(['A', 'B'])
-    DisplayGame().switch(game)
+    DisplayGame().update(game)
  
