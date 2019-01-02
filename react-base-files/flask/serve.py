@@ -46,7 +46,6 @@ def join_server(data):
     join_room(users[data["socketId"]])
     global game
     if game is None or not game.is_active():
-        # display()
         DisplayGame.update([*users.values()])
 
 @socketio.on('createGame')
@@ -54,8 +53,7 @@ def create_game(data):
     global game
     print(users)
     if game is None or not game.is_active():
-        game = GameList.select_game(data, users.values(), socketio)
-        print(":"+game.__name__)
+        game = GameList.select_game(data, users.values(), socketio, DisplayGame)
         emit('gameStarted', game.__name__, broadcast=True)
         global game_thread
         if game_thread is None or not game_thread.isAlive():
