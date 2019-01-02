@@ -9,9 +9,9 @@ class Hot_Potato(Game):
     __state = {}
     __hold_potato = False
 
-    def __init__(self, players, socketio=None):
-        super().__init__(players, socketio)
-        if socketio:
+    def __init__(self, players, **kwargs):
+        super().__init__(players, **kwargs)
+        if self.socketio:
             self.socketio.on_event('endOfTurn', self.action)
         self.__set_state(super().get_players())
 
@@ -24,6 +24,8 @@ class Hot_Potato(Game):
                 super().end_game()
                 self.__rank_players()
             self.display()
+            if self.display_game:
+                self.display_game.update(self)
 
     def display(self):
         if self.is_active():
@@ -78,6 +80,9 @@ class Hot_Potato(Game):
             results.put((stats['score'], player))
         while not results.empty():
             self.add_ranks(results.get()[1])
+
+    def get_state(self):
+        return self.__state
 
 if __name__ == '__main__':
     game = Hot_Potato(['A', 'B', 'C'])
