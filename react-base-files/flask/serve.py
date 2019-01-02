@@ -17,6 +17,7 @@ from threading import Thread
 import json
 
 from game_list import GameList
+from display_game import DisplayGame
 import desktop
 
 # initialize Flask
@@ -45,7 +46,8 @@ def join_server(data):
     join_room(users[data["socketId"]])
     global game
     if game is None or not game.is_active():
-        display()
+        # display()
+        DisplayGame.update([*users.values()])
 
 @socketio.on('createGame')
 def create_game(data):
