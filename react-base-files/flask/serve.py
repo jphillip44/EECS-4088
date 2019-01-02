@@ -22,7 +22,6 @@ from gameList import GameList
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-ROOMS = {} # dict to track active rooms
 
 users = {}
 game = None
@@ -46,8 +45,6 @@ def join_server(data):
 
 @socketio.on('createGame')
 def create_game(data):
-    # emit('gameStarted', 'Double07', broadcast=True)
-    # emit('gameOver', broadcast=True)
     global game
     print(users)
     if game is None or not game.is_active():
@@ -57,40 +54,6 @@ def create_game(data):
         if game_thread is None or not game_thread.isAlive():
             game_thread = Thread(target=game.run_game, args=[socketio])
             game_thread.start()
-
-# def runGame():
-#     while game.is_active():
-#         emit('state', game.get_state())
-#         for i in range(game.get_timer(), 0, -1):
-#             print(i)
-#             socketio.sleep(1)
-#         if game.get_timer():
-#             emit('timerExpired', "")
-#             print("Waiting for inputs")
-#             socketio.sleep(5)
-#             print("Times up")
-#         game.end_round()
-#         game.display()
-#     else:
-#         emit('gameOver', "")
-
-# @socketio.on('endOfRound')
-# def action(data):
-#     print(users[request.sid], data)
-#     if game.action(data):
-#         game.end_round()
-
-# def background():
-#     i = 0
-#     while True:
-#         print(i)
-#         i += 1
-#         socketio.sleep(1)
-        # emit('poll', broadcast=True)
-
-# @socketio.on('pollResponse')
-# def polling():
-#     print("a")
 
 # ----------------- Chat ------------------
 
@@ -108,41 +71,6 @@ def send_to_server(data):
         emit('userList', users, broadcast=True)
     elif data["type"] == "retrieveUsername":
         emit('username', users[request.sid])
-
-
-'''
-There should be no game logic inside the server
-'''
-# ----------------- 007 GAME ------------------
-
-# players stores username, socket id, lives, action points of all players
-# players = {}
-# actions stores each users actions in the current round
-# actions = []
-# function endOfRound cycles through the actions list and applies those actions
-# to players, updating players list
-
-# broadcast is set to true so that when a user joins a game, it tells all other users
-# in the game an updated opponents list
-
-# @socketio.on('initializePlayers')
-# def initializePlayers():
-#     # reset array on load
-#     players = []
-#     for user in users:
-#         players.append({
-#             "username": users[user],
-#             "socketId": user,
-#             "hp": 3,
-#             "ap": 1
-#         })
-#     emit("allPlayers", players, broadcast=True) 
-
-# @socketio.on('endOfRound')
-# def endOfRound(data):
-#     print(data)
-
-# ---------------- HOT POTATO GAME ------------------
 
 # When the client disconnects from the socket
 @socketio.on('disconnect')

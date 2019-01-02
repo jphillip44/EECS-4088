@@ -21,7 +21,9 @@ class App extends Component {
             gameList: []
         };
 
+        // enable 1st option for testing on port 3000, enable second for deployment
         this.socket = io('http://localhost:5000');
+        // this.socket = io(); 
     }
 
     updateUsername = (username) => {
