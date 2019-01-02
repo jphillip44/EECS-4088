@@ -41,8 +41,10 @@ def join_server(data):
     print(users.get(data["socketId"])  + " has logged in")   
     emit('games', {'games': GameList.list_games()})
     emit('username', {'username': users[data["socketId"]]})
-    join_room(users[data["socketId"]])  
-    display()
+    join_room(users[data["socketId"]])
+    global game
+    if game is None or not game.is_active():
+        display()
 
 @socketio.on('createGame')
 def create_game(data):
