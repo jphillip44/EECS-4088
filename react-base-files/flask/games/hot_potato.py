@@ -17,7 +17,6 @@ class Hot_Potato(Game):
 
     def action(self, data):
         self.__hold_potato = False
-        self.socketio.sleep(1)
         if self.is_active():
             print(data)
             self.__hold(data['player'], data.get('time'))
@@ -38,9 +37,10 @@ class Hot_Potato(Game):
 
     def run_game(self):
         while self.is_active():
-            self.socketio.emit('state', self.__state, broadcast=True)
+            self.socketio.sleep(1)
             self.__hold_potato = True
             while self.__hold_potato:
+                self.socketio.emit('state', self.__state, broadcast=True)
                 if self.__state['timer'] > 0:
                     self.socketio.sleep(1)
                     print(self.__state['timer'])
@@ -61,12 +61,12 @@ class Hot_Potato(Game):
         self.__state['next'] = self.__get_turn()
 
     def __hold(self, player, time):
+        self.__state['next'] = self.__get_turn()
         if time and self.__state['timer'] > 0:
             self.__state['players'][player]['score'] += time
         else:
             self.__state['players'][player]['score'] = 0
             self.__state['timer'] = self.__new_potato_timer()
-        self.__state['next'] = self.__get_turn()
 
     def __get_turn(self):
         if self.__next is None:
