@@ -36,13 +36,15 @@ class Match(Game):
 
     def set_p1(self, data):
         self.__p1 = data
-        print(self.__state['board'][self.__p1])   
-        self.socketio.emit('player1_move', data)        
+        print(self.__state['board'][self.__p1])
+        if self.__dict__.get('socketio'):
+            self.socketio.emit('player1_move', data)        
 
     def set_p2(self, data):
         self.__p2 = data
         print(self.__state['board'][self.__p2])
-        self.socketio.emit('player2_move', data)        
+        if self.__dict__.get('socketio'):
+            self.socketio.emit('player2_move', data)        
         self.is_match()
 
     def is_match(self):
@@ -73,6 +75,8 @@ class Match(Game):
         return next(self.__next)
 
 if __name__ == '__main__':
+    game = Match(['A'])
+    game.display()
     game = Match(['A', 'B', 'C'])
     game.display()
     game.set_p1(4)

@@ -48,6 +48,7 @@ def join_server(data):
     emit('username', {'username': users[data["socketId"]]})
     join_room(users[data["socketId"]])
     global game
+    display()
     if game is None or not game.is_active():
         DisplayGame.update([*users.values()])
 
@@ -65,7 +66,7 @@ def create_game(data):
 
 def display():
     print("users")
-    print(*users.values(), sep='\n')
+    print(*users.values(), sep='\n') if users else print('none')
 
 # ----------------- Chat ------------------
 
@@ -82,13 +83,14 @@ def send_to_server(data):
     elif data["type"] == "retrieveUsers":
         emit('userList', users, broadcast=True)
     elif data["type"] == "retrieveUsername":
-        emit('username', users[request.sid])
+        emit('username', users.get(request.sid))
 
 # When the client disconnects from the socket
 @socketio.on('disconnect')
 def dc():
     if users.get(request.sid):
         del users[request.sid]
+    display()
     if game is None or not game.is_active():
         DisplayGame.update([*users.values()])
     # let every user know when a user disconnects

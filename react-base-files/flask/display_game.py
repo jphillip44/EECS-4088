@@ -7,8 +7,7 @@ class DisplayGame():
         getattr(DisplayGame, obj.__class__.__name__)(obj)
 
     def list(obj):
-        print("users")
-        print(*obj, sep='\n') if obj else print('none')
+        pass
 
     def Double07(obj):
         print(obj.get_state())
