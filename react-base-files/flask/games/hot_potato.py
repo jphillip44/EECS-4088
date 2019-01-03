@@ -8,6 +8,7 @@ class Hot_Potato(Game):
     __next = None
     __state = {}
     __hold_potato = False
+    
 
     def __init__(self, players, **kwargs):
         super().__init__(players, **kwargs)
@@ -20,7 +21,7 @@ class Hot_Potato(Game):
         if self.is_active():
             print(data)
             self.__hold(data['player'], data.get('time'))
-            if self.__state['players'][data['player']]['score'] > 20:
+            if self.__state['players'][data['player']]['score'] > 50:
                 super().end_game()
                 self.__rank_players()
             self.display()
@@ -30,6 +31,7 @@ class Hot_Potato(Game):
     def display(self):
         if self.is_active():
             print("timer: " + str(self.__state['timer']), end = ", ")
+            print("penalty: " + str(self.__state['penalty']), end=", ")
             print("next: " + self.__state['next'], end=', ')
             print(*self.__state['players'].items())
         else:
@@ -64,7 +66,7 @@ class Hot_Potato(Game):
         if time and self.__state['timer'] > 0:
             self.__state['players'][player]['score'] += time
         else:
-            self.__state['players'][player]['score'] = 0
+            self.__state['players'][player]['score'] -= min(self.__state['players'][player]['score'], self.__state['penalty'])
             self.__state['timer'] = self.__new_potato_timer()
 
     def __get_turn(self):
@@ -73,7 +75,8 @@ class Hot_Potato(Game):
         return next(self.__next)
 
     def __new_potato_timer(self):
-        return randint(10, 20)
+        self.__state['penalty'] = randint(1, 20)
+        return self.__state['penalty']
 
     def __rank_players(self):
         results = PriorityQueue()
