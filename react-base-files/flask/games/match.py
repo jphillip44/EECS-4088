@@ -12,8 +12,8 @@ class Match(Game):
     def __init__(self, players, pairs=20, **kwargs):
         super().__init__(players, **kwargs)
         if self.__dict__.get('socketio'):
-            self.socketio.on_event('player1', self.set_p1)
-            self.socketio.on_event('player2', self.set_p2)
+            self.socketio.on_event('player1_return', self.set_p1)
+            self.socketio.on_event('player2_return', self.set_p2)
         self.__set_state(super().get_players(), pairs)
 
     def __set_state(self, players, pairs):
@@ -37,12 +37,12 @@ class Match(Game):
     def set_p1(self, data):
         self.__p1 = data
         print(self.__state['board'][self.__p1])   
-        self.socketio.emit('player1', data)        
+        self.socketio.emit('player1_move', data)        
 
     def set_p2(self, data):
         self.__p2 = data
         print(self.__state['board'][self.__p2])
-        self.socketio.emit('player2', data)        
+        self.socketio.emit('player2_move', data)        
         self.is_match()
 
     def is_match(self):

@@ -16,6 +16,9 @@ class DisplayGame():
     def Hot_Potato(obj):
         print(obj.get_state())
 
+    def Match(obj):
+        print(obj.get_state())
+
 
 if __name__ == '__main__':
     player_list = ['player1', 'player2']
