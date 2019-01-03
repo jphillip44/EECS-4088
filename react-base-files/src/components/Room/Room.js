@@ -62,7 +62,6 @@ class Room extends React.Component {
     };
 
     goToGame = (game) => {
-        console.log("CREATEGAME");
         this.props.socket.emit('createGame', game);       
     };
     
