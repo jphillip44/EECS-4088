@@ -36,17 +36,16 @@ class Match(Game):
 
     def set_p1(self, data):
         self.__p1 = data
-        if self.__p2:
-            self.is_match()           
+        print(self.__state['board'][self.__p1])   
+        self.socketio.emit('player1', data)        
 
     def set_p2(self, data):
         self.__p2 = data
-        if self.__p1:
-            self.is_match()
+        print(self.__state['board'][self.__p2])
+        self.socketio.emit('player2', data)        
+        self.is_match()
 
     def is_match(self):
-        print(self.__state['board'][self.__p1])
-        print(self.__state['board'][self.__p2])
         if self.__state['board'][self.__p1] == self.__state['board'][self.__p2]:
             self.__state['gameBoard'][self.__p1] = self.__state['board'][self.__p1]
             self.__state['gameBoard'][self.__p2] = self.__state['board'][self.__p2]

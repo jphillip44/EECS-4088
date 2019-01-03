@@ -8,7 +8,7 @@ class DisplayGame():
 
     def list(obj):
         print("users")
-        print(*obj, sep='\n')
+        print(*obj, sep='\n') if obj else print('none')
 
     def Double07(obj):
         print(obj.get_state())

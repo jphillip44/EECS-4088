@@ -3,13 +3,16 @@ try:
     from eventlet import monkey_patch
     monkey_patch()
     print("Running Eventlet Server")
+    async_mode='eventlet'
 except ModuleNotFoundError:
     try:
         from gevent import monkey
         monkey.patch_all()
         print("Running Gevent Server")
+        async_mode='gevent'
     except ModuleNotFoundError:
         print("Running Flask Server")
+        async_mode = None
 
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, join_room, emit
@@ -23,7 +26,7 @@ import desktop
 # initialize Flask
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode=async_mode)
 
 users = {}
 game = None
@@ -84,12 +87,15 @@ def send_to_server(data):
 # When the client disconnects from the socket
 @socketio.on('disconnect')
 def dc():
-    del users[request.sid]
+    if users.get(request.sid):
+        del users[request.sid]
+    if game is None or not game.is_active():
+        DisplayGame.update([*users.values()])
     # let every user know when a user disconnects
     emit("userDisconnected", request.sid, broadcast=True)
-    print("dc " + request.sid)
+    # print("dc " + request.sid)
 
-@socketio.on('connect')
+# @socketio.on('connect')
 def con():
     print("con " + request.sid) 
 #     gm = game.Start(socketio)

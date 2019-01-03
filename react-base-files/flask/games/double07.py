@@ -75,7 +75,7 @@ class Double07(Game):
                 self.socketio.sleep(1)
             self.socketio.emit('timerExpired', broadcast=True)
             print("Waiting for inputs")
-            self.socketio.sleep(2)
+            self.socketio.sleep(1)
             print("Times up")
             self.end_round()
         else:
