@@ -38,14 +38,13 @@ class Match(Game):
 
     def display(self):
         if self.active:
-            # print("Board")
-            # print(*self.state['board'], sep='\n')
-            # print("Game Board")
-            # print(*self.state['gameBoard'], sep='\n')
-            # print('next: ' + str(self.state['next']))
-            # print('cursor: ' + str(self.state['cursor']))
-            # print(self.state['players'])
-            print(*self.state)
+            print("Board")
+            print(*self.state['board'], sep='\n')
+            print("Game Board")
+            print(*self.state['gameBoard'], sep='\n')
+            print('next: ' + str(self.state['next']))
+            print('cursor: ' + str(self.state['cursor']))
+            print(self.state['players'])
         else:
             self.print_standings()
 
