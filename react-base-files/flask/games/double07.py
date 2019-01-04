@@ -13,7 +13,7 @@ class Double07(Game):
     __other_queue = Queue()
 
     def __init__(self, players, timer=15, **kwargs):
-        def __init_state(players):
+        def init_state(players):
             '''
             Setups the game state for each player with default parameters.
             '''
@@ -26,7 +26,7 @@ class Double07(Game):
         super().__init__(players, **kwargs)
         if self.__dict__.get('socketio'):
             self.socketio.on_event('endOfRound', self.action)
-        __init_state(super().get_players())
+        init_state(self.get_players())
         self.__timer = timer
 
     def action(self, data):
@@ -56,7 +56,7 @@ class Double07(Game):
             self.__target(*self.__target_queue.get())
         while not self.__attack_queue.empty():
             self.__attack(*self.__attack_queue.get())
-        self.__rank_players()
+        self.rank_players()
         self.display()
         if self.__dict__.get('display_game'):
             self.display_game.update(self)
@@ -134,7 +134,7 @@ class Double07(Game):
         else:
             self.state[target]['hp'] -= 1
 
-    def __rank_players(self):
+    def rank_players(self):
         '''
         Ranks players based on order of death.
         Simultaneous deaths are tie-broken by the player with greater AP.
@@ -167,7 +167,7 @@ class Double07(Game):
         if len(alive) < 2:
             for player in alive:
                 self.add_ranks(player) 
-            super().end_game()
+            self.end_game()
 
 
 

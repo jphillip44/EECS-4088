@@ -9,7 +9,7 @@ class Hot_Potato(Game):
     __hold_potato = False
 
     def __init__(self, players, **kwargs):
-        def __init_state(players):
+        def init_state(players):
             self.state['timer'] = self.__new_potato_timer()
             self.state['players'] = OrderedDict()
             for player in players:
@@ -19,16 +19,16 @@ class Hot_Potato(Game):
         super().__init__(players, **kwargs)
         if self.__dict__.get('socketio'):
             self.socketio.on_event('endOfTurn', self.action)
-        __init_state(super().get_players())
+        init_state(self.get_players())
 
     def action(self, data):
         self.__hold_potato = False
         if self.active:
             print(data)
             self.__hold(data['player'], data.get('time'))
-            if self.state['players'][data['player']]['score'] > 50:
-                super().end_game()
-                self.__rank_players()
+            if self.state['players'][data['player']]['score'] > 20:
+                self.end_game()
+                self.rank_players()
             self.display()
         if self.__dict__.get('display_game'):
             self.display_game.update(self)
@@ -48,9 +48,9 @@ class Hot_Potato(Game):
             self.__hold_potato = True
             while self.__hold_potato:
                 if self.state['timer'] > 0:
+                    self.socketio.sleep(1)
                     print(self.state['timer'])
                     self.state['timer'] -= 1
-                    self.socketio.sleep(1)
                 else:
                     self.socketio.emit('explode', room=self.state['next'])
                     self.__hold_potato = False
@@ -76,12 +76,12 @@ class Hot_Potato(Game):
         self.state['penalty'] = randint(1, 20)
         return self.state['penalty']
 
-    def __rank_players(self):
-        results = PriorityQueue()
-        for player, stats in self.state['players'].items():
-            results.put((stats['score'], player))
-        while not results.empty():
-            self.add_ranks(results.get()[1])
+    # def __rank_players(self):
+    #     results = PriorityQueue()
+    #     for player, stats in self.state['players'].items():
+    #         results.put((stats['score'], player))
+    #     while not results.empty():
+    #         self.add_ranks(results.get()[1])
 
 if __name__ == '__main__':
     game = Hot_Potato(['A', 'B', 'C'])

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
 from flask_socketio import emit
-from queue import LifoQueue
+from queue import LifoQueue, PriorityQueue
 
 class Game(ABC):
     __active_game = False
@@ -75,5 +75,12 @@ class Game(ABC):
 
     def add_ranks(self, data):
         self.__ranks.put(data)
+
+    def rank_players(self):
+        results = PriorityQueue()
+        for player, stats in self.state['players'].items():
+            results.put((stats['score'], player))
+        while not results.empty():
+            self.add_ranks(results.get()[1])
 
         
