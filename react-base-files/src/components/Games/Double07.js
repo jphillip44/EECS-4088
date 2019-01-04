@@ -117,7 +117,7 @@ class Double07 extends React.Component {
     }
 
     closeTargetList = () => {
-        this.setState({ showSingleTarget: false });
+        this.setState({ showTargets: false });
     }
     
     render() {
