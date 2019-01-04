@@ -12,15 +12,22 @@ class Double07(Game):
     __target_queue = Queue()
     __other_queue = Queue()
 
-    def __init__(self, players, **kwargs):
+    def __init__(self, players, timer=15, **kwargs):
+        def __init_state(players):
+            '''
+            Setups the game state for each player with default parameters.
+            '''
+            for player in players:
+                self.state[player] = {'hp' : 3, 'ap': 1, 'defend': 'none'}
+
         '''
         Sets up the games default parameters.
         '''
         super().__init__(players, **kwargs)
         if self.__dict__.get('socketio'):
             self.socketio.on_event('endOfRound', self.action)
-        self.__set_state(super().get_players())
-        super().set_timer(15)
+        __init_state(super().get_players())
+        self.__timer = timer
 
     def action(self, data):
         '''
@@ -59,21 +66,20 @@ class Double07(Game):
         '''
         Displays the game state to the console.
         '''
-        print(self.__state)
-        if not self.is_active():
+        print(self.state)
+        if not self.active:
            self.print_standings()
 
-    def get_state(self):
-        return self.__state
-
-
     def run_game(self):
-        while self.is_active():
-            self.socketio.emit('state', self.__state, broadcast=True)
-            for i in range(self.get_timer(), 0, -1):
-                print(i)
+        while self.active:
+            self.socketio.emit('state', self.state, broadcast=True)
+            t = self.timer
+            while self.timer > 0:
                 self.socketio.sleep(1)
+                print(self.timer)
+                self.timer -= 1
             self.socketio.emit('timerExpired', broadcast=True)
+            self.timer = t
             print("Waiting for inputs")
             self.socketio.sleep(1)
             print("Times up")
@@ -81,48 +87,52 @@ class Double07(Game):
         else:
             print("Game Over")
             self.socketio.emit('gameOver', broadcast=True)
+            
+    @property
+    def timer(self):
+        return self.__timer
 
-    def __set_state(self, players):
-        '''
-        Setups the game state for each player with default parameters.
-        '''
-        self.__state = {}
-        for player in players:
-            self.__state[player] = {'hp' : 3, 'ap': 1, 'defend': 'none'}
+    @timer.setter
+    def timer(self, value):
+        self.__timer = value
+
+    @timer.deleter
+    def timer(self):
+        del self.__timer
 
     def __defend(self, player):
         '''
         Handles logic for the defend action.
         '''
-        self.__state[player]['defend'] = "all"
-        self.__state[player]['ap'] -= 1
+        self.state[player]['defend'] = "all"
+        self.state[player]['ap'] -= 1
 
     def __reload(self, player):
         '''
         Handles logic for the reload action.
         '''
-        self.__state[player]['defend'] = "none"
-        self.__state[player]['ap'] += 1
+        self.state[player]['defend'] = "none"
+        self.state[player]['ap'] += 1
 
     def __target(self, player, target):
         '''
         Handles defend logic for attack action.
         Sets defense to attacker to prevent double attacks.
         '''
-        self.__state[player]['defend'] = target
+        self.state[player]['defend'] = target
 
     def __attack(self, player, target):
         '''
         Handles logic attack action.
         Handles different cases of success/failure.
         '''
-        if self.__state[target]['defend'] == "all":
-            self.__state[target]['ap'] += 1
-            self.__state[player]['ap'] -= 1
-        elif self.__state[target]['defend'] == player:
-            self.__state[player]['ap'] -= 1
+        if self.state[target]['defend'] == "all":
+            self.state[target]['ap'] += 1
+            self.state[player]['ap'] -= 1
+        elif self.state[target]['defend'] == player:
+            self.state[player]['ap'] -= 1
         else:
-            self.__state[target]['hp'] -= 1
+            self.state[target]['hp'] -= 1
 
     def __rank_players(self):
         '''
@@ -136,10 +146,10 @@ class Double07(Game):
             A local function to __rank_players(). 
             Adds players to ranking queue if they are dead.
             '''
-            for player, stats in self.__state.items():
+            for player, stats in self.state.items():
                 if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     dead.put((stats['ap'], player))
-                    self.__state[player]['hp'] = 'dead'
+                    self.state[player]['hp'] = 'dead'
             while not dead.empty(): 
                 self.add_ranks(dead.get()[1])
 
@@ -148,7 +158,7 @@ class Double07(Game):
             A local function to __rank_players().
             Returns a list of living players.
             '''
-            for player, stats in self.__state.items():
+            for player, stats in self.state.items():
                 if stats['hp'] != 'dead':
                     yield player
 

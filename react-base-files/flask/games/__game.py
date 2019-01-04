@@ -5,8 +5,8 @@ from queue import LifoQueue
 
 class Game(ABC):
     __active_game = False
-    __input_timer = 0
     __ranks = LifoQueue()
+    __state = {}
 
     def __init__(self, players, **kwargs):
         '''
@@ -31,40 +31,37 @@ class Game(ABC):
         '''
         Signal for ending a game.
         '''
-        self.__active_game = False
+        self.active = False
 
-    def is_active(self):
+    @property
+    def active(self):
         '''
         Query to determine if a game is active.
         '''
         return self.__active_game
 
+    @active.setter
+    def active(self, value):
+        self.__active_game = value
+
+    @active.deleter
+    def active(self):
+        del self.__active_game
+
+    @property
+    def state(self):
+        return self.__state
+    
+    @state.setter
+    def state(self, value):
+       self.__state = value
+
+    @state.deleter
+    def state(self):
+        del self.__state
+ 
     def get_players(self):
         return self.__players
-
-    def set_timer(self, time):
-        self.__input_timer = time
-
-    def get_timer(self):
-        return self.__input_timer
-
-    # def timed_event(self, timer=get_timer):
-    #     '''
-    #     Allows setting of custom timer events for a game
-    #     '''
-    #     if type(timer) is not int:
-    #         timer = timer(self)
-    #     for i in range(timer, 0, -1):
-    #         print(i)
-    #         sleep(1)
-    #     return timer
-
-    
-    def get_state(self):
-        '''
-        Query to get game estate
-        '''
-        return self.__state
 
     def print_standings(self):
         '''

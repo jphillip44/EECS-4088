@@ -10,13 +10,13 @@ class DisplayGame():
         pass
 
     def Double07(obj):
-        print(obj.get_state())
+        print(obj.state)
 
     def Hot_Potato(obj):
-        print(obj.get_state())
+        print(obj.state)
 
     def Match(obj):
-        print(obj.get_state())
+        print(obj.state)
 
 
 if __name__ == '__main__':
