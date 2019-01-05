@@ -62,16 +62,18 @@ class Hot_Potato extends React.Component {
     }
 
     endOfTurn = () => {
-        this.setState({
-            userTurn: false,
-            timer: 0,
-            handImage: '/images/hand.png'
-        });
-        this.props.socket.emit('endOfTurn', {
-            "player": this.state.potatoHolder,
-            "time": this.state.timer, 
-        });
-        clearInterval(this.interval);
+        if (this.state.userTurn === true) {          
+            this.props.socket.emit('endOfTurn', {
+                "player": this.state.potatoHolder,
+                "time": this.state.timer, 
+            });           
+            this.setState({
+                userTurn: false,
+                timer: 0,
+                handImage: '/images/hand.png'
+            });            
+            clearInterval(this.interval);   
+        }        
     }
 
     render() {
