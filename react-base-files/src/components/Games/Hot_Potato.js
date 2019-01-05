@@ -1,4 +1,5 @@
 import React from 'react';
+import Hammer from 'hammerjs';
 
 class Hot_Potato extends React.Component {
     constructor(props) {
@@ -8,16 +9,24 @@ class Hot_Potato extends React.Component {
             timer: 0,
             potatoHolder: '',
             userTurn: false,
-            explode: false
+            explode: false,
+            handImage: '/images/hand.png'
         };
     }
     
     componentDidMount() {
+
+        let stage = document.getElementById('swipePotato');
+        let mc = new Hammer(stage);
+
+        mc.on("swipe", this.endOfTurn);
+
         this.props.socket.on('state', (data) => {     
             if (this.props.userState.username === data.next) {
                 this.setState({
                     userTurn: true,
-                    explode: false
+                    explode: false,
+                    handImage: '/images/hand_with_potato.png'
                  }, () => {
                     this.interval = setInterval(() => this.updateTimer(), 1000);    
                 });                
@@ -55,11 +64,12 @@ class Hot_Potato extends React.Component {
     endOfTurn = () => {
         this.setState({
             userTurn: false,
-            timer: 0
+            timer: 0,
+            handImage: '/images/hand.png'
         });
         this.props.socket.emit('endOfTurn', {
             "player": this.state.potatoHolder,
-            "time": this.state.timer
+            "time": this.state.timer, 
         });
         clearInterval(this.interval);
     }
@@ -82,9 +92,10 @@ class Hot_Potato extends React.Component {
                                 </div>
                                 <div className="box">
                                     <img
-                                            src={this.state.explode === true ? "/images/explosion.png" : "/images/potato.png"}
-                                            alt="Pass Potato"
-                                        />
+                                        id="swipePotato" 
+                                        src={this.state.explode === true ? "/images/hand_with_explosion.png" : this.state.handImage}
+                                        alt="Pass Potato"
+                                    />
                                     <button
                                         className="button is-primary is-fullwidth"
                                         onClick={this.endOfTurn}
