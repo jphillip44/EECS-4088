@@ -71,8 +71,7 @@ class Room extends React.Component {
                 <div className="hero-body">
                     <div className="container">
                         <div className="columns is-centered">
-                            <div className="column is-6 has-text-centered">
-                                <h1 className="title is-1 has-text-white">Room</h1>                               
+                            <div className="column is-6 has-text-centered">                             
                                 <GameList
                                     gameList={this.props.userState.gameList}
                                     goToGame={this.goToGame}

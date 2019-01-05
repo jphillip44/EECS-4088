@@ -4,7 +4,7 @@ import UsernamePicker from './UsernamePicker';
 import Room from './Room/Room';
 import Double07 from './Games/Double07';
 import HotPotato from './Games/Hot_Potato';
-import Game3 from './Games/Game3';
+import Match from './Games/Match';
 import Game4 from './Games/Game4';
 import Game5 from './Games/Game5';
 import NotFound from './NotFound';
@@ -70,7 +70,13 @@ class App extends Component {
                         socket={this.socket}
                         />}
                     />
-                    <Route path="/game3" component={Game3} />
+                    <Route
+                        path="/Match"
+                        render={(props) => <Match {...props}
+                        userState={this.state}
+                        socket={this.socket}
+                        />}
+                    />
                     <Route path="/game4" component={Game4} />
                     <Route path="/game5" component={Game5} />
                     <Route path="/" component={NotFound} />

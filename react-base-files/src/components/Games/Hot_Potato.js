@@ -81,7 +81,7 @@ class Hot_Potato extends React.Component {
                                         onClick={this.endOfTurn}
                                         disabled={!this.state.userTurn}
                                     >
-                                        Pass Potato
+                                        <img src={"/images/cartoon_potato.png"} alt="Pass Potato" />
                                     </button>
                                 </div>
                             </div>

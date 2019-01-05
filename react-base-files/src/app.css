@@ -5,5 +5,9 @@
 .userChatLog {
     overflow-y: scroll;
     overflow-wrap: normal;
-    height: 300px;
+    height: 200px;
+}
+
+.noButton {
+    border: none;
 }
