@@ -7,14 +7,18 @@ class Hot_Potato extends React.Component {
             timeFromServer: 0,
             timer: 0,
             potatoHolder: '',
-            userTurn: false
+            userTurn: false,
+            explode: false
         };
     }
     
     componentDidMount() {
         this.props.socket.on('state', (data) => {     
             if (this.props.userState.username === data.next) {
-                this.setState({ userTurn: true }, () => {
+                this.setState({
+                    userTurn: true,
+                    explode: false
+                 }, () => {
                     this.interval = setInterval(() => this.updateTimer(), 1000);    
                 });                
             }
@@ -29,7 +33,8 @@ class Hot_Potato extends React.Component {
             clearInterval(this.interval);
             this.setState({
                 userTurn: false,
-                timer: 0
+                timer: 0,
+                explode: true
             });
             this.props.socket.emit('endOfTurn', { "player": this.state.potatoHolder });
         });
@@ -76,12 +81,16 @@ class Hot_Potato extends React.Component {
                                     <h5 className="title is-5">{this.state.potatoHolder}</h5>
                                 </div>
                                 <div className="box">
+                                    <img
+                                            src={this.state.explode === true ? "/images/explosion.png" : "/images/potato.png"}
+                                            alt="Pass Potato"
+                                        />
                                     <button
                                         className="button is-primary is-fullwidth"
                                         onClick={this.endOfTurn}
                                         disabled={!this.state.userTurn}
                                     >
-                                        <img src={"/images/cartoon_potato.png"} alt="Pass Potato" />
+                                        Pass The Potato
                                     </button>
                                 </div>
                             </div>

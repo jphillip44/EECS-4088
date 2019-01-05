@@ -5,6 +5,7 @@ class Match extends React.Component {
         super(props);
         this.state = {
             direction: '',
+            flip: false,
             playersTurn: true
         };
     }
@@ -16,10 +17,12 @@ class Match extends React.Component {
 
         this.props.socket.on('flip', (data) => {
             console.log(data);
+            this.setState({ flip: true });
         });
 
         this.props.socket.on('timeout', (data) => {
             console.log(data);
+            this.setState({ playersTurn: false });
         });
 
 
@@ -45,7 +48,11 @@ class Match extends React.Component {
                             <div className="column is-5">
                                 <h1 className="landing title is-1 has-text-white">Match</h1>
                                 <div className="box">
-                                    <img className="image" src={"/images/cartoon_potato.png"} alt="Card" />
+                                    <img
+                                        className="image"
+                                        src={this.state.flip === true ? "/images/explosion.png" : "/images/explosion.png"}
+                                        alt="Card"
+                                    />
                                 </div>
                                 <div className="box">
                                     <div className="field is-grouped is-grouped-centered">
