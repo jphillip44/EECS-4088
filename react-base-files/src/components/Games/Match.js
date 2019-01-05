@@ -50,7 +50,7 @@ class Match extends React.Component {
                                 <div className="box">
                                     <img
                                         className="image"
-                                        src={this.state.flip === true ? "/images/explosion.png" : "/images/explosion.png"}
+                                        src={this.state.flip === true ? "/images/hand.png" : "/images/hand.png"}
                                         alt="Card"
                                     />
                                 </div>

@@ -41,11 +41,14 @@ class Room extends React.Component {
 
         this.props.socket.on('userDisconnected', (data) => {
             let tempUsers = [];
-            this.state.users.map((user) => {
-                if(user.socketId !== data) {
-                    tempUsers.push(user);
+            let temp = this.state.users;
+            let i;
+
+            for(i = 0; i < this.state.users.length; i++) {
+                if(temp[i].socketId !== data) {
+                    tempUsers.push(temp[i]);
                 }
-            });           
+            }         
             this.setState({ users: tempUsers });
         });
 
