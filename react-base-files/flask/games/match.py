@@ -60,6 +60,7 @@ class Match(Game):
                 print(self.state['timer'])
                 self.state['timer'] -= 1
                 self.socketio.emit('timeout', room=self.state['next'][0])
+                self.state['next'] = (self.state['next'][1], self.__get_turn())
             else:
                 self.__waiting = True
                 self.state['timer'] = 15
@@ -69,12 +70,11 @@ class Match(Game):
         def is_match():
             if self.__dict__.get('socketio'):
                 self.socketio.emit('flip', broadcast=True)
-            if self.state['board'][self.__p1] == self.state['board'][self.__p2]:
-                self.state['gameBoard'][self.__p1] = self.state['board'][self.__p1]
-                self.state['gameBoard'][self.__p2] = self.state['board'][self.__p2]
-                self.state['players'][self.state['next'][0]]['score'] +=1
-                self.state['players'][self.state['next'][1]]['score'] +=1
-                # this is wrong?
+            if self.state['board'][self.__p1[1]] == self.state['board'][self.__p2[1]]:
+                self.state['gameBoard'][self.__p1[1]] = self.state['board'][self.__p1[1]]
+                self.state['gameBoard'][self.__p2[1]] = self.state['board'][self.__p2[1]]
+                self.state['players'][self.__p1[0]]['score'] +=1
+                self.state['players'][self.__p2[0]]['score'] +=1
             self.__p1 = None
             self.__p2 = None
             if self.__dict__.get('display_game'):
@@ -84,16 +84,17 @@ class Match(Game):
         if data is None:
             data = self.state['cursor']
             
-        self.state['next'] = (self.state['next'][1], self.__get_turn())
+    
         print("value: " + self.state['board'][data])
         self.__waiting = False
         if self.__p1 is None:
-            self.__p1 = data
-            self.state['gameBoard'][self.__p1] = 'ZZ'
+            self.__p1 = self.state['next'][0], data
+            self.state['gameBoard'][self.__p1[1]] = 'ZZ'
         else:
-            self.__p2 = data 
-            self.state['gameBoard'][self.__p1] = 'XX'    
+            self.__p2 = self.state['next'][0], data
+            self.state['gameBoard'][self.__p1[1]] = 'XX'    
             is_match()
+        self.state['next'] = (self.state['next'][1], self.__get_turn())
         self.display() 
 
 
