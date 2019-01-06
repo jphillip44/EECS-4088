@@ -22,6 +22,9 @@ class DisplayGame():
     def Match(self, obj):
         print(obj.state)
 
+    def Fragments(self, obj):
+        print(obj.state)
+
 
 if __name__ == '__main__':
     display = DisplayGame()

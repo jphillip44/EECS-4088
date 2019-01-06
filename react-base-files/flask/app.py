@@ -51,16 +51,16 @@ def join_server(data):
     sio.join_room(users[data["socketId"]])
     global game
     display()
+    global display_game
+    if display_game is None:
+        display_game=DisplayGame()
     if game is None or not game.active:
-        DisplayGame.update([*users.values()])
+        display_game.update([*users.values()])
 
 @socketio.on('createGame')
 def create_game(data):
     global game
-    global display_game
     print(users)
-    if display_game is None:
-        display_game=DisplayGame()
     if game is None or not game.active:
         game = GameList.select_game(data, users.values(), socketio=socketio, display_game=display_game)
         sio.emit('gameStarted', game.__name__, broadcast=True)
