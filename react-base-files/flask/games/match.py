@@ -1,9 +1,10 @@
-from __game import Game, emit
+import itertools
+import random
+import numpy
+
 from collections import OrderedDict
-from random import shuffle
-from itertools import cycle
-from numpy import asarray, matrix
-from queue import PriorityQueue
+from __game import Game
+
 
 class Match(Game):
     __next = None
@@ -11,19 +12,19 @@ class Match(Game):
     __p2 = None
     __waiting = True
 
-    def __init__(self, players, rows=4, columns=10, shuffle_board=True, **kwargs):
-        def init_state(players, rows, columns, shuffle_board):
+    def __init__(self, players, rows=4, columns=10, shuffle=True, **kwargs):
+        def init_state(players, rows, columns, shuffle):
             self.state['players'] = OrderedDict()
             for player in players:
                 self.state['players'][player] = {'score': 0}
             self.state['next'] = (self.__get_turn(), self.__get_turn())
             board = [format(x, '02d') for x in range(rows*columns//2) for _ in range(2)]
-            if shuffle_board:
-                shuffle(board)
+            if shuffle:
+                random.shuffle(board)
             self.rows = rows
             self.columns = columns
-            self.state['board'] = asarray([board[i*columns:i*columns+columns] for i in range(rows)])
-            self.state['gameBoard'] = asarray([['XX'] * columns for _ in range(rows)])
+            self.state['board'] = numpy.asarray([board[i*columns:i*columns+columns] for i in range(rows)])
+            self.state['gameBoard'] = numpy.asarray([['XX'] * columns for _ in range(rows)])
             self.state['cursor'] = (0,0)
             self.state['timer'] = 15
 
@@ -34,7 +35,7 @@ class Match(Game):
             self.socketio.on_event('down', self.down)
             self.socketio.on_event('left', self.left)
             self.socketio.on_event('right', self.right)
-        init_state(super().get_players(), rows, columns, shuffle_board)
+        init_state(self.players, rows, columns, shuffle)
 
     def display(self):
         if self.active:
@@ -53,8 +54,8 @@ class Match(Game):
             self.state['board'] = self.state['board'].tolist()
             self.state['gameBoard'] = self.state['gameBoard'].tolist()
             self.socketio.emit('turn', self.state, broadcast=True)
-            self.state['board'] = asarray(self.state['board'])
-            self.state['gameBoard'] = asarray(self.state['gameBoard'])
+            self.state['board'] = numpy.asarray(self.state['board'])
+            self.state['gameBoard'] = numpy.asarray(self.state['gameBoard'])
             while self.__waiting and self.state['timer'] > 0:
                 self.socketio.sleep(1)
                 print(self.state['timer'])
@@ -148,7 +149,7 @@ class Match(Game):
 
     def __get_turn(self):
         if self.__next is None:
-            self.__next = cycle(self.state['players'].keys())
+            self.__next = itertools.cycle(self.state['players'].keys())
         return next(self.__next)
 
 if __name__ == '__main__':

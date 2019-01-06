@@ -1,4 +1,4 @@
-from __game import Game, emit
+from __game import Game
 from queue import Queue, PriorityQueue
 
 class Double07(Game):
@@ -26,7 +26,7 @@ class Double07(Game):
         super().__init__(players, **kwargs)
         if self.__dict__.get('socketio'):
             self.socketio.on_event('endOfRound', self.action)
-        init_state(self.get_players())
+        init_state(self.players)
         self.__timer = timer
 
     def action(self, data):

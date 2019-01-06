@@ -1,8 +1,10 @@
-from __game import Game, emit
+import random
+import itertools
+
 from collections import OrderedDict
-from random import randint
-from itertools import cycle
 from queue import PriorityQueue
+from __game import Game
+
 
 class Hot_Potato(Game):
     __next = None
@@ -19,7 +21,7 @@ class Hot_Potato(Game):
         super().__init__(players, **kwargs)
         if self.__dict__.get('socketio'):
             self.socketio.on_event('endOfTurn', self.action)
-        init_state(self.get_players())
+        init_state(self.players)
 
     def action(self, data):
         self.__hold_potato = False
@@ -69,11 +71,11 @@ class Hot_Potato(Game):
 
     def __get_turn(self):
         if self.__next is None:
-            self.__next = cycle(self.state['players'].keys())
+            self.__next = itertools.cycle(self.state['players'].keys())
         return next(self.__next)
 
     def __new_potato_timer(self):
-        self.state['penalty'] = randint(1, 20)
+        self.state['penalty'] = random.randint(1, 20)
         return self.state['penalty']
 
     # def __rank_players(self):

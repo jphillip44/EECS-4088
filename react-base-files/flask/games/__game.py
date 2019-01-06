@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 from abc import ABC, abstractmethod
-from flask_socketio import emit
 from queue import LifoQueue, PriorityQueue
 
 class Game(ABC):
@@ -24,7 +23,7 @@ class Game(ABC):
         pass
 
     @abstractmethod
-    def run_game(socketio):
+    def run_game(self):
         pass
 
     def end_game(self):
@@ -60,7 +59,8 @@ class Game(ABC):
     def state(self):
         del self.__state
  
-    def get_players(self):
+    @property
+    def players(self):
         return self.__players
 
     def print_standings(self):
