@@ -2,7 +2,7 @@ from __game import Game, emit
 from collections import OrderedDict
 from random import shuffle
 from itertools import cycle
-from numpy import asarray
+from numpy import asarray, matrix
 from queue import PriorityQueue
 
 class Match(Game):
@@ -48,20 +48,27 @@ class Match(Game):
         else:
             self.print_standings()
 
-    def run_game():
+    def run_game(self):
         while self.active:
-            self.socketio.emit('turn', self.state)
+            self.state['board'] = self.state['board'].tolist()
+            self.state['gameBoard'] = self.state['gameBoard'].tolist()
+            self.socketio.emit('turn', self.state, broadcast=True)
+            self.state['board'] = asarray(self.state['board'])
+            self.state['gameBoard'] = asarray(self.state['gameBoard'])
             while self.__waiting and self.state['timer'] > 0:
                 self.socketio.sleep(1)
                 print(self.state['timer'])
                 self.state['timer'] -= 1
+                self.socketio.emit('timeout', room=self.state['next'][0])
             else:
                 self.__waiting = True
                 self.state['timer'] = 15
 
 
-    def action(self, data):
+    def action(self, data=None):
         def is_match():
+            if self.__dict__.get('socketio'):
+                self.socketio.emit('flip', broadcast=True)
             if self.state['board'][self.__p1] == self.state['board'][self.__p2]:
                 self.state['gameBoard'][self.__p1] = self.state['board'][self.__p1]
                 self.state['gameBoard'][self.__p2] = self.state['board'][self.__p2]
@@ -73,6 +80,9 @@ class Match(Game):
             if self.__dict__.get('display_game'):
                 self.display_game.update(self)
             self.check_end()
+
+        if data is None:
+            data = self.state['cursor']
             
         self.state['next'] = (self.state['next'][1], self.__get_turn())
         print("value: " + self.state['board'][data])
@@ -135,11 +145,11 @@ class Match(Game):
 if __name__ == '__main__':
     game = Match(['A', 'B', 'C'])
     game.display()
-    game.action(game.state['cursor'])
+    game.action()
     game.down()
     game.up()
-    game.action(game.state['cursor'])
-    # game = Match(['A', 'B', 'C'], shuffle_board=False)
-    # game.display()
-    # [game.action((i, j)) for i in range(4) for j in range(10)]
-    # game.display()
+    game.action()
+    game = Match(['A', 'B', 'C'], shuffle_board=False)
+    game.display()
+    [game.action((i, j)) for i in range(4) for j in range(10)]
+    game.display()

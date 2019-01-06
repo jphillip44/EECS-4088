@@ -49,14 +49,14 @@ def join_server(data):
     join_room(users[data["socketId"]])
     global game
     display()
-    if game is None or not game.is_active():
+    if game is None or not game.active:
         DisplayGame.update([*users.values()])
 
 @socketio.on('createGame')
 def create_game(data):
     global game
     print(users)
-    if game is None or not game.is_active():
+    if game is None or not game.active:
         game = GameList.select_game(data, users.values(), socketio=socketio, display_game=DisplayGame)
         emit('gameStarted', game.__name__, broadcast=True)
         global game_thread
@@ -91,7 +91,7 @@ def dc():
     if users.get(request.sid):
         del users[request.sid]
     display()
-    if game is None or not game.is_active():
+    if game is None or not game.active:
         DisplayGame.update([*users.values()])
     # let every user know when a user disconnects
     emit("userDisconnected", request.sid, broadcast=True)
