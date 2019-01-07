@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import itertools
 import random
 import numpy
@@ -29,7 +30,7 @@ class Match(Game):
             self.state['timer'] = 15
 
         super().__init__(players, **kwargs)
-        if self.__dict__.get('socketio'):
+        if self.socketio:
             self.socketio.on_event('select', self.action)
             self.socketio.on_event('up', self.up)
             self.socketio.on_event('down', self.down)
@@ -65,11 +66,13 @@ class Match(Game):
             else:
                 self.__waiting = True
                 self.state['timer'] = 15
+                self.display_game.update(self.deepcopy)
+
 
 
     def action(self, data=None):
         def is_match():
-            if self.__dict__.get('socketio'):
+            if self.socketio:
                 self.socketio.emit('flip', broadcast=True)
             if self.state['board'][self.__p1[1]] == self.state['board'][self.__p2[1]]:
                 self.state['gameBoard'][self.__p1[1]] = self.state['board'][self.__p1[1]]
@@ -78,7 +81,7 @@ class Match(Game):
                 self.state['players'][self.__p2[0]]['score'] +=1
             self.__p1 = None
             self.__p2 = None
-            if self.__dict__.get('display_game'):
+            if self.display_game:
                 self.display_game.update(self.deepcopy)
             self.check_end()
 
@@ -111,7 +114,7 @@ class Match(Game):
             self.state['cursor'] = (self.state['cursor'][0], self.columns - 1)
         # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
         #     self.left()
-        if self.__dict__.get('socketio'):
+        if self.socketio:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
 
     def right(self):
@@ -121,7 +124,7 @@ class Match(Game):
             self.state['cursor'] = (self.state['cursor'][0], 0)
         # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
         #     self.right()
-        if self.__dict__.get('socketio'):
+        if self.socketio:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
 
     def up(self):
@@ -131,7 +134,7 @@ class Match(Game):
             self.state['cursor'] = (self.rows - 1, self.state['cursor'][1])
         # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
         #     self.up()
-        if self.__dict__.get('socketio'):
+        if self.socketio:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
 
     def down(self):
@@ -141,7 +144,7 @@ class Match(Game):
             self.state['cursor'] = (0, self.state['cursor'][1])
         # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
         #     self.down()
-        if self.__dict__.get('socketio'):
+        if self.socketio:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])       
 
     # def selected(self, data):

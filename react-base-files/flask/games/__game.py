@@ -14,11 +14,22 @@ class Game(ABC):
         '''
         self.__state = {}
         super().__init__()
-        self.__dict__.update(kwargs)
-        self.__players = players
+        self.keys = [*kwargs.keys()]
+        self.socketio = kwargs.get('socketio', None)
+        self.display_game = kwargs.get('display_game', None)
+        self.__players = [*players]
         self.__name__ = self.__class__.__name__
         print("New "+self.__name__+" Started")
         self.__active_game = True
+
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if k not in self.keys:
+                setattr(result, k, deepcopy(v, memo))
+        return result
 
     @abstractmethod
     def display(self):
@@ -67,9 +78,9 @@ class Game(ABC):
 
     @property
     def deepcopy(self):
-        deep_copy = copy(self)
-        deep_copy.state = deepcopy(deep_copy.state)
-        return deep_copy
+        # deep_copy = copy(self)
+        # deep_copy.state = deepcopy(deep_copy.state)
+        return deepcopy(self)
 
     def print_standings(self):
         '''

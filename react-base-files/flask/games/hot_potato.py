@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import random
 import itertools
 import copy
@@ -20,7 +21,7 @@ class Hot_Potato(Game):
             self.state['next'] = self.__get_turn()
 
         super().__init__(players, **kwargs)
-        if self.__dict__.get('socketio'):
+        if self.socketio:
             self.socketio.on_event('endOfTurn', self.action)
         init_state(self.players)
 
@@ -33,7 +34,7 @@ class Hot_Potato(Game):
                 self.end_game()
                 self.rank_players()
             self.display()
-        if self.__dict__.get('display_game'):
+        if self.display_game:
             self.display_game.update(self.deepcopy)
 
     def display(self):

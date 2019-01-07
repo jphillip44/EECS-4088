@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import random
 
 from collections import OrderedDict
@@ -17,7 +18,7 @@ class Fragments(Game):
             self.reset_state()
  
         super().__init__(players, **kwargs)
-        if self.__dict__.get('socketio'):
+        if self.socketio:
             self.socketio.on_event('select', self.action)
         init_state(self.players, images)
 
