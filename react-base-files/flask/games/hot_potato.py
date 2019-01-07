@@ -21,7 +21,7 @@ class Hot_Potato(Game):
             self.state['next'] = self.__get_turn()
 
         super().__init__(players, **kwargs)
-        if self.socketio:
+        if self.socketio is not None:
             self.socketio.on_event('endOfTurn', self.action)
         init_state(self.players)
 
@@ -34,7 +34,7 @@ class Hot_Potato(Game):
                 self.end_game()
                 self.rank_players()
             self.display()
-        if self.display_game:
+        if self.display_game is not None:
             self.display_game.update(self.deepcopy)
 
     def display(self):
@@ -44,6 +44,7 @@ class Hot_Potato(Game):
             print("next: " + self.state['next'], end=', ')
             print(*self.state['players'].items())
         else:
+            print(*self.state['players'].items())
             self.print_standings()
 
     def run_game(self):
@@ -79,13 +80,6 @@ class Hot_Potato(Game):
     def __new_potato_timer(self):
         self.state['penalty'] = random.randint(1, 20)
         return self.state['penalty']
-
-    # def __rank_players(self):
-    #     results = PriorityQueue()
-    #     for player, stats in self.state['players'].items():
-    #         results.put((stats['score'], player))
-    #     while not results.empty():
-    #         self.add_ranks(results.get()[1])
 
 if __name__ == '__main__':
     game = Hot_Potato(['A', 'B', 'C'])

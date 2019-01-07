@@ -26,7 +26,7 @@ class Double07(Game):
                 self.state[player] = {'hp' : 3, 'ap': 1, 'defend': 'none'}
 
         super().__init__(players, **kwargs)
-        if self.socketio:
+        if self.socketio is not None:
             self.socketio.on_event('endOfRound', self.action)
         init_state(self.players)
         self.__timer = timer
@@ -60,7 +60,7 @@ class Double07(Game):
             self.__attack(*self.__attack_queue.get())
         self.rank_players()
         self.display()
-        if self.display_game:
+        if self.display_game is not None:
             self.display_game.update(self.deepcopy)
 
 

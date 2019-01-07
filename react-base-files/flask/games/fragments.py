@@ -18,7 +18,7 @@ class Fragments(Game):
             self.reset_state()
  
         super().__init__(players, **kwargs)
-        if self.socketio:
+        if self.socketio is not None:
             self.socketio.on_event('select', self.action)
         init_state(self.players, images)
 
@@ -77,6 +77,10 @@ if __name__ == '__main__':
     game.action({'player': 'B', 'selection': "XX"}, 22.5)
     game.action({'player': 'C', 'selection': game.state['selection']}, 17.44)
     game.display()
+    game.end_game()
+    game.rank_players()
+    game.display()
+    game = Fragments(['A', 'B', 'C'])
     game.end_game()
     game.rank_players()
     game.display()

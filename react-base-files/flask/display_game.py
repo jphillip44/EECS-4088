@@ -4,7 +4,7 @@ import games
 
 class DisplayGame():
 
-    def start(self):
+    def __init__(self):
         pass
 
     def update(self, obj):
@@ -28,7 +28,6 @@ class DisplayGame():
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
-    DISPLAY.start()
     PLAYERS = ['player1', 'player2']
     DISPLAY.update(PLAYERS)
     GAME = games.Double07(['A', 'B'])

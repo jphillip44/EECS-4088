@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 from copy import copy, deepcopy
 from abc import ABC, abstractmethod
-from queue import LifoQueue, PriorityQueue
+from queue import Queue, PriorityQueue
 
 class Game(ABC):
     __active_game = False
-    __ranks = LifoQueue()
-    # __state = {}
 
     def __init__(self, players, **kwargs):
         '''
@@ -14,20 +12,24 @@ class Game(ABC):
         '''
         self.__state = {}
         super().__init__()
-        self.keys = [*kwargs.keys()]
+        self.nocopy = [*kwargs.keys()]
+        self.nocopy.append('_Game__ranks')
         self.socketio = kwargs.get('socketio', None)
         self.display_game = kwargs.get('display_game', None)
         self.__players = [*players]
         self.__name__ = self.__class__.__name__
         print("New "+self.__name__+" Started")
         self.__active_game = True
+        self.__ranks = Queue()
 
     def __deepcopy__(self, memo):
         cls = self.__class__
         result = cls.__new__(cls)
         memo[id(self)] = result
         for k, v in self.__dict__.items():
-            if k not in self.keys:
+            if k in self.nocopy:
+                setattr(result, k, copy(v))  
+            else:
                 setattr(result, k, deepcopy(v, memo))
         return result
 
@@ -78,19 +80,19 @@ class Game(ABC):
 
     @property
     def deepcopy(self):
-        # deep_copy = copy(self)
-        # deep_copy.state = deepcopy(deep_copy.state)
         return deepcopy(self)
 
     def print_standings(self):
         '''
         Prints standings.
         '''
-        i = 1
         print("Standings")
-        while not self.__ranks.empty():
-            print(str(i) + ": " + self.__ranks.get())
-            i += 1
+        for i, item in enumerate(self.get_standings(), 1):
+            print(str(i) + ": " + item)
+
+    def get_standings(self):
+        for item in reversed(self.__ranks.queue):
+            yield item
 
     def add_ranks(self, data):
         self.__ranks.put(data)
