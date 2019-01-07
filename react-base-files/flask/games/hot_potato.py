@@ -1,5 +1,6 @@
 import random
 import itertools
+import copy
 
 from collections import OrderedDict
 from queue import PriorityQueue
@@ -33,7 +34,7 @@ class Hot_Potato(Game):
                 self.rank_players()
             self.display()
         if self.__dict__.get('display_game'):
-            self.display_game.update(self)
+            self.display_game.update(self.deepcopy)
 
     def display(self):
         if self.active:

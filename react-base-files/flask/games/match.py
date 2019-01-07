@@ -79,7 +79,7 @@ class Match(Game):
             self.__p1 = None
             self.__p2 = None
             if self.__dict__.get('display_game'):
-                self.display_game.update(self)
+                self.display_game.update(self.deepcopy)
             self.check_end()
 
         if data is None:

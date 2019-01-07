@@ -32,7 +32,11 @@ if __name__ == '__main__':
     player_list = ['player1', 'player2']
     display.update(player_list)
     game = games.Double07(['A', 'B'])
-    display.update(game)
+    display.update(game.deepcopy)
     game = games.Hot_Potato(['A', 'B'])
-    display.update(game)
+    display.update(game.deepcopy)
+    game = games.Match(['A', 'B'])
+    display.update(game.deepcopy)
+    game = games.Fragments(['A', 'B'])
+    display.update(game.deepcopy)
  

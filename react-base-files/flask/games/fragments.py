@@ -48,7 +48,7 @@ class Fragments(Game):
     def run_game(self):
         count = 0
         while self.active:
-            self.display_game.update(self)
+            self.display_game.update(self.deepcopy)
             self.socketio.emit('turn', self.state, broadcast=True)
             while self.state['timer'] > 0:
                 print(round(self.state['timer']))

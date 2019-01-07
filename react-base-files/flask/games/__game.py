@@ -1,16 +1,18 @@
 #!/usr/bin/python3
+from copy import copy, deepcopy
 from abc import ABC, abstractmethod
 from queue import LifoQueue, PriorityQueue
 
 class Game(ABC):
     __active_game = False
     __ranks = LifoQueue()
-    __state = {}
+    # __state = {}
 
     def __init__(self, players, **kwargs):
         '''
         Sets up the games default parameters.
         '''
+        self.__state = {}
         super().__init__()
         self.__dict__.update(kwargs)
         self.__players = players
@@ -62,6 +64,12 @@ class Game(ABC):
     @property
     def players(self):
         return self.__players
+
+    @property
+    def deepcopy(self):
+       dc = copy(self)
+       dc.state = deepcopy(dc.state)
+       return dc
 
     def print_standings(self):
         '''

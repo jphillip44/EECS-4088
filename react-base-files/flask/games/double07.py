@@ -59,7 +59,7 @@ class Double07(Game):
         self.rank_players()
         self.display()
         if self.__dict__.get('display_game'):
-            self.display_game.update(self)
+            self.display_game.update(self.deepcopy)
 
 
     def display(self):
