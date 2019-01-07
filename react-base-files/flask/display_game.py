@@ -11,7 +11,6 @@ class DisplayGame():
 
     def list(self, obj):
         print(obj)
-        # pass
 
     def Double07(self, obj):
         print(obj.state)
@@ -27,16 +26,16 @@ class DisplayGame():
 
 
 if __name__ == '__main__':
-    display = DisplayGame()
-    display.start()
-    player_list = ['player1', 'player2']
-    display.update(player_list)
-    game = games.Double07(['A', 'B'])
-    display.update(game.deepcopy)
-    game = games.Hot_Potato(['A', 'B'])
-    display.update(game.deepcopy)
-    game = games.Match(['A', 'B'])
-    display.update(game.deepcopy)
-    game = games.Fragments(['A', 'B'])
-    display.update(game.deepcopy)
+    DISPLAY = DisplayGame()
+    DISPLAY.start()
+    PLAYERS = ['player1', 'player2']
+    DISPLAY.update(PLAYERS)
+    GAME = games.Double07(['A', 'B'])
+    DISPLAY.update(GAME.deepcopy)
+    GAME = games.Hot_Potato(['A', 'B'])
+    DISPLAY.update(GAME.deepcopy)
+    GAME = games.Match(['A', 'B'])
+    DISPLAY.update(GAME.deepcopy)
+    GAME = games.Fragments(['A', 'B'])
+    DISPLAY.update(GAME.deepcopy)
  

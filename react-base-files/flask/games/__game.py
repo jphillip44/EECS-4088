@@ -52,24 +52,24 @@ class Game(ABC):
     @property
     def state(self):
         return self.__state
-    
+
     @state.setter
     def state(self, value):
-       self.__state = value
+        self.__state = value
 
     @state.deleter
     def state(self):
         del self.__state
- 
+
     @property
     def players(self):
         return self.__players
 
     @property
     def deepcopy(self):
-       dc = copy(self)
-       dc.state = deepcopy(dc.state)
-       return dc
+        deep_copy = copy(self)
+        deep_copy.state = deepcopy(deep_copy.state)
+        return deep_copy
 
     def print_standings(self):
         '''
@@ -90,5 +90,3 @@ class Game(ABC):
             results.put((stats['score'], player))
         while not results.empty():
             self.add_ranks(results.get()[1])
-
-        
