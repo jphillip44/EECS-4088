@@ -98,7 +98,7 @@ def disconnect():
         del USERS[flask.request.sid]
     display()
     if GAME is None or not GAME.active:
-        DISPLAY.update([*USERS.values()])
+        DISPLAY.update(list(USERS.values()))
     # let every user know when a user disconnects
     sio.emit("userDisconnected", flask.request.sid, broadcast=True)
     # print("dc " + request.sid)
