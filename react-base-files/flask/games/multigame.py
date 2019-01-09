@@ -32,12 +32,12 @@ class MultiGame(Game):
         init_state(self.players, lives)
 
     def init(self, game):
+        self.state['timer'] = 20 # for now
         self.state['valid'] = game.valid
         self.state['name'] = game.__class__.__name__
         if self.display_game is not None:
             self.display_game.update(self.deepcopy)
         self.display()
-        self.state['timer'] = 20 # for now
 
     def run_game(self):
         level = 1
