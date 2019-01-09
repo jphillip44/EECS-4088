@@ -20,8 +20,8 @@ class Match(Game):
                 self.state['players'][player] = {'score': 0}
             self.state['next'] = (self.__get_turn(), self.__get_turn())
             board = [format(x, '02d') for x in range(rows*columns//2) for _ in range(2)]
-            if shuffle:
-                random.shuffle(board)
+            # if shuffle:
+            #     random.shuffle(board)
             self.rows = rows
             self.columns = columns
             self.state['board'] = numpy.asarray([board[i*columns:i*columns+columns] for i in range(rows)])
@@ -67,7 +67,7 @@ class Match(Game):
             else:
                 self.__waiting = True
                 self.state['timer'] = 15
-                self.display_game.update(self.deepcopy)
+                # self.display_game.update(self.deepcopy)
 
 
 
@@ -82,8 +82,8 @@ class Match(Game):
                 self.state['players'][self.__p2[0]]['score'] +=1
             self.__p1 = None
             self.__p2 = None
-            if self.display_game is not None:
-                self.display_game.update(self.deepcopy)
+            # if self.display_game is not None:
+            #     self.display_game.update(self.deepcopy)
             self.check_end()
 
         if data is None:
@@ -113,40 +113,36 @@ class Match(Game):
             self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] - 1)
         else:
             self.state['cursor'] = (self.state['cursor'][0], self.columns - 1)
-        # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
-        #     self.left()
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        print(self.state['cursor'])
 
     def right(self):
         if self.state['cursor'][1] < self.columns - 1:
             self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] + 1)
         else:
             self.state['cursor'] = (self.state['cursor'][0], 0)
-        # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
-        #     self.right()
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        print(self.state['cursor'])
 
     def up(self):
         if self.state['cursor'][0] > 0:
             self.state['cursor'] = (self.state['cursor'][0] - 1, self.state['cursor'][1])
         else:
             self.state['cursor'] = (self.rows - 1, self.state['cursor'][1])
-        # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
-        #     self.up()
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        print(self.state['cursor'])
 
     def down(self):
         if self.state['cursor'][0] < self.rows - 1:
             self.state['cursor'] = (self.state['cursor'][0] + 1, self.state['cursor'][1])
         else:
             self.state['cursor'] = (0, self.state['cursor'][1])
-        # if self.state['gameBoard'][self.state['cursor']] == 'ZZ':
-        #     self.down()
         if self.socketio is not None:
-            self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])       
+            self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        print(self.state['cursor'])
 
     # def selected(self, data):
     #     return self.state['cursor'] != 'XX'
