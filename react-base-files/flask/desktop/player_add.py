@@ -16,22 +16,22 @@ class PlayerUI ():
         self.setup()
 
     def setup(self):
-        topFrame = Frame(height = self.window.screenH / 10, width = self.window.screenW, bg="green")
+        topFrame = Frame(height = self.window.screenH / 10, width = self.window.screenW, bg= self.window.backgroundC)
         topFrame.pack_propagate(False) # ensures frame doesnt shrink to size of the wigets added down the road
         topFrame.pack()
         self.topframe = topFrame
         self.window.addFrame(topFrame)
-        leftFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg = "black")
+        leftFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg = self.window.backgroundC)
         leftFrame.pack_propagate(False)
         leftFrame.place(x = 0, y = self.window.screenH / 10)
         self.leftframe = leftFrame
         self.window.addFrame(leftFrame)
-        rightFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg = "black")
+        rightFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg =  self.window.backgroundC)
         rightFrame.pack_propagate(False)
         rightFrame.place(x = (self.window.screenW / 4) * 3, y = self.window.screenH / 10)
         self.rightframe = rightFrame
         self.window.addFrame(rightFrame)
-        centerFrame = Frame(height = (self.window.screenH / 10) * 8, width = (self.window.screenW / 4) * 2, bg = "red")
+        centerFrame = Frame(height = (self.window.screenH / 10) * 8, width = (self.window.screenW / 4) * 2, bg =  self.window.backgroundC)
         centerFrame.pack_propagate(False)
         centerFrame.place(x = (self.window.screenW / 4), y = self.window.screenH / 10)
         self.centerframe = centerFrame
@@ -53,7 +53,6 @@ class PlayerUI ():
         #left player list
         if (leftPlay % 2) == 1:
             for i in range(leftPlay):
-                print(self.window.framelist)
                 label = Label(self.window.framelist[1], text = players[2 * i], font = self.deffont, bg = self.window.framelist[1]['bg'], fg = textColour)
                 label.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
         else:
@@ -77,8 +76,6 @@ class PlayerUI ():
 def main():
     kek = PlayerUI(DesktopUI())
     mainloop()
-
-    print(kek.window.framelist) 
 
     kek.PlayerShow(players = ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"])
     mainloop()

@@ -1,5 +1,6 @@
 from tkinter import Tk, mainloop, Frame
 import sys, time
+from colour import Color
 
 
 class DesktopUI():
@@ -7,7 +8,11 @@ class DesktopUI():
     screenH = 0
     win = 0
     framelist = []
-    
+    #top = Color("black")
+    #bottom = Color("#001a35")
+    #colours = list(top.range_to(bottom, 100))
+    backgroundC = "#001a35"
+
     def __init__(self):
         self.win = Tk()
         screenWidth = self.win.winfo_screenwidth()
@@ -17,7 +22,7 @@ class DesktopUI():
         
         self.win.attributes('-fullscreen', True) #make fullscreen
         self.win.focus_set() #focus on fullscreen
-        self.win.configure(background = '#001a35')
+        self.win.configure(background = self.backgroundC)
 
         self.win.bind("<Escape>", lambda e: self.win.quit())        
     
