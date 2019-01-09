@@ -5,7 +5,7 @@ import Room from './Room/Room';
 import Double07 from './Games/Double07';
 import HotPotato from './Games/Hot_Potato';
 import Match from './Games/Match';
-import Game4 from './Games/Game4';
+import Fragments from './Games/Fragments';
 import Game5 from './Games/Game5';
 import NotFound from './NotFound';
 import io from 'socket.io-client';
@@ -77,7 +77,13 @@ class App extends Component {
                         socket={this.socket}
                         />}
                     />
-                    <Route path="/game4" component={Game4} />
+                    <Route
+                        path="/Fragments"
+                        render={(props) => <Fragments {...props}
+                        userState={this.state}
+                        socket={this.socket}
+                        />}
+                    />
                     <Route path="/game5" component={Game5} />
                     <Route path="/" component={NotFound} />
                 </Switch>

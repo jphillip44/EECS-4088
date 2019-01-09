@@ -6,29 +6,46 @@ class Match extends React.Component {
         this.state = {
             direction: '',
             flip: false,
-            playersTurn: true
+            playersTurn: false,
+            cursor: [],
+            cardValue: ''
         };
     }
 
     componentDidMount() {
         this.props.socket.on('turn', (data) => {
-            console.log(data.players);
+            // if next in state is the clients username
+            if (data.next[0] === this.props.userState.username) {
+                this.setState({
+                    playersTurn: true,
+                    cursor: [data.cursor[ 0], data.cursor[1]]
+                });
+            } else {
+                this.setState({ playersTurn: false });
+            }
+            console.log(data);
         });
 
         this.props.socket.on('flip', (data) => {
+            console.log('flip');
+            this.interval = setInterval(() => this.flipCard(), 5000);
+            this.setState({
+                flip: true,
+                playersTurn: false
+            });
+        });
+
+        this.props.socket.on('cursor', (data) => {
+            console.log('cursor');
             console.log(data);
-            this.setState({ flip: true });
         });
 
         this.props.socket.on('timeout', (data) => {
-            console.log(data);
-            this.setState({ playersTurn: false });
+            console.log('timeout');
         });
-
-
     }
 
-    submitDirection = (direction) => {
+    submitDirection = (direction) => {       
         this.setState({ direction: direction }, () => {
             this.props.socket.emit(`${this.state.direction}`);
             console.log(`${this.state.direction}`);    
@@ -36,7 +53,13 @@ class Match extends React.Component {
     }
 
     selectCard = () => {
+        console.log("SELECT");
         this.props.socket.emit('select');
+    }
+
+    flipCard = () => {
+        clearInterval(this.interval);
+        this.setState({ flip: false });
     }
     
     render() {
@@ -48,11 +71,12 @@ class Match extends React.Component {
                             <div className="column is-5">
                                 <h1 className="landing title is-1 has-text-white">Match</h1>
                                 <div className="box">
-                                    <img
-                                        className="image"
-                                        src={this.state.flip === true ? "/images/hand.png" : "/images/hand.png"}
-                                        alt="Card"
-                                    />
+                                    <h1 className="title is-1">
+                                        {this.state.flip === true ? "CARD VALUE" : "CARD HIDDEN"}
+                                    </h1>
+                                </div>
+                                <div className="box">
+                                    <img src={"/images/hand.png"} alt ="RED"/>
                                 </div>
                                 <div className="box">
                                     <div className="field is-grouped is-grouped-centered">
@@ -86,7 +110,7 @@ class Match extends React.Component {
                                             <button
                                                 className="button is-info is-large"
                                                 disabled={this.state.playersTurn === false}
-                                                onClick={this.submitDirection}
+                                                onClick={this.selectCard}
                                             >
                                                 <img src={"/images/dot_and_circle.png"} alt="SUBMIT" />
                                             </button>
