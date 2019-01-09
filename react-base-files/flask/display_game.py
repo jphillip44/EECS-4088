@@ -1,17 +1,24 @@
 #!/usr/bin/python3
 import desktop
 import games
+from tkinter import mainloop
 
 class DisplayGame():
+    screenSetup = 0
+    curScreen = 0
+
 
     def __init__(self):
-        pass
+        self.screenSetup = desktop.DesktopUI()
+        self.curScreen = desktop.PlayerUI(self.screenSetup)
+        
 
     def update(self, obj):
         getattr(self, obj.__class__.__name__)(obj)
 
     def list(self, obj):
         print(obj)
+        self.curScreen.PlayerShow(obj)
 
     def Double07(self, obj):
         print(obj.state)
