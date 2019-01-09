@@ -60,7 +60,7 @@ def create_game(data):
     global GAME
     print(USERS)
     if GAME is None or not GAME.active:
-        GAME = GameList.select_game(data, USERS.values(), \
+        GAME = GameList.select_game(data, list(USERS.values()), \
             socketio=SOCKETIO, display_game=DISPLAY)
         sio.emit('gameStarted', GAME.__name__, broadcast=True)
         global THREAD

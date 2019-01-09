@@ -16,7 +16,7 @@ class Game(ABC):
         self.nocopy.append('_Game__ranks')
         self.socketio = kwargs.get('socketio', None)
         self.display_game = kwargs.get('display_game', None)
-        self.__players = list(players)
+        self.__players = players
         self.__name__ = self.__class__.__name__
         print("New "+self.__name__+" Started")
         self.__active_game = True
