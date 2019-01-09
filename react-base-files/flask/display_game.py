@@ -55,5 +55,4 @@ if __name__ == '__main__':
     DISPLAY.update(GAME.deepcopy)
     GAME = games.MultiGame(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    GAME.run_game()
  
