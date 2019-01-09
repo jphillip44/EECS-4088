@@ -37,6 +37,7 @@ class MultiGame(Game):
         if self.display_game is not None:
             self.display_game.update(self.deepcopy)
         self.display()
+        self.state['timer'] = 20 # for now
 
     def run_game(self):
         level = 1
