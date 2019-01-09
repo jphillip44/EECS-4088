@@ -25,17 +25,35 @@ class DisplayGame():
     def Fragments(self, obj):
         print(obj.state)
 
+    def MultiGame(self, obj):
+        if obj.state.get('name'):
+            getattr(self, obj.state['name'])(obj)
+        else:
+            print(obj.state)
+
+    def Sequence(self, obj):
+        print(obj.state)
+
+    def MultiTap(self, obj):
+        print(obj.state)
+
+    def QuickMaff(self, obj):
+        print(obj.state)
+
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
-    PLAYERS = ['player1', 'player2']
+    PLAYERS = ['player1', 'player2', 'player3']
     DISPLAY.update(PLAYERS)
-    GAME = games.Double07(['A', 'B'])
+    GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    GAME = games.Hot_Potato(['A', 'B'])
+    GAME = games.Hot_Potato(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    GAME = games.Match(['A', 'B'])
+    GAME = games.Match(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    GAME = games.Fragments(['A', 'B'])
+    GAME = games.Fragments(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
+    GAME = games.MultiGame(PLAYERS)
+    DISPLAY.update(GAME.deepcopy)
+    GAME.run_game()
  

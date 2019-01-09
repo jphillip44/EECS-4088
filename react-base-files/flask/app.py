@@ -111,5 +111,5 @@ def con():
 
 if __name__ == '__main__':
     # game_thread(target=background).start()
-    SOCKETIO.run(APP, host="0.0.0.0")
+    SOCKETIO.run(APP, host="0.0.0.0", debug=True)
     # wsgi.server(eventlet.listen(('0.0.0.0', 5000)), app)
