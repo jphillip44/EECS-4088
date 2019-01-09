@@ -20,14 +20,14 @@ class Match(Game):
                 self.state['players'][player] = {'score': 0}
             self.state['next'] = (self.__get_turn(), self.__get_turn())
             board = [format(x, '02d') for x in range(rows*columns//2) for _ in range(2)]
-            # if shuffle:
-            #     random.shuffle(board)
+            if shuffle:
+                random.shuffle(board)
             self.rows = rows
             self.columns = columns
             self.state['board'] = numpy.asarray([board[i*columns:i*columns+columns] for i in range(rows)])
             self.state['gameBoard'] = numpy.asarray([['XX'] * columns for _ in range(rows)])
             self.state['cursor'] = (0,0)
-            self.state['timer'] = 15
+            self.state['timer'] = 30
 
         super().__init__(players, **kwargs)
         if self.socketio is not None:
