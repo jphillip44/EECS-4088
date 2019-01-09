@@ -53,7 +53,7 @@ def join_server(data):
     if DISPLAY is None:
         DISPLAY = DisplayGame()
     if GAME is None or not GAME.active:
-        DISPLAY.update([*USERS.values()])
+        DISPLAY.update(list(USERS.values()))
 
 @SOCKETIO.on('createGame')
 def create_game(data):

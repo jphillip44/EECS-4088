@@ -12,7 +12,7 @@ class Game(ABC):
         '''
         self.__state = {}
         super().__init__()
-        self.nocopy = [*kwargs.keys()]
+        self.nocopy = list(kwargs.keys())
         self.nocopy.append('_Game__ranks')
         self.socketio = kwargs.get('socketio', None)
         self.display_game = kwargs.get('display_game', None)
