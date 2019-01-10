@@ -26,7 +26,7 @@ class Fragments extends React.Component {
                     <div className="container has-text-centered">
                         <h1 className="landing title is-1 has-text-white">Fragments</h1>
                         <div className="box">
-                            <figure className="image">
+                            <figure>
                                 {this.state.fragments.map((fragment, index) => (
                                     <img
                                         src={`/images/${fragment}`}
