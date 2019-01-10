@@ -1,7 +1,8 @@
-from __screen import DesktopUI
-from tkinter import mainloop, Frame, Label
+from tkinter import *
 from tkinter.font import Font
 import math
+import __screen 
+from __screen import DesktopUI
 
 class PlayerUI ():
     window = DesktopUI()
@@ -53,7 +54,7 @@ class PlayerUI ():
         #left player list
         if (leftPlay % 2) == 1:
             for i in range(leftPlay):
-                label = Label(self.window.framelist[1], text = players[2 * i], font = self.deffont, bg = self.window.framelist[1]['bg'], fg = textColour)
+                label = Label(self.leftframe, text = players[2 * i], font = self.deffont, bg = self.leftframe['bg'], fg = textColour)
                 label.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
         else:
             for i in range(leftPlay):
@@ -74,8 +75,9 @@ class PlayerUI ():
           
            
 def main():
-    kek = PlayerUI(DesktopUI())
-    mainloop()
+    kek = PlayerUI(__screen.DesktopUI())
+    while True:
+        kek.window.win.update()
 
     kek.PlayerShow(players = ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"])
     mainloop()

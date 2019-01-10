@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import desktop
 import games
-from tkinter import mainloop
+from tkinter import *
 
 class DisplayGame():
     screenSetup = 0
@@ -11,6 +11,7 @@ class DisplayGame():
     def __init__(self):
         self.screenSetup = desktop.DesktopUI()
         self.curScreen = desktop.PlayerUI(self.screenSetup)
+        self.screenSetup.win.update()
         
 
     def update(self, obj):
@@ -22,6 +23,7 @@ class DisplayGame():
 
     def Double07(self, obj):
         print(obj.state)
+        self.curScreen = desktop.Double07UI(self.screenSetup, obj.state, 10)
 
     def Hot_Potato(self, obj):
         print(obj.state)

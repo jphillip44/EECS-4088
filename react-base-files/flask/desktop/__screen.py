@@ -1,7 +1,5 @@
-from tkinter import Tk, mainloop, Frame
-import sys, time
-from colour import Color
-
+from tkinter import Tk, Frame
+#from colour import Color
 
 class DesktopUI():
     screenW = 0
@@ -37,5 +35,17 @@ class DesktopUI():
                 
     def addFrame (self, fname):
         self.framelist.append(fname)
+
+    @property
+    def screen(self):
+        return self.__screen
+
+    @screen.setter
+    def screen(self, value):
+        self.__screen = value
+
+    @screen.deleter
+    def screen(self):
+        del self.__screen   
 
 
