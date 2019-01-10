@@ -62,10 +62,11 @@ class Match(Game):
                 self.socketio.sleep(1)
                 print(self.state['timer'])
                 self.state['timer'] -= 1
+            else:
                 self.socketio.emit('timeout', room=self.state['next'][0])
                 self.state['next'] = (self.state['next'][1], self.__get_turn())
                 self.__waiting = True
-                self.state['timer'] = 15
+                self.state['timer'] = 30
                 # self.display_game.update(self.deepcopy)
 
 
@@ -98,7 +99,7 @@ class Match(Game):
             self.__p2 = self.state['next'][0], data
             self.state['gameBoard'][self.__p1[1]] = 'XX'    
             is_match()
-        self.state['next'] = (self.state['next'][1], self.__get_turn())
+        # self.state['next'] = (self.state['next'][1], self.__get_turn())
         self.display() 
 
 
