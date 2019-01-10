@@ -6,11 +6,11 @@ import games
 import time
 
 class DisplayGame():
-    screenSetup = 0
-    curScreen = 0
+    # screenSetup = 0
+    # curScreen = 0
 
 
-    def run(self):
+    def __init__(self):
         self.screenSetup = desktop.DesktopUI()
         self.curScreen = desktop.PlayerUI(self.screenSetup)
         self.screenSetup.win.update()

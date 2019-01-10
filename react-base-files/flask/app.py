@@ -30,9 +30,8 @@ SOCKETIO = sio.SocketIO(APP, async_mode=ASYNC_MODE)
 USERS = {}
 GAME = None
 THREAD = None
-DISPLAY = DisplayGame()
-DISPLAY.run()
-# DISPLAY = None
+# DISPLAY = DisplayGame()
+DISPLAY = None
 
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
@@ -54,7 +53,7 @@ def join_server(data):
     global DISPLAY
     # if DISPLAY is None:
     #     DISPLAY = DisplayGame()
-    if GAME is None or not GAME.active:
+    if DISPLAY is not None and (GAME is None or not GAME.active):
         DISPLAY.update(list(USERS.values()))
 
 @SOCKETIO.on('createGame')
