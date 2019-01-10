@@ -3,24 +3,26 @@ import desktop
 import games
 # from tkinter import *
 # import tkinter as tk
+import time
 
 class DisplayGame():
     screenSetup = 0
     curScreen = 0
 
 
-    def __init__(self):
+    def run(self):
         self.screenSetup = desktop.DesktopUI()
         self.curScreen = desktop.PlayerUI(self.screenSetup)
         self.screenSetup.win.update()
         
-
     def update(self, obj):
         getattr(self, obj.__class__.__name__)(obj)
 
     def list(self, obj):
         print(obj)
         self.curScreen.PlayerShow(obj)
+        self.screenSetup.win.update()
+
 
     def Double07(self, obj):
         print(obj.state)
@@ -53,8 +55,11 @@ class DisplayGame():
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
+    DISPLAY.run()
+    time.sleep(3)
     PLAYERS = ['player1', 'player2', 'player3']
     DISPLAY.update(PLAYERS)
+    time.sleep(3)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     GAME = games.Hot_Potato(PLAYERS)
