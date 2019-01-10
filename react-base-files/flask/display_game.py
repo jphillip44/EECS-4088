@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 import desktop
 import games
-from tkinter import *
+# from tkinter import *
+# import tkinter as tk
 
 class DisplayGame():
     screenSetup = 0

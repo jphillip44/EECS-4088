@@ -26,7 +26,7 @@ class Match(Game):
             self.columns = columns
             self.state['board'] = numpy.asarray([board[i*columns:i*columns+columns] for i in range(rows)])
             self.state['gameBoard'] = numpy.asarray([['XX'] * columns for _ in range(rows)])
-            self.state['cursor'] = (0,0)
+            self.state['cursor'] = [0,0]
             self.state['timer'] = 30
 
         super().__init__(players, **kwargs)
@@ -87,7 +87,7 @@ class Match(Game):
             self.check_end()
 
         if data is None:
-            data = self.state['cursor']
+            data = tuple(self.state['cursor'])
             
     
         print("value: " + self.state['board'][data])
@@ -110,36 +110,44 @@ class Match(Game):
 
     def left(self):
         if self.state['cursor'][1] > 0:
-            self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] - 1)
+            # self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] - 1)
+            self.state['cursor'][1] -= 1
         else:
-            self.state['cursor'] = (self.state['cursor'][0], self.columns - 1)
+            # self.state['cursor'] = (self.state['cursor'][0], self.columns - 1)
+            self.state['cursor'][1] = self.columns - 1
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
         print(self.state['cursor'])
 
     def right(self):
         if self.state['cursor'][1] < self.columns - 1:
-            self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] + 1)
+            # self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] + 1)
+            self.state['cursor'][1] += 1
         else:
-            self.state['cursor'] = (self.state['cursor'][0], 0)
+            # self.state['cursor'] = (self.state['cursor'][0], 0)
+            self.state['cursor'][1] = 0
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
         print(self.state['cursor'])
 
     def up(self):
         if self.state['cursor'][0] > 0:
-            self.state['cursor'] = (self.state['cursor'][0] - 1, self.state['cursor'][1])
+            # self.state['cursor'] = (self.state['cursor'][0] - 1, self.state['cursor'][1])
+            self.state['cursor'][0] -= 1
         else:
-            self.state['cursor'] = (self.rows - 1, self.state['cursor'][1])
+            # self.state['cursor'] = (self.rows - 1, self.state['cursor'][1])
+            self.state['cursor'][0] = self.rows - 1
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
         print(self.state['cursor'])
 
     def down(self):
         if self.state['cursor'][0] < self.rows - 1:
-            self.state['cursor'] = (self.state['cursor'][0] + 1, self.state['cursor'][1])
+            # self.state['cursor'] = (self.state['cursor'][0] + 1, self.state['cursor'][1])
+            self.state['cursor'][0] += 1
         else:
-            self.state['cursor'] = (0, self.state['cursor'][1])
+            # self.state['cursor'] = (0, self.state['cursor'][1])
+            self.state['cursor'][0] = 0
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
         print(self.state['cursor'])

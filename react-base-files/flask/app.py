@@ -30,8 +30,8 @@ SOCKETIO = sio.SocketIO(APP, async_mode=ASYNC_MODE)
 USERS = {}
 GAME = None
 THREAD = None
-DISPLAY = DisplayGame()
-# DISPLAY = None
+# DISPLAY = DisplayGame()
+DISPLAY = None
 
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
