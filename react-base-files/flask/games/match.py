@@ -64,7 +64,6 @@ class Match(Game):
                 self.state['timer'] -= 1
                 self.socketio.emit('timeout', room=self.state['next'][0])
                 self.state['next'] = (self.state['next'][1], self.__get_turn())
-            else:
                 self.__waiting = True
                 self.state['timer'] = 15
                 # self.display_game.update(self.deepcopy)
