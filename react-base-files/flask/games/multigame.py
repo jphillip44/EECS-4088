@@ -9,7 +9,8 @@ from __game import Game
 class MultiGame(Game):
     class Simon():
         def __init__(self, game, level):
-            self.valid = list(np.random.choice(4, level + 4))
+            choices = ['red', 'blue', 'green', 'yellow']
+            self.valid = list(np.random.choice(choices, level + 4))
             self.timer = 20
             game.init(self)
 
