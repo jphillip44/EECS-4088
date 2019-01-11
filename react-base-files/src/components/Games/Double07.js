@@ -141,7 +141,7 @@ class Double07 extends React.Component {
                                 </div>
                                 <div className="box">
                                     <h5 className="title is-5">{this.props.userState.username}</h5>
-                                    <div className="level is-mobile">
+                                    <div className="level">
                                         <div className="level-item">
                                             <button className="button">Health Points: {this.state.player.hp}</button>
                                         </div>
