@@ -18,19 +18,10 @@ class Double07(Game):
         '''
         Sets up the games default parameters.
         '''
-        def init_state(players):
-            '''
-            Setups the game state for each player with default parameters.
-            '''
-            self.state['players'] = {}
-            for player in players:
-                self.state['players'][player] = {'hp' : 3, 'ap': 1, 'defend': 'none'}
-
-        super().__init__(players, **kwargs)
+        super().__init__(players, {'hp' : 3, 'ap': 1, 'defend': 'none'}, **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('endOfRound', self.action)
-        init_state(self.players)
-        self.__timer = timer
+        self.state['timer'] = timer
 
     def action(self, data):
         '''
@@ -77,36 +68,21 @@ class Double07(Game):
         '''
         Function that runs the gameloop from the server.
         '''
+        timer = self.state['timer']
         while self.active:
             self.socketio.emit('state', self.state['players'], broadcast=True)
-            timer = self.timer
-            while self.timer > 0:
+            while self.state['timer'] > 0:
                 self.socketio.sleep(1)
-                print(self.timer)
-                self.timer -= 1
+                print(self.state['timer'])
+                self.state['timer'] -= 1
             self.socketio.emit('timerExpired', broadcast=True)
-            self.timer = timer
+            self.state['timer'] = timer
             print("Waiting for inputs")
             self.socketio.sleep(1)
             print("Times up")
             self.end_round()
         print("Game Over")
         self.socketio.emit('gameOver', broadcast=True)
-
-    @property
-    def timer(self):
-        '''
-        Local timer object
-        '''
-        return self.__timer
-
-    @timer.setter
-    def timer(self, value):
-        self.__timer = value
-
-    @timer.deleter
-    def timer(self):
-        del self.__timer
 
     def __defend(self, player):
         '''
@@ -139,7 +115,7 @@ class Double07(Game):
             self.state['players'][player]['ap'] -= 1
         elif self.state['players'][target]['defend'] == player:
             self.state['players'][player]['ap'] -= 1
-        else:
+        elif type(self.state['players'][target]['hp']) == int:
             self.state['players'][target]['hp'] -= 1
 
     def rank_players(self):

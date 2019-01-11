@@ -3,9 +3,7 @@ import itertools
 import random
 import numpy
 
-from collections import OrderedDict
 from __game import Game
-
 
 class Match(Game):
     __next = None
@@ -15,9 +13,6 @@ class Match(Game):
 
     def __init__(self, players, rows=4, columns=10, shuffle=True, **kwargs):
         def init_state(players, rows, columns, shuffle):
-            self.state['players'] = OrderedDict()
-            for player in players:
-                self.state['players'][player] = {'score': 0}
             self.state['next'] = (self.__get_turn(), self.__get_turn())
             board = [format(x, '02d') for x in range(rows*columns//2) for _ in range(2)]
             if shuffle:
@@ -29,7 +24,7 @@ class Match(Game):
             self.state['cursor'] = [0,0]
             self.state['timer'] = 30
 
-        super().__init__(players, **kwargs)
+        super().__init__(players, {'score': 0},  **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('select', self.action)
             self.socketio.on_event('up', self.up)
@@ -52,6 +47,7 @@ class Match(Game):
             self.print_standings()
 
     def run_game(self):
+        timer = self.state['timer']
         while self.active:
             self.state['board'] = self.state['board'].tolist()
             self.state['gameBoard'] = self.state['gameBoard'].tolist()
@@ -63,10 +59,11 @@ class Match(Game):
                 print(self.state['timer'])
                 self.state['timer'] -= 1
             else:
-                self.socketio.emit('timeout', room=self.state['next'][0])
-                self.state['next'] = (self.state['next'][1], self.__get_turn())
+                if self.state['timer'] == 0:
+                    self.socketio.emit('timeout', room=self.state['next'][0])
+                    self.state['next'] = (self.state['next'][1], self.__get_turn())
                 self.__waiting = True
-                self.state['timer'] = 30
+                self.state['timer'] = timer
                 # self.display_game.update(self.deepcopy)
 
 
@@ -99,7 +96,7 @@ class Match(Game):
             self.__p2 = self.state['next'][0], data
             self.state['gameBoard'][self.__p1[1]] = 'XX'    
             is_match()
-        # self.state['next'] = (self.state['next'][1], self.__get_turn())
+        self.state['next'] = (self.state['next'][1], self.__get_turn())
         self.display() 
 
 

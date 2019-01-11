@@ -1,12 +1,13 @@
 #!/usr/bin/python3
-from copy import copy, deepcopy
+from copy import deepcopy
 from abc import ABC, abstractmethod
 from queue import Queue, PriorityQueue
+from collections import OrderedDict
 
 class Game(ABC):
     __active_game = False
 
-    def __init__(self, players, **kwargs):
+    def __init__(self, players, default, **kwargs):
         '''
         Sets up the games default parameters.
         '''
@@ -21,6 +22,9 @@ class Game(ABC):
         print("New "+self.__name__+" Started")
         self.__active_game = True
         self.__ranks = Queue()
+        self.state['players'] = {}
+        for player in players:
+            self.state['players'][player] = deepcopy(default)
 
     def __deepcopy__(self, memo):
         cls = self.__class__

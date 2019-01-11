@@ -43,7 +43,7 @@ class DisplayGame():
         else:
             print(obj.state)
 
-    def Sequence(self, obj):
+    def Simon(self, obj):
         print(obj.state)
 
     def MultiTap(self, obj):
@@ -55,10 +55,10 @@ class DisplayGame():
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
-    time.sleep(3)
+    # time.sleep(3)
     PLAYERS = ['player1', 'player2', 'player3']
     DISPLAY.update(PLAYERS)
-    time.sleep(3)
+    # time.sleep(3)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     GAME = games.Hot_Potato(PLAYERS)

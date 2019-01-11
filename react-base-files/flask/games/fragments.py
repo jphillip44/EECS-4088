@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import random
 
-from collections import OrderedDict
 from queue import Queue
 from __game import Game
 
@@ -10,17 +9,11 @@ class Fragments(Game):
     __pool = None
 
     def __init__(self, players, images=50, **kwargs):
-        def init_state(players, images):
-            self.state['players'] = {}
-            for player in players:
-                self.state['players'][player] = {'score': 0}
-            self.__pool = [format(x, '02d') + ".fragment.jpg" for x in range(images)] 
-            self.reset_state()
- 
-        super().__init__(players, **kwargs)
+        super().__init__(players, {'score': 0}, **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('select', self.action)
-        init_state(self.players, images)
+        self.__pool = [format(x, '02d') + ".fragment.jpg" for x in range(images)] 
+        self.reset_state()
 
     def reset_state(self):
             self.state['fragments'] = random.sample(self.__pool, 9)
@@ -48,6 +41,7 @@ class Fragments(Game):
 
     def run_game(self):
         count = 0
+        timer = self.state['timer']
         while self.active:
             self.display_game.update(self.deepcopy)
             self.socketio.emit('turn', self.state, broadcast=True)
@@ -58,7 +52,7 @@ class Fragments(Game):
                     self.state['timer'] -= 0.01
             else:
                 self.display()
-                self.state['timer'] = 30
+                self.state['timer'] = timer
                 self.reset_state()
                 count += 1
                 if count == 5:

@@ -3,27 +3,18 @@ import random
 import itertools
 import copy
 
-from collections import OrderedDict
-from queue import PriorityQueue
 from __game import Game
-
 
 class Hot_Potato(Game):
     __next = None
     __hold_potato = False
 
     def __init__(self, players, **kwargs):
-        def init_state(players):
-            self.state['timer'] = self.__new_potato_timer()
-            self.state['players'] = OrderedDict()
-            for player in players:
-                self.state['players'][player] = {'score': 0}
-            self.state['next'] = self.__get_turn()
-
-        super().__init__(players, **kwargs)
+        super().__init__(players, {'score': 0},  **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('endOfTurn', self.action)
-        init_state(self.players)
+        self.state['timer'] = self.__new_potato_timer()
+        self.state['next'] = self.__get_turn()
 
     def action(self, data):
         self.__hold_potato = False
