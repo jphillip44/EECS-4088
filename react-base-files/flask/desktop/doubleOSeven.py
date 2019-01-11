@@ -48,20 +48,67 @@ class Double07UI():
         center = int(self.window.screenH / 2)
         offset = int(self.window.screenH / 10)
         textColour = "white"
-        
-        for i in range(numPlay):
+        doubleFont = self.window.setFontSize(int(self.window.screenH / 50))
+                
+        for i, player in enumerate(players):
             if i < leftPlay:
-                    if  (leftPlay / 2) % 2 == 1:
-                        #background image
-                        label = Label(self.leftframe, text = players[i], font = self.window.deffont, bg = self.leftframe['bg'], fg = textColour)
-                        label.place(anchor = "left", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
+                if  (leftPlay / 2) % 2 == 1:
+                    #background image
+                    #playerFrame = Frame(height = (self.window.screenH / 15), width = (3 * self.window.screenW / 12), bg =  "black")
+                    #playerFrame.pack_propagate(False)
+                    #playerFrame.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW /16)
+                    #self.window.addFrame(playerFrame)
+
+                    label = Label(self.leftframe, text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)#.pack()
+                    label.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 32)
+
+                    label2 = Label(self.leftframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label2.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
+                    
+                    label3 = Label(self.leftframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label3.place(anchor = "e", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 4)
+
+
+
+                else:
+                    label = Label(self.leftframe, text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label.place(anchor = "w", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 32) 
+
+                    label2 = Label(self.leftframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label2.place(anchor = "center", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 8) 
+
+                    label3 = Label(self.leftframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label3.place(anchor = "e", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 4) 
+            else:
+                if (rightPlay % 2) == 1:
+                    label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label.place(anchor = "w", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 32)
+
+                    label2 = Label(self.rightframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label2.place(anchor = "center", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 8) 
+
+                    label3 = Label(self.rightframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label3.place(anchor = "e", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 4.1) 
+                else:
+                    label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label.place(anchor = "w", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 32) 
+
+                    label2 = Label(self.rightframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label2.place(anchor = "center", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 8) 
+
+                    label3 = Label(self.rightframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label3.place(anchor = "e", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = 31 * self.window.screenW / 32) 
+
 
 
     def actions(self, players):
         pass
 
     def timer (self, timer):
-        pass        
+        label = Label(text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") #need to add to top frame
+        label.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
+        print("here")
+
 
 def main():
     pass

@@ -12,18 +12,18 @@ class DesktopUI():
     #colours = list(top.range_to(bottom, 100))
     backgroundC = "#001a35"
     deffont = 0
+    fontFamily = "Times"
 
     def __init__(self):
         self.win = Tk()
         screenWidth = self.win.winfo_screenwidth()
         screenHeight = self.win.winfo_screenheight()
 
-        self.deffont = Font(family = "Times", size = int(screenHeight / 30)) 
-
+        self.deffont = self.setFontSize(int(screenHeight / 30)) 
         self.setscreen(screenWidth, screenHeight)
 
-        SS = str(screenWidth) + "x" + str(screenHeight)
-        self.win.geometry(SS)
+        self.win.state('zoomed') #make maximized (on windows)
+
         #self.win.attributes('-fullscreen', True) #make fullscreen
         self.win.focus_set() #focus on fullscreen
         self.win.configure(background = self.backgroundC)
@@ -41,6 +41,9 @@ class DesktopUI():
                 
     def addFrame (self, fname):
         self.framelist.append(fname)
+
+    def setFontSize(self, fSize):
+        return Font(family = self.fontFamily, size = fSize)
 
     @property
     def screen(self):

@@ -25,7 +25,7 @@ class DisplayGame():
 
     def Double07(self, obj):
         print(obj.state)
-        #self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)        
+        self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)        
         self.screenSetup.win.update()
 
 
@@ -56,18 +56,19 @@ class DisplayGame():
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
-    time.sleep(3)
+    #time.sleep(3)
     PLAYERS = ['player1', 'player2', 'player3']
     DISPLAY.update(PLAYERS)
     # time.sleep(3)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    GAME = games.Hot_Potato(PLAYERS)
-    DISPLAY.update(GAME.deepcopy)
-    GAME = games.Match(PLAYERS)
-    DISPLAY.update(GAME.deepcopy)
-    GAME = games.Fragments(PLAYERS)
-    DISPLAY.update(GAME.deepcopy)
-    GAME = games.MultiGame(PLAYERS)
-    DISPLAY.update(GAME.deepcopy)
+    time.sleep(5)
+    #GAME = games.Hot_Potato(PLAYERS)
+    #DISPLAY.update(GAME.deepcopy)
+    #GAME = games.Match(PLAYERS)
+    #DISPLAY.update(GAME.deepcopy)
+   # GAME = games.Fragments(PLAYERS)
+  #  DISPLAY.update(GAME.deepcopy)
+  #  GAME = games.MultiGame(PLAYERS)
+  #  DISPLAY.update(GAME.deepcopy)
  
