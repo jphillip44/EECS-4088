@@ -35,6 +35,13 @@ class Double07 extends React.Component {
                     });
                 }
             };
+            // Reset button to reload after attack in previous round
+            if (this.state.action === 'attack' && Object.keys(this.state.target).length === 0) {
+                this.setState({
+                    action: 'reload'
+                });
+            }
+
             // Switch to reload action when user ap is zero
             if (player.ap === 0) {
                 this.setState({
@@ -187,15 +194,12 @@ class Double07 extends React.Component {
                                     </div>
                                     <div className="level-item">
                                         <span>{user.hp} Hp</span>
-                                    </div>
-                                    <div className="level-item">
-                                        <span>{user.ap} AP</span>  
-                                    </div>                                          
+                                    </div>                                         
                                 </div>
                             ))} 
                         </div>
                     </div>
-                    <button class="modal-close is-large" aria-label="close" onClick={this.closeTargetList}></button>
+                    <button className="modal-close is-large" aria-label="close" onClick={this.closeTargetList}></button>
                 </div>
                     
             </div>
