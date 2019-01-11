@@ -22,8 +22,9 @@ class Double07(Game):
             '''
             Setups the game state for each player with default parameters.
             '''
+            self.state['players'] = {}
             for player in players:
-                self.state[player] = {'hp' : 3, 'ap': 1, 'defend': 'none'}
+                self.state['players'][player] = {'hp' : 3, 'ap': 1, 'defend': 'none'}
 
         super().__init__(players, **kwargs)
         if self.socketio is not None:
@@ -77,7 +78,7 @@ class Double07(Game):
         Function that runs the gameloop from the server.
         '''
         while self.active:
-            self.socketio.emit('state', self.state, broadcast=True)
+            self.socketio.emit('state', self.state['players'], broadcast=True)
             timer = self.timer
             while self.timer > 0:
                 self.socketio.sleep(1)
@@ -111,35 +112,35 @@ class Double07(Game):
         '''
         Handles logic for the defend action.
         '''
-        self.state[player]['defend'] = "all"
-        self.state[player]['ap'] -= 1
+        self.state['players'][player]['defend'] = "all"
+        self.state['players'][player]['ap'] -= 1
 
     def __reload(self, player):
         '''
         Handles logic for the reload action.
         '''
-        self.state[player]['defend'] = "none"
-        self.state[player]['ap'] += 1
+        self.state['players'][player]['defend'] = "none"
+        self.state['players'][player]['ap'] += 1
 
     def __target(self, player, target):
         '''
         Handles defend logic for attack action.
         Sets defense to attacker to prevent double attacks.
         '''
-        self.state[player]['defend'] = target
+        self.state['players'][player]['defend'] = target
 
     def __attack(self, player, target):
         '''
         Handles logic attack action.
         Handles different cases of success/failure.
         '''
-        if self.state[target]['defend'] == "all":
-            self.state[target]['ap'] += 1
-            self.state[player]['ap'] -= 1
-        elif self.state[target]['defend'] == player:
-            self.state[player]['ap'] -= 1
+        if self.state['players'][target]['defend'] == "all":
+            self.state['players'][target]['ap'] += 1
+            self.state['players'][player]['ap'] -= 1
+        elif self.state['players'][target]['defend'] == player:
+            self.state['players'][player]['ap'] -= 1
         else:
-            self.state[target]['hp'] -= 1
+            self.state['players'][target]['hp'] -= 1
 
     def rank_players(self):
         '''
@@ -154,10 +155,10 @@ class Double07(Game):
             A local function to __rank_players().
             Adds players to ranking queue if they are dead.
             '''
-            for player, stats in self.state.items():
+            for player, stats in self.state['players'].items():
                 if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     dead.put((stats['ap'], player))
-                    self.state[player]['hp'] = 'dead'
+                    self.state['players'][player]['hp'] = 'dead'
             while not dead.empty():
                 self.add_ranks(dead.get()[1])
 
@@ -166,7 +167,7 @@ class Double07(Game):
             A local function to __rank_players().
             Returns a list of living players.
             '''
-            for player, stats in self.state.items():
+            for player, stats in self.state['players'].items():
                 if stats['hp'] != 'dead':
                     yield player
 
