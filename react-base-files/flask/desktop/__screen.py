@@ -1,4 +1,5 @@
 from tkinter import Tk, Frame
+from tkinter.font import Font
 #from colour import Color
 
 class DesktopUI():
@@ -10,15 +11,20 @@ class DesktopUI():
     #bottom = Color("#001a35")
     #colours = list(top.range_to(bottom, 100))
     backgroundC = "#001a35"
+    deffont = 0
 
     def __init__(self):
         self.win = Tk()
         screenWidth = self.win.winfo_screenwidth()
         screenHeight = self.win.winfo_screenheight()
 
+        self.deffont = Font(family = "Times", size = int(screenHeight / 30)) 
+
         self.setscreen(screenWidth, screenHeight)
-        
-        self.win.attributes('-fullscreen', True) #make fullscreen
+
+        SS = str(screenWidth) + "x" + str(screenHeight)
+        self.win.geometry(SS)
+        #self.win.attributes('-fullscreen', True) #make fullscreen
         self.win.focus_set() #focus on fullscreen
         self.win.configure(background = self.backgroundC)
 

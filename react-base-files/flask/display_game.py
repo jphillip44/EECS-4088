@@ -9,7 +9,6 @@ class DisplayGame():
     # screenSetup = 0
     # curScreen = 0
 
-
     def __init__(self):
         self.screenSetup = desktop.DesktopUI()
         self.curScreen = desktop.PlayerUI(self.screenSetup)
@@ -26,7 +25,9 @@ class DisplayGame():
 
     def Double07(self, obj):
         print(obj.state)
-        self.curScreen = desktop.Double07UI(self.screenSetup, obj.state, 10)
+        #self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)        
+        self.screenSetup.win.update()
+
 
     def Hot_Potato(self, obj):
         print(obj.state)
@@ -55,7 +56,7 @@ class DisplayGame():
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
-    # time.sleep(3)
+    time.sleep(3)
     PLAYERS = ['player1', 'player2', 'player3']
     DISPLAY.update(PLAYERS)
     # time.sleep(3)

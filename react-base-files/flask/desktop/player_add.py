@@ -1,16 +1,16 @@
-from tkinter import *
+from tkinter import Tk, Label, Frame
 from tkinter.font import Font
 import math
 import __screen 
 from __screen import DesktopUI
 
 class PlayerUI ():
-    window = DesktopUI()
+    window = 0 #DesktopUI()
     topframe = 0
     rightframe = 0
     leftframe = 0
     centerframe = 0
-    deffont = Font(family = "Times", size = int(window.screenH / 30)) 
+    
     
     def __init__(self, ui):
         self.window = ui
@@ -37,7 +37,7 @@ class PlayerUI ():
         centerFrame.place(x = (self.window.screenW / 4), y = self.window.screenH / 10)
         self.centerframe = centerFrame
         self.window.addFrame(centerFrame)
-        label1 = Label(centerFrame, text="Go to website or scan the below code to enter the lobby", bg = centerFrame['bg'], fg = "white", font = self.deffont, wraplength = self.window.screenW / 2)
+        label1 = Label(centerFrame, text="Go to website or scan the below code to enter the lobby", bg = centerFrame['bg'], fg = "white", font = self.window.deffont, wraplength = self.window.screenW / 2)
         label1.place(x = self.window.screenW / 4, y = self.window.screenH / 10, anchor = 'center')
         
     def PlayerShow (self, players):
@@ -54,21 +54,21 @@ class PlayerUI ():
         #left player list
         if (leftPlay % 2) == 1:
             for i in range(leftPlay):
-                label = Label(self.leftframe, text = players[2 * i], font = self.deffont, bg = self.leftframe['bg'], fg = textColour)
+                label = Label(self.leftframe, text = players[2 * i], font = self.window.deffont, bg = self.leftframe['bg'], fg = textColour)
                 label.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
         else:
             for i in range(leftPlay):
-                label = Label(self.leftframe, text = players[2 * i], font = self.deffont, bg = self.leftframe['bg'], fg = textColour)
+                label = Label(self.leftframe, text = players[2 * i], font = self.window.deffont, bg = self.leftframe['bg'], fg = textColour)
                 label.place(anchor = "center", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 8) 
 
         #right player list
         if (rightPlay % 2) == 1:
             for i in range(rightPlay):
-                label = Label(self.rightframe, text = players[2 * i + 1], font = self.deffont, bg = self.rightframe['bg'], fg = textColour)
+                label = Label(self.rightframe, text = players[2 * i + 1], font = self.window.deffont, bg = self.rightframe['bg'], fg = textColour)
                 label.place(anchor = "center", y = center - ((((rightPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
         else:
             for i in range(rightPlay):
-                label = Label(self.rightframe, text = players[2 * i + 1], font = self.deffont, bg = self.rightframe['bg'], fg = textColour)
+                label = Label(self.rightframe, text = players[2 * i + 1], font = self.window.deffont, bg = self.rightframe['bg'], fg = textColour)
                 label.place(anchor = "center", y = center - (rightPlay / 2 + .5 - i) * offset, x = self.window.screenW / 8) 
 
         

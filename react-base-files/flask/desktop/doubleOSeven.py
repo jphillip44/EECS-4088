@@ -1,23 +1,22 @@
-from tkinter import *
+from tkinter import Tk, Label, Frame
 from tkinter.font import Font
 import math
 from __screen import DesktopUI
 
 
 class Double07UI():
-    window = DesktopUI()
-    deffont = Font(family = "Times", size = int(window.screenH / 30)) 
+    window = 0 #DesktopUI()
 
     topframe = 0
     rightframe = 0
     leftframe = 0
     centerframe = 0
 
-    def __init__(self, ui, players, timer):
+    def __init__(self, ui, obj):
         self.window = ui
         self.setup()
-        self.display(players)
-        self.timer(timer)
+        self.display(obj['players'])
+        self.timer(obj['timer'])
 
     def setup(self):
         topFrame = Frame(height = self.window.screenH / 10, width = self.window.screenW, bg= self.window.backgroundC)
@@ -54,7 +53,7 @@ class Double07UI():
             if i < leftPlay:
                     if  (leftPlay / 2) % 2 == 1:
                         #background image
-                        label = Label(self.leftframe, text = players[i], font = self.deffont, bg = self.leftframe['bg'], fg = textColour)
+                        label = Label(self.leftframe, text = players[i], font = self.window.deffont, bg = self.leftframe['bg'], fg = textColour)
                         label.place(anchor = "left", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
 
 
