@@ -16,6 +16,8 @@ class Double07 extends React.Component {
     componentDidMount() {
         // Wait for players data from server and convert it to list of players
         this.props.socket.on('state', (data) => {
+            console.log('state');
+            console.log(data);
             let keys = Object.keys(data)
             let targetList = [];
             let player = {};
@@ -58,6 +60,7 @@ class Double07 extends React.Component {
         });
 
         this.props.socket.on('timerExpired', () => {
+            console.log('timerExpired');
             // If attack is picked but not a target, default to reload
             if (this.state.action === 'attack' && Object.keys(this.state.target).length === 0) {
                 this.props.socket.emit('endOfRound', {
@@ -83,6 +86,7 @@ class Double07 extends React.Component {
         });
 
         this.props.socket.on('gameOver', () => {
+            console.log('gameover');
             this.props.history.push('/room');
         });
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Game5 extends React.Component {
+class MultiGame extends React.Component {
     render() {
         return (
             <div className="hero is-fullheight">
@@ -14,4 +14,4 @@ class Game5 extends React.Component {
     }
 }
 
-export default Game5;
+export default MultiGame;

@@ -6,7 +6,7 @@ import Double07 from './Games/Double07';
 import HotPotato from './Games/Hot_Potato';
 import Match from './Games/Match';
 import Fragments from './Games/Fragments';
-import Game5 from './Games/Game5';
+import MultiGame from './Games/MultiGame';
 import NotFound from './NotFound';
 import io from 'socket.io-client';
 
@@ -84,7 +84,13 @@ class App extends Component {
                         socket={this.socket}
                         />}
                     />
-                    <Route path="/game5" component={Game5} />
+                    <Route
+                        path="/MultiGame"
+                        render={(props) => <MultiGame {...props}
+                        userState={this.state}
+                        socket={this.socket}
+                        />}
+                    />
                     <Route path="/" component={NotFound} />
                 </Switch>
             </BrowserRouter>
