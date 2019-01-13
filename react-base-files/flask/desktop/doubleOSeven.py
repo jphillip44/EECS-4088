@@ -116,10 +116,10 @@ class Double07UI():
     def timer (self, timer):
         label = Label(text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") #need to add to top frame
         label.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
-        print("here")
+        # print("here")
 
     def heartDisplay(self, number):
-        imageFolder = Path('react-base-files\public\images')
+        imageFolder = Path('..\public\images')
         imagePath = imageFolder.cwd()
 
         if number == 0:
@@ -133,7 +133,7 @@ class Double07UI():
 
         imgFile = imagePath / imageFolder / imgName
        
-        print(imgFile)
+        # print(imgFile)
 
         img = Image.open(imgFile)
 
