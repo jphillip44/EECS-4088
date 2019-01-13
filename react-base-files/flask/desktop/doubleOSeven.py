@@ -122,7 +122,7 @@ class Double07UI():
         imageFolder = Path('..\public\images')
         imagePath = imageFolder.cwd()
 
-        if number == 0:
+        if number == 0 or number == 'dead':
             imgName ="0Heart.png"
         elif number == 1:
             imgName ="1Heart.png"

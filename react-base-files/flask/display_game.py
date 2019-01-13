@@ -18,7 +18,8 @@ class DisplayGame():
         getattr(self, obj.__class__.__name__)(obj)
 
     def list(self, obj):
-        print(obj)
+        # print(obj)
+        self.curScreen = desktop.PlayerUI(self.screenSetup)
         self.curScreen.PlayerShow(obj)
         self.screenSetup.win.update()
 
