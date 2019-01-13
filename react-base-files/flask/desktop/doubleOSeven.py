@@ -1,6 +1,9 @@
 from tkinter import Tk, Label, Frame
 from tkinter.font import Font
 import math
+import os
+from pathlib import Path
+from PIL import Image, ImageTk
 from __screen import DesktopUI
 
 
@@ -51,6 +54,7 @@ class Double07UI():
         doubleFont = self.window.setFontSize(int(self.window.screenH / 50))
                 
         for i, player in enumerate(players):
+            photo = self.heartDisplay(players[player].get("hp"))
             if i < leftPlay:
                 if  (leftPlay / 2) % 2 == 1:
                     #background image
@@ -62,8 +66,9 @@ class Double07UI():
                     label = Label(self.leftframe, text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)#.pack()
                     label.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 32)
 
-                    label2 = Label(self.leftframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label2.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 8)
+                    label2 = Label(self.leftframe, text = "HP: ", image = photo, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label2.image = photo
+                    label2.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 7)
                     
                     label3 = Label(self.leftframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
                     label3.place(anchor = "e", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 4)
@@ -74,8 +79,10 @@ class Double07UI():
                     label = Label(self.leftframe, text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
                     label.place(anchor = "w", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 32) 
 
-                    label2 = Label(self.leftframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label2.place(anchor = "center", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 8) 
+
+                    label2 = Label(self.leftframe, text = "HP: ", image = photo, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label2.image = photo
+                    label2.place(anchor = "center", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 7) 
 
                     label3 = Label(self.leftframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
                     label3.place(anchor = "e", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 4) 
@@ -84,8 +91,9 @@ class Double07UI():
                     label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
                     label.place(anchor = "w", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 32)
 
-                    label2 = Label(self.rightframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label2.place(anchor = "center", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 8) 
+                    label2 = Label(self.rightframe, text = "HP: ", image = photo, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label2.image = photo
+                    label2.place(anchor = "center", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 7) 
 
                     label3 = Label(self.rightframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
                     label3.place(anchor = "e", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 4.1) 
@@ -93,8 +101,9 @@ class Double07UI():
                     label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
                     label.place(anchor = "w", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 32) 
 
-                    label2 = Label(self.rightframe, text = "HP: " + str(players[player].get("hp")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label2.place(anchor = "center", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 8) 
+                    label2 = Label(self.rightframe, text = "HP: ", image = photo, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label2.image = photo
+                    label2.place(anchor = "center", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 7) 
 
                     label3 = Label(self.rightframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
                     label3.place(anchor = "e", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = 31 * self.window.screenW / 32) 
@@ -109,6 +118,30 @@ class Double07UI():
         label.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
         print("here")
 
+    def heartDisplay(self, number):
+        imageFolder = Path('react-base-files\public\images')
+        imagePath = imageFolder.cwd()
+
+        if number == 0:
+            imgName ="0Heart.png"
+        elif number == 1:
+            imgName ="1Heart.png"
+        elif number == 2:
+            imgName ="2Heart.png"
+        elif number == 3:
+            imgName ="3Heart.png"
+
+        imgFile = imagePath / imageFolder / imgName
+       
+        print(imgFile)
+
+        img = Image.open(imgFile)
+
+        img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
+
+        ph = ImageTk.PhotoImage(img)
+
+        return ph
 
 def main():
     pass
