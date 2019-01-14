@@ -15,16 +15,18 @@ class Double07UI():
     leftframe = 0
     centerframe = 0
 
+    topFrameLabel = ""
+
     def __init__(self, ui, obj):
         self.window = ui
         self.setup()
-        self.display(obj['players'])
+        self.display(obj['players'], obj['timer'])
         self.timer(obj['timer'])
 
     def setup(self):
         topFrame = Frame(height = self.window.screenH / 10, width = self.window.screenW, bg= self.window.backgroundC)
         topFrame.pack_propagate(False) # ensures frame doesnt shrink to size of the wigets added down the road
-        topFrame.pack()
+        topFrame.place(x = 0, y = 0)
         self.topframe = topFrame
         self.window.addFrame(topFrame)
         leftFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg = self.window.backgroundC)
@@ -44,7 +46,7 @@ class Double07UI():
         self.window.addFrame(centerFrame)
         
 
-    def display(self, players):
+    def display(self, players, timer):
         numPlay = len(players)
         leftPlay = math.ceil(numPlay / 2)
         rightPlay = math.floor(numPlay / 2)
@@ -54,7 +56,8 @@ class Double07UI():
         doubleFont = self.window.setFontSize(int(self.window.screenH / 50))
                 
         for i, player in enumerate(players):
-            photo = self.heartDisplay(players[player].get("hp"))
+            lives = self.heartDisplay(players[player].get("hp"))
+            prevAct = self.actions(players[player].get("defend"))
             if i < leftPlay:
                 if  (leftPlay / 2) % 2 == 1:
                     #background image
@@ -66,11 +69,12 @@ class Double07UI():
                     label = Label(self.leftframe, text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)#.pack()
                     label.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 32)
 
-                    label2 = Label(self.leftframe, text = "HP: ", image = photo, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label2.image = photo
+                    label2 = Label(self.leftframe, text = "HP: ", image = lives, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label2.image = lives #ensures image isnt trash collected
                     label2.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 7)
                     
-                    label3 = Label(self.leftframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label3 = Label(self.leftframe, text = "Act: /n", image = prevAct, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label3.image = prevAct
                     label3.place(anchor = "e", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 4)
 
 
@@ -80,46 +84,64 @@ class Double07UI():
                     label.place(anchor = "w", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 32) 
 
 
-                    label2 = Label(self.leftframe, text = "HP: ", image = photo, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label2.image = photo
+                    label2 = Label(self.leftframe, text = "HP: ", image = lives, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label2.image = lives
                     label2.place(anchor = "center", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 7) 
 
-                    label3 = Label(self.leftframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label3 = Label(self.leftframe, text = "Act: /n" , image = prevAct, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
+                    label3.image = prevAct
                     label3.place(anchor = "e", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 4) 
             else:
                 if (rightPlay % 2) == 1:
                     label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
                     label.place(anchor = "w", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 32)
 
-                    label2 = Label(self.rightframe, text = "HP: ", image = photo, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label2.image = photo
+                    label2 = Label(self.rightframe, text = "HP: ", image = lives, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label2.image = lives
                     label2.place(anchor = "center", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 7) 
 
-                    label3 = Label(self.rightframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label3 = Label(self.rightframe, text = "Act: /n" , image = prevAct, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label3.image = prevAct
                     label3.place(anchor = "e", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 4.1) 
                 else:
                     label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
                     label.place(anchor = "w", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 32) 
 
-                    label2 = Label(self.rightframe, text = "HP: ", image = photo, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label2.image = photo
+                    label2 = Label(self.rightframe, text = "HP: ", image = lives, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label2.image = lives 
                     label2.place(anchor = "center", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 7) 
 
-                    label3 = Label(self.rightframe, text = "Act: " + str(players[player].get("defend")), font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label3 = Label(self.rightframe, text = "Act: /n" , image = prevAct, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
+                    label3.image = prevAct
                     label3.place(anchor = "e", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = 31 * self.window.screenW / 32) 
 
 
 
-    def actions(self, players):
-        pass
+    def actions(self, act):
+        imageFolder = Path(__file__ + '..\..\..\..\public\images')
+        imagePath = imageFolder.cwd()
+       
+        if act == 'none':
+            imgName = "Reload.png"
+        elif act == 'all':
+            imgName = "Defend.png"
+        else:
+            imgName = "Attack.png"
+
+        imgFile = imagePath / imageFolder / imgName
+        img = Image.open(imgFile)
+
+        img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 10)))
+
+        ph = ImageTk.PhotoImage(img)
+        return ph
 
     def timer (self, timer):
-        label = Label(text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") #need to add to top frame
-        label.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
-        # print("here")
+        topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") #need to add to top frame
+        topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
 
     def heartDisplay(self, number):
-        imageFolder = Path('..\public\images')
+        imageFolder = Path(__file__ + '..\..\..\..\public\images')
         imagePath = imageFolder.cwd()
 
         if number == 0 or number == 'dead':
@@ -133,7 +155,7 @@ class Double07UI():
 
         imgFile = imagePath / imageFolder / imgName
        
-        # print(imgFile)
+        print(imgFile)
 
         img = Image.open(imgFile)
 
