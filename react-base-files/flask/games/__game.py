@@ -13,7 +13,7 @@ class Game(ABC):
             self.__ranks.append(player)
 
         def __iter__(self):
-            for item in reversed(self.__ranks):
+            for item in self.__ranks:
                 yield item
 
         @property

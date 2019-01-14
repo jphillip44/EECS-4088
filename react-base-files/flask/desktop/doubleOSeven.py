@@ -118,7 +118,7 @@ class Double07UI():
 
 
     def actions(self, act):
-        imageFolder = Path(__file__ + '..\..\..\..\public\images')
+        imageFolder = Path(__file__ + '\..\..\..\public\images')
         imagePath = imageFolder.cwd()
        
         if act == 'none':
@@ -141,7 +141,7 @@ class Double07UI():
         topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
 
     def heartDisplay(self, number):
-        imageFolder = Path(__file__ + '..\..\..\..\public\images')
+        imageFolder = Path(__file__ + '\..\..\..\public\images')
         imagePath = imageFolder.cwd()
 
         if number == 0 or number == 'dead':
