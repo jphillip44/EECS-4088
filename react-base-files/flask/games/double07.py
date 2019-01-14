@@ -76,11 +76,13 @@ class Double07(Game):
                 self.socketio.sleep(1)
                 print(self.state['timer'])
                 self.state['timer'] -= 1
+            self.display_game.update(self)
             self.socketio.emit('timerExpired', broadcast=True)
             print("Waiting for inputs")
             self.socketio.sleep(1)
             print("Times up")
             self.end_round()
+            self.state['timer'] -= 1
             self.display_game.update(self)
             self.state['timer'] = timer
 
