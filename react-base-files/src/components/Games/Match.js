@@ -4,13 +4,14 @@ class Match extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            direction: '',
             flip: false,
             playersTurn: false,
             cursor: [],
             board: [],
+            unselectableCards: [],
             cardSelected: false,
-            cardValue: ''
+            cardValue: '',
+            disableSubmit: false
         };
     }
 
@@ -26,6 +27,20 @@ class Match extends React.Component {
             } else {
                 this.setState({ playersTurn: false });
             }
+            // get matched cards and selected card location from gameboard
+            let i, j;
+            let temp = [];
+            for (i = 0; i < data.gameBoard.length; i++) {
+                for (j = 0; j < data.gameBoard[0].length; j++) {
+                    if (!(data.gameBoard[i][j] === "XX")) {
+                        temp.push([i, j]);
+                    }
+                }
+            }
+            this.setState({ unselectableCards: temp }, () => {
+                console.log(this.state.unselectableCards);
+                this.findUnselectable(data.cursor);
+            });           
             console.log(data);
         });
 
@@ -39,8 +54,10 @@ class Match extends React.Component {
         });
 
         this.props.socket.on('cursor', (data) => {
-            console.log(data);
+            this.findUnselectable(data);
+            // If there is no match, than put cursor location into state
             this.setState({ cursor: data });
+            console.log(data);
         });
 
         this.props.socket.on('timeout', (data) => {
@@ -48,10 +65,26 @@ class Match extends React.Component {
         });
     }
 
-    submitDirection = (direction) => {       
-        this.setState({ direction: direction }, () => {
-            this.props.socket.emit(`${this.state.direction}`);   
-        });      
+    findUnselectable = (data) => {
+        // compare cursor location to unselectableCards location list and disable
+        // submit button if there is a match
+        let i;
+        for (i = 0; i < this.state.unselectableCards.length; i++) {
+            if (this.state.unselectableCards[i][0] === data[0] && this.state.unselectableCards[i][1] === data[1]) {
+                this.setState({
+                    disableSubmit: true,
+                    cursor: data
+                }); 
+            }
+        }
+    }
+
+    submitDirection = (direction) => {
+        // Reset disableSubmit to default of false
+        this.setState({ disableSubmit: false }, () => {
+            // Emit cursor direction to server when a directional button is clicked
+            this.props.socket.emit(direction);      
+        });          
     }
 
     selectCard = () => {
@@ -130,7 +163,7 @@ class Match extends React.Component {
                                         <div className="control">
                                             <button
                                                 className="button is-info is-large"
-                                                disabled={this.state.playersTurn === false}
+                                                disabled={this.state.playersTurn === false || this.state.disableSubmit === true}
                                                 onClick={this.selectCard}
                                             >
                                                 <img src="/images/dot_and_circle.png" alt="SUBMIT" />
