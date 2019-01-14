@@ -119,7 +119,7 @@ class Double07UI():
         # print("here")
 
     def heartDisplay(self, number):
-        imageFolder = Path('..\public\images')
+        imageFolder = Path(__file__ + '..\..\..\..\public\images')
         imagePath = imageFolder.cwd()
 
         if number == 0 or number == 'dead':
