@@ -52,10 +52,10 @@ class MultiGame(Game):
         # timer = self.state['timer']
         while self.active:
             for d in dir(MultiGame):
-                self.display_game.update(self.deepcopy)
-                self.socketio.emit('state', self.state, broadcast=True)
                 if inspect.isclass(getattr(MultiGame, d)) and d !='__class__':
                     getattr(self, d)(self, level)
+                    self.display_game.update(self.deepcopy)
+                    self.socketio.emit('state', self.state, broadcast=True)
                     while self.state['timer'] > 0:
                         self.socketio.sleep(1)
                         print(self.state['timer'])
