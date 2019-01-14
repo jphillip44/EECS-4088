@@ -52,8 +52,8 @@ class Double07(Game):
             self.__attack(*self.__attack_queue.get())
         self.rank_players()
         self.display()
-        if self.display_game is not None:
-            self.display_game.update(self.deepcopy)
+        # if self.display_game is not None:
+        #     self.display_game.update(self.deepcopy)
 
 
     def display(self):

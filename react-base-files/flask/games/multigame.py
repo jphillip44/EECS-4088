@@ -49,7 +49,7 @@ class MultiGame(Game):
 
     def run_game(self):
         level = 0
-        timer = self.state['timer']
+        # timer = self.state['timer']
         while self.active:
             for d in dir(MultiGame):
                 self.display_game.update(self.deepcopy)
@@ -60,7 +60,7 @@ class MultiGame(Game):
                         self.socketio.sleep(1)
                         print(self.state['timer'])
                         self.state['timer'] -= 1
-                    self.state['timer'] = timer
+                    # self.state['timer'] = timer
                     self.socketio.emit('timerExpired', self.state, broadcast=True)
                     self.socketio.sleep(1)
                     self.check_turns()
