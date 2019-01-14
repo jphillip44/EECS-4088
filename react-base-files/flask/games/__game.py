@@ -5,6 +5,21 @@ from queue import Queue, PriorityQueue
 from collections import OrderedDict
 
 class Game(ABC):
+    class Ranks():
+        def __init__(self, start=0):
+            self.__ranks = []
+
+        def append(self, player):
+            self.__ranks.append(player)
+
+        def __iter__(self):
+            for item in reversed(self.__ranks):
+                yield item
+
+        @property
+        def ranks(self):
+            return self.__ranks
+
     __active_game = False
 
     def __init__(self, players, default, **kwargs):
@@ -21,8 +36,8 @@ class Game(ABC):
         self.__name__ = self.__class__.__name__
         print("New "+self.__name__+" Started")
         self.__active_game = True
-        self.__ranks = Queue()
-        self.state['players'] = {}
+        self.ranks = self.Ranks()
+        self.state['players'] = OrderedDict()
         for player in players:
             self.state['players'][player] = deepcopy(default)
 
@@ -89,19 +104,13 @@ class Game(ABC):
         Prints standings.
         '''
         print("Standings")
-        for i, item in enumerate(self.get_standings(), 1):
-            print(str(i) + ": " + item)
-
-    def get_standings(self):
-        for item in reversed(self.__ranks.queue):
-            yield item
-
-    def add_ranks(self, data):
-        self.__ranks.put(data)
+        for i, item in enumerate(self.ranks, 1):
+            print(str(i) + ": " + str(item))
 
     def rank_players(self):
         results = PriorityQueue()
         for player, stats in self.state['players'].items():
             results.put((stats['score'], player))
         while not results.empty():
-            self.add_ranks(results.get()[1])
+            # self.add_ranks(results.get()[1])
+            self.ranks.append(results.get()[1])

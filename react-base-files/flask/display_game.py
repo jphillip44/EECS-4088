@@ -17,12 +17,15 @@ class DisplayGame():
     def update(self, obj):
         getattr(self, obj.__class__.__name__)(obj)
 
+
     def list(self, obj):
         # print(obj)
         self.curScreen = desktop.PlayerUI(self.screenSetup)
         self.curScreen.PlayerShow(obj)
         self.screenSetup.win.update()
 
+    def Ranks(self, obj):
+        print(obj.ranks)
 
     def Double07(self, obj):
         # print(obj.state)

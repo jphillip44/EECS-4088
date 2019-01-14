@@ -75,7 +75,7 @@ class MultiGame(Game):
             for player, stats in self.state['players'].items():
                 if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     stats['hp'] = 'dead'
-                    self.add_ranks(player)
+                    self.ranks.append(player)
 
         def check_alive():
             for player, stats in self.state['players'].items():
@@ -86,7 +86,7 @@ class MultiGame(Game):
         alive = list(check_alive())
         if len(alive) < 2 and self.active:
             for player in alive:
-                self.add_ranks(player)
+                self.ranks.append(player)
             self.end_game()
             
 

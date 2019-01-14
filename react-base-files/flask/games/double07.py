@@ -85,7 +85,10 @@ class Double07(Game):
             self.end_round()
         print("Game Over")
         self.socketio.emit('gameOver', broadcast=True)
-        self.display_game.update(list(self.state['players'].keys()))
+        self.display_game.update(self.ranks)
+        # game.sleep(5)
+        # self.display_game.update(list(self.state['players'].keys()))
+
 
     def __defend(self, player):
         '''
@@ -139,7 +142,7 @@ class Double07(Game):
                     dead.put((stats['ap'], player))
                     self.state['players'][player]['hp'] = 'dead'
             while not dead.empty():
-                self.add_ranks(dead.get()[1])
+                self.ranks.append(dead.get()[1])
 
         def check_alive():
             '''
@@ -154,7 +157,7 @@ class Double07(Game):
         alive = list(check_alive())
         if len(alive) < 2 and self.active:
             for player in alive:
-                self.add_ranks(player)
+                self.ranks.append(player)
             self.end_game()
 
 if __name__ == '__main__':
