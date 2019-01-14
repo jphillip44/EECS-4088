@@ -152,7 +152,7 @@ class Double07(Game):
 
         check_dead()
         alive = list(check_alive())
-        if len(alive) < 2:
+        if len(alive) < 2 and self.active:
             for player in alive:
                 self.add_ranks(player)
             self.end_game()
@@ -183,6 +183,7 @@ if __name__ == '__main__':
     GAME.action({'player': "A", 'action': 'attack', 'target':'C'})
     GAME.action({'player': "C", 'action': 'reload'})
     GAME.end_round()   # should trigger end game
+    GAME.end_round()
 
     GAME = Double07(['A', 'B', 'C'])
     GAME.action({'player': "A", 'action': 'reload'})
@@ -205,6 +206,7 @@ if __name__ == '__main__':
     GAME.action({'player': "B", 'action': 'attack', 'target': 'C'})
     GAME.action({'player': "A", 'action': 'attack', 'target': 'B'})
     GAME.end_round()   #triple kill
+    GAME.end_round()
 
     GAME = Double07(map(chr, range(ord('a'), ord('z')+1)))
     GAME.display()

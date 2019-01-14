@@ -35,7 +35,7 @@ class MultiGame(Game):
             game.init(self)
 
     def __init__(self, players, lives=5, **kwargs):
-        super().__init__(players, {'hp' : lives}, **kwargs)
+        super().__init__(players, {'hp' : lives, 'turn': False}, **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('action', self.action)
 
@@ -63,6 +63,7 @@ class MultiGame(Game):
                     self.state['timer'] = timer
                     self.socketio.emit('timerExpired', self.state, broadcast=True)
                     self.socketio.sleep(1)
+                    self.check_turns()
                     self.display()
                     self.rank_players()
                     del self.state['name']
@@ -83,28 +84,50 @@ class MultiGame(Game):
 
         check_dead()
         alive = list(check_alive())
-        if len(alive) < 2:
+        if len(alive) < 2 and self.active:
             for player in alive:
                 self.add_ranks(player)
             self.end_game()
             
 
     def display(self):
-        print(self.state)
+        if self.active:
+            print(self.state)
+        else:
+            self.print_standings()
 
     def action(self, data):
-        if data['valid'] != self.state['vaild']:
-            self.state['player'][data['player']]['lives'] -= 1
+        print(data)
+        if data['valid'] != self.state['valid']:
+            self.state['players'][data['player']]['hp'] -= 1
+        self.state['players'][data['player']]['turn'] = True
+
+    def check_turns(self):
+        for player, state in self.state['players'].items():
+            if state['hp'] != 'dead' and state['hp'] > 0:
+                if state['turn']:
+                    state['turn'] = False
+                else:
+                    state['hp'] -= 1
+        self.rank_players()
 
 
 if __name__ == '__main__':
     game = MultiGame(['A', 'B', 'C'])
     game.display()
     level = 0
-    while level < 4:
+    while level < 3:
         game.MultiTap(game, level)
+        game.action({'player': 'A', 'valid': game.state['valid']})
+        game.action({'player': 'B', 'valid': None})
+        game.check_turns()
         game.QuickMaff(game, level)
+        game.action({'player': 'B', 'valid': game.state['valid']})
+        game.action({'player': 'A', 'valid': None})
+        game.check_turns()
         game.Simon(game, level)
+        game.action({'player': 'A', 'valid': game.state['valid']})
+        game.check_turns()
         level += 1
-        game.rank_players()
+        game.display()
 
