@@ -70,7 +70,6 @@ class Double07(Game):
         '''
         timer = self.state['timer']
         while self.active:
-            self.display_game.update(self)
             self.socketio.emit('state', self.state['players'], broadcast=True)
             while self.state['timer'] > 0:
                 self.display_game.update(self)
@@ -78,11 +77,13 @@ class Double07(Game):
                 print(self.state['timer'])
                 self.state['timer'] -= 1
             self.socketio.emit('timerExpired', broadcast=True)
-            self.state['timer'] = timer
             print("Waiting for inputs")
             self.socketio.sleep(1)
             print("Times up")
             self.end_round()
+            self.display_game.update(self)
+            self.state['timer'] = timer
+
         print("Game Over")
         self.socketio.emit('gameOver', broadcast=True)
         self.display_game.update(self.ranks)
