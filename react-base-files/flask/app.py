@@ -68,6 +68,12 @@ def create_game(data):
         if THREAD is None or not THREAD.isAlive():
             THREAD = threading.Thread(target=GAME.run_game)
             THREAD.start()
+            threading.Thread(target=check_thread).start()
+
+            
+def check_thread():
+    THREAD.join()
+    DISPLAY.update(list(USERS.values()))
 
 def display():
     print("users")
