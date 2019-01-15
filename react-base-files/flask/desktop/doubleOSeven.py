@@ -30,16 +30,19 @@ class Double07UI():
         topFrame.place(x = 0, y = 0)
         self.topframe = topFrame
         self.window.addFrame(topFrame)
+
         leftFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg = self.window.backgroundC)
         leftFrame.pack_propagate(False)
         leftFrame.place(x = 0, y = self.window.screenH / 10)
         self.leftframe = leftFrame
         self.window.addFrame(leftFrame)
+
         rightFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg =  self.window.backgroundC)
         rightFrame.pack_propagate(False)
         rightFrame.place(x = (self.window.screenW / 4) * 3, y = self.window.screenH / 10)
         self.rightframe = rightFrame
         self.window.addFrame(rightFrame)
+  
         centerFrame = Frame(height = (self.window.screenH / 10) * 8, width = (self.window.screenW / 4) * 2, bg =  self.window.backgroundC)
         centerFrame.pack_propagate(False)
         centerFrame.place(x = (self.window.screenW / 4), y = self.window.screenH / 10)
@@ -114,7 +117,7 @@ class Double07UI():
 
                     label3 = Label(self.rightframe, text = "Act: /n" , image = prevAct, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
                     label3.image = prevAct
-                    label3.place(anchor = "e", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = 31 * self.window.screenW / 32) 
+                    label3.place(anchor = "e", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 4.1) 
 
 
 
@@ -139,11 +142,15 @@ class Double07UI():
 
     def timer (self, timer, players):
         if timer >= 0:
-            topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") #need to add to top frame
+            topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") 
             topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
-        
+
         if timer == -1:
+            topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: 0", font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") 
+            topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
+
             self.eventlog(players)
+
 
     def heartDisplay(self, number):
         path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images')
@@ -182,60 +189,62 @@ class Double07UI():
         imageFolder = Path(path)
         
         for player in players:
-            if players[player].get('hp') > 0 and players[player].get('hp') != "dead":
+            if players[player].get('hp') != "dead":
 
                 curPlayerAction = players[player].get('defend')
-                
-                if curPlayerAction != "none" or curPlayerAction != "all":
+
+                if not(curPlayerAction == "none" or curPlayerAction == "all" or (player in playerActed)):
                 
                     oppAct = players[curPlayerAction].get('defend')
                     playerActed.append(player)
 
-                    if oppAct == 'defend':
+                    if oppAct == 'all':
+                        playerActed.append(curPlayerAction)
                         act = "Attack.png"
                         result = "Defend.png"
-                        playerActed.append(curPlayerAction)
+                        
                     elif oppAct == 'none' or oppAct != player:
                         act = "Attack.png"
                         result = "Heart.png"
+
                     else:
+                        playerActed.append(curPlayerAction)
                         act = "CAttack.png"
                         result = "none"
-                        playerActed.append(curPlayerAction)
 
                     posY = self.window.screenH * (1/10 + 1/10 * posCounter)
 
                     label1 = Label(self.centerframe, text = player, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
-                    label1.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 1/40)
+                    label1.place(anchor = "nw", y = posY, x = 1/40 * self.window.screenW / 2)
 
                     imgFile = os.path.join(imageFolder, act)
                     img = Image.open(imgFile)
-                    img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
+                    img = img.resize((int(self.window.screenW / 30), int(self.window.screenH / 20)))
 
                     actImg = ImageTk.PhotoImage(img)
                     
                     label2 = Label(self.centerframe, image = actImg, bg = self.centerframe['bg']) 
                     label2.image = actImg 
-                    label2.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 17/40)
+                    label2.place(anchor = "nw", y = posY, x = 17/40 * self.window.screenW / 2)
 
                     label3 = Label(self.centerframe, text = curPlayerAction, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
-                    label3.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 20.5/40)
+                    label3.place(anchor = "ne", y = posY, x = 35.5/40 * self.window.screenW / 2)
 
                     if result != 'none':
-                        print("not reloading")
                         imgFile2 = os.path.join(imageFolder, result)
                         img2 = Image.open(imgFile2)
-                        img2 = img2.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
+                        img2 = img2.resize((int(self.window.screenW / 30), int(self.window.screenH / 20)))
 
                         resImg = ImageTk.PhotoImage(img2)
 
                         label4 = Label(self.centerframe, image = resImg, bg = self.centerframe['bg']) 
                         label4.image = resImg 
-                        label4.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 36.5/40)
+                        label4.place(anchor = "nw", y = posY, x = 36.5/40 * self.window.screenW / 2)
 
                     posCounter += 1
                     time.sleep(1)
-                    
+                    self.window.win.update()   
+
             else:
                 playerActed.append(player)
 
@@ -250,28 +259,28 @@ class Double07UI():
                     act = "Reload.png"
                 else:
                     act = "Defend.png"
-                    print(playerAct)
                 
-                posY = 1/10 + 1/10 * posCounter
+                posY = (1/10 + 1/10 * posCounter) * self.window.screenH 
 
                 label1 = Label(self.centerframe, text = player, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
-                label1.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 1/40)
+                label1.place(anchor = "nw", y = posY, x = 1/40 * self.window.screenW / 2)
 
                 imgFile = os.path.join(imageFolder, act)
                 img = Image.open(imgFile)
-                img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
+                img = img.resize((int(self.window.screenW / 30), int(self.window.screenH / 20)))
 
                 actImg = ImageTk.PhotoImage(img)
                 
                 label2 = Label(self.centerframe, image = actImg, bg = self.centerframe['bg']) 
-                label2.image = actImg 
-                label2.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 17/40)
+                label2.image = actImg
+                label2.place(anchor = "nw", y = posY, x = 17/40 * self.window.screenW / 2)
+                
+                posCounter += 1
                 time.sleep(1)
-
+                self.window.win.update()   
         
         self.window.win.update()   
-        print("show?")
-        time.sleep(5)  
+        time.sleep(2)  
 
 def main():
     pass
