@@ -21,7 +21,7 @@ class Double07UI():
         self.window = ui
         self.setup()
         self.display(obj['players'], obj['timer'])
-        self.timer(obj['timer'], obj['players'])
+        self.timer(obj['timer'])
 
     def setup(self):
         topFrame = Frame(height = self.window.screenH / 10, width = self.window.screenW, bg= self.window.backgroundC)
@@ -118,8 +118,8 @@ class Double07UI():
 
 
     def actions(self, act):
-        imageFolder = Path(__file__ + '\..\..\..\public\images')
-        imagePath = imageFolder.cwd()
+        path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images')
+        imageFolder = Path(path)
        
         if act == 'none':
             imgName = "Reload.png"
@@ -128,7 +128,7 @@ class Double07UI():
         else:
             imgName = "Attack.png"
 
-        imgFile = imagePath / imageFolder / imgName
+        imgFile = os.path.join(imageFolder, imgName)
         img = Image.open(imgFile)
 
         img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 10)))
@@ -136,18 +136,13 @@ class Double07UI():
         ph = ImageTk.PhotoImage(img)
         return ph
 
-    def timer (self, timer, players):
-        if timer >= 0:
-            topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") #need to add to top frame
-            topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
-        
-        if timer == 0:
-            self.eventlog(players)
-        
+    def timer (self, timer):
+        topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") #need to add to top frame
+        topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
 
     def heartDisplay(self, number):
-        imageFolder = Path(__file__ + '\..\..\..\public\images')
-        imagePath = imageFolder.cwd()
+        path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images')
+        imageFolder = Path(path)
 
         if number == 0 or number == 'dead':
             imgName ="0Heart.png"
@@ -158,8 +153,8 @@ class Double07UI():
         elif number == 3:
             imgName ="3Heart.png"
 
-        imgFile = imagePath / imageFolder / imgName
-       
+        imgFile = os.path.join(imageFolder, imgName)
+
         img = Image.open(imgFile)
 
         img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
@@ -167,103 +162,6 @@ class Double07UI():
         ph = ImageTk.PhotoImage(img)
 
         return ph
-
-    def eventlog(self, players):
-        playerActed = []
-
-        act = 0
-        result = 0
-        posCounter = 0
-
-        ELFont = self.window.setFontSize(int (self.window.screenH / 30))
-        textColour = "white"
-
-        imageFolder = Path(__file__ + '\..\..\..\public\images')
-        imagePath = imageFolder.cwd()
-        
-        for player in players:
-            if players[player].get('hp') > 0 | players[player].get('hp') != "dead":
-
-                curPlayerAction = players[player].get('defend')
-                
-                if curPlayerAction != "none" | curPlayerAction != "all":
-                
-                    oppAct =  players[curPlayerAction].get('defend')
-                    playerActed.append(player)
-
-                    if oppAct == 'defend':
-                        act = "Attack.png"
-                        result = "Defend.png"
-                        playerActed.append(curPlayerAction)
-                    elif oppAct == 'none' | oppAct != player:
-                        act = "Attack.png"
-                        result = "Heart.png"
-                    else:
-                        act = "CAttack.png"
-                        result = "none"
-                        playerActed.append(curPlayerAction)
-
-                    posY = 1/10 + 1/10 * posCounter
-
-                    label1 = Label(self.centerframe, text = player, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
-                    label1.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 1/40)
-
-                    imgFile = imagePath / imageFolder / act
-                    img = Image.open(imgFile)
-                    img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
-
-                    actImg = ImageTk.PhotoImage(img)
-                    
-                    label2 = Label(self.centerframe, image = actImg, bg = self.centerframe['bg']) 
-                    label2.image = actImg 
-                    label2.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 17/40)
-
-                    label3 = Label(self.centerframe, text = curPlayerAction, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
-                    label3.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 20.5/40)
-
-                    if result != 'none':
-                        imgFile2 = imagePath / imageFolder / result
-                        img2 = Image.open(imgFile2)
-                        img2 = img2.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
-
-                        resImg = ImageTk.PhotoImage(img2)
-
-                        label4 = Label(self.centerframe, image = resImg, bg = self.centerframe['bg']) 
-                        label4.image = resImg 
-                        label4.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 36.5/40)
-
-                    posCounter += 1
-                    
-            else:
-                playerActed.append(player)
-       
-        for player in players:
-            act = 0
-
-            if not (player in playerActed):
-                playerAct = players[player].get('defend')
-                if playerAct == "none":
-                    act = "Reload.png"
-                else:
-                    act = "Defend.png"
-                
-                posY = 1/10 + 1/10 * posCounter
-
-                label1 = Label(self.centerframe, text = player, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
-                label1.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 1/40)
-
-                imgFile = imagePath / imageFolder / act
-                img = Image.open(imgFile)
-                img = img.resize((int(self.window.screenW / 15), int(self.window.screenH / 20)))
-
-                actImg = ImageTk.PhotoImage(img)
-                
-                label2 = Label(self.centerframe, image = actImg, bg = self.centerframe['bg']) 
-                label2.image = actImg 
-                label2.place(anchor = "nw", y = posY, x = self.window.screenW / 4 + 17/40)
-                    
-
-
 
 def main():
     pass
