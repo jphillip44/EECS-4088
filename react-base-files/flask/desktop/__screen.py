@@ -1,5 +1,6 @@
 from tkinter import Tk, Frame
 from tkinter.font import Font
+import sys
 #from colour import Color
 
 class DesktopUI():
@@ -22,7 +23,11 @@ class DesktopUI():
         self.deffont = self.setFontSize(int(screenHeight / 30)) 
         self.setscreen(screenWidth, screenHeight)
 
-        self.win.state('zoomed') #make maximized (on windows)
+        if sys.platform == "linux":
+            SS = str(screenWidth) + "x" + str(screenHeight)
+            self.win.geometry(SS)
+        else:
+            self.win.state('zoomed') #make maximized (on windows)
 
         #self.win.attributes('-fullscreen', True) #make fullscreen
         self.win.focus_set() #focus on fullscreen
