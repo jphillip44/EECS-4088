@@ -65,6 +65,10 @@ class Match extends React.Component {
         });
     }
 
+    componentWillUnmount() {
+        this.props.socket.removeAllListeners();
+    }
+
     findUnselectable = (data) => {
         // compare cursor location to unselectableCards location list and disable
         // submit button if there is a match
