@@ -16,7 +16,7 @@ class Fragments extends React.Component {
     }
 
     selectPicture = (data) => {
-        this.props.socket.emit('select', data);
+        this.props.socket.emit('select', {"selection": data});
     }
     
     render() {
@@ -24,18 +24,67 @@ class Fragments extends React.Component {
             <div className="hero is-fullheight">
                 <div className="hero-body">
                     <div className="container has-text-centered">
-                        <h1 className="landing title is-1 has-text-white">Fragments</h1>
-                        <div className="box">
-                            <figure>
-                                {this.state.fragments.map((fragment, index) => (
-                                    <img
-                                        src={`/images/${fragment}`}
-                                        alt={fragment}
-                                        onClick={() => this.selectPicture(fragment)}
-                                    />   
-                                ))}
-                                
-                            </figure>
+                        <div className="columns is-1 is-variable is-mobile">
+                            <div className="column">
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[0]}`}
+                                    alt="Fragment 1"
+                                    onClick={() => this.selectPicture(this.state.fragments[0])}
+                                />
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[3]}`}
+                                    alt="Fragment 4"
+                                    onClick={() => this.selectPicture(this.state.fragments[3])}
+                                />
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[6]}`}
+                                    alt="Fragment 7"
+                                    onClick={() => this.selectPicture(this.state.fragments[6])}
+                                />
+                            </div>
+                            <div className="column">
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[1]}`}
+                                    alt="Fragment 2"
+                                    onClick={() => this.selectPicture(this.state.fragments[1])}
+                                />
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[4]}`}
+                                    alt="Fragment 5"
+                                    onClick={() => this.selectPicture(this.state.fragments[4])}
+                                />
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[7]}`}
+                                    alt="Fragment 8"
+                                    onClick={() => this.selectPicture(this.state.fragments[7])}
+                                />
+                            </div>
+                            <div className="column">
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[2]}`}
+                                    alt="Fragment 3"
+                                    onClick={() => this.selectPicture(this.state.fragments[2])}
+                                />
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[5]}`}
+                                    alt="Fragment 6"
+                                    onClick={() => this.selectPicture(this.state.fragments[5])}
+                                />
+                                <img
+                                    className="image"
+                                    src={`/images/fragments/${this.state.fragments[8]}`}
+                                    alt="Fragment 9"
+                                    onClick={() => this.selectPicture(this.state.fragments[8])}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>  
