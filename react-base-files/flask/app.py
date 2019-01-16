@@ -40,10 +40,11 @@ def index(path):
 @SOCKETIO.on('joinServer')
 def join_server(data):
     "Create a game lobby"
+    print(data['username'])
     USERS[flask.request.sid] = data["username"] + " #" + flask.request.sid[:4]
     print(USERS.get(flask.request.sid)  + " has logged in")
     sio.emit('games', {'games': GameList.list_games()})
-    sio.emit('username', {'username': USERS[flask.request.sid]})
+    sio.emit('username', USERS[flask.request.sid])
     sio.join_room(USERS[flask.request.sid])
     global GAME
     display()
