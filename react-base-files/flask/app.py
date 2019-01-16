@@ -72,9 +72,12 @@ def check_thread():
     THREAD.join()
     DISPLAY.update(list(USERS.values()))
 
-@atexit.register
-def close_running_threads():
-    SOCKETIO.emit("terminated")
+# @APP.before_first_request
+def startup():
+    SOCKETIO.emit("startup")
+    # SOCKETIO.disconnect()
+    # sio.emit("terminated")
+startup()
 
 def display():
     print("users")
