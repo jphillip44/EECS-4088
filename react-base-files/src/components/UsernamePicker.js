@@ -59,6 +59,7 @@ class UsernamePicker extends React.Component {
                                                     type="text"
                                                     name="username"
                                                     placeholder="Username"
+                                                    maxlength="10"
                                                     required
                                                     ref={this.usernameInput}
                                                 />

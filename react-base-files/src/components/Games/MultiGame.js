@@ -42,13 +42,6 @@ class MultiGame extends React.Component {
         this.props.socket.removeAllListeners();
     }
 
-    lightSequence = () => {
-        // For activateButton: 1 = green, 2 = red, 3 = yellow, 4 = blue
-        this.interval = setInterval(() => {
-
-        }, 500);
-    }
-
     submitTap = () => {
         this.setState({ tapCount: this.state.tapCount + 1 });
     }
@@ -58,8 +51,9 @@ class MultiGame extends React.Component {
             <div className="hero is-fullheight">
                 <div className="hero-body">
                     <div className="container has-text-centered">
-                        <div className="column is-5">
-                            <div className={this.state.name === "Simon" ? "box" : "box is-hidden"}>
+                        <div className="columns is-centered">
+                            <div className="column is-5">
+                                <div className={this.state.name === "Simon" ? "box" : "box is-hidden"}>
                                 <p>Simon</p>
                                 <div className="buttons">
                                     <button className="button is-large is-success">G</button>
@@ -70,7 +64,7 @@ class MultiGame extends React.Component {
                                     <button className="button is-large is-info">B</button>
                                 </div>
                             </div>
-                            <div className={this.state.name === "MultiTap" ? "box" : "box is-hidden"}>
+                                <div className={this.state.name === "MultiTap" ? "box" : "box is-hidden"}>
                                 <p>MultiTap</p>
                                 <p>Tap {this.state.valid} times</p>
                                 <button
@@ -80,7 +74,7 @@ class MultiGame extends React.Component {
                                     TAP
                                 </button>
                             </div>
-                            <div className={this.state.name === "QuickMaff" ? "box" : "box is-hidden"}>
+                                <div className={this.state.name === "QuickMaff" ? "box" : "box is-hidden"}>
                                 <p>QuickMaff</p>      
                                 <div className="field">
                                     <span>{this.state.valid}</span> 
@@ -97,6 +91,7 @@ class MultiGame extends React.Component {
                                         <button className="button is-primary is-fullwidth">Enter</button>
                                     </div>
                                 </div>                                                                
+                            </div>
                             </div>
                         </div>
                     </div>

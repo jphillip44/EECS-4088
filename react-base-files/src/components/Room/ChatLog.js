@@ -15,7 +15,7 @@ class ChatLog extends React.Component {
 
     render() {
         let userChat = (
-            <ul className="userChatLog">
+            <ul className="userChatLog has-text-left">
                 {this.props.chatLog.map((item, index) => (
                     <li key={index}>{`${item.username}: ${item.message}`}</li>
                 ))}    
@@ -36,6 +36,7 @@ class ChatLog extends React.Component {
                                 type="text"
                                 name="chatInput"
                                 placeholder="Type text here"
+                                autocomplete="off"
                                 required
                                 ref={this.chatInput}
                             />
