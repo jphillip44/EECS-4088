@@ -43,7 +43,7 @@ class Hot_Potato(Game):
             self.socketio.emit('state', self.state, broadcast=True)
             self.__hold_potato = True
             while self.__hold_potato:
-                if self.state['timer'] > 0:
+                if self.state['timer'] >= 0:
                     self.socketio.sleep(1)
                     print(self.state['timer'])
                     self.state['timer'] -= 1

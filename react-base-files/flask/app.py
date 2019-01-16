@@ -14,6 +14,7 @@ except ModuleNotFoundError:
         print("Running Flask Server")
         ASYNC_MODE = None
 
+import atexit
 import threading
 import flask
 import flask_socketio as sio
@@ -74,12 +75,33 @@ def check_thread():
     THREAD.join()
     DISPLAY.update(list(USERS.values()))
 
+def close_running_threads():
+    sio.emit("terminated")
+
 def display():
     print("users")
     if USERS:
         print(*USERS.values(), sep='\n')
     else:
         print('none')
+
+# When the client disconnects from the socket
+@SOCKETIO.on('disconnect')
+def disconnect():
+    if flask.request.sid in USERS:
+        user = USERS[flask.request.sid]
+        USERS.pop(flask.request.sid)
+    else:
+        return
+    display()
+    if GAME is None or not GAME.active:
+        DISPLAY.update(list(USERS.values()))
+    else:
+        GAME.remove_player(user)
+    # let every user know when a user disconnects
+    sio.emit("userDisconnected", flask.request.sid, broadcast=True)
+    # print("dc " + request.sid)
+
 # ----------------- Chat ------------------
 
 CHATLOG = []
@@ -97,31 +119,6 @@ def send_to_server(data):
     elif data["type"] == "retrieveUsername":
         sio.emit('username', USERS.get(flask.request.sid))
 
-# When the client disconnects from the socket
-@SOCKETIO.on('disconnect')
-def disconnect():
-    if flask.request.sid in USERS:
-        user = USERS[flask.request.sid]
-        # del USERS[flask.request.sid]
-        USERS.pop(flask.request.sid)
-    else:
-        return
-    display()
-    if GAME is None or not GAME.active:
-        DISPLAY.update(list(USERS.values()))
-    else:
-        GAME.remove_player(user)
-    # let every user know when a user disconnects
-    sio.emit("userDisconnected", flask.request.sid, broadcast=True)
-    # print("dc " + request.sid)
-
-# @socketio.on('connect')
-def con():
-    print("con " + flask.request.sid)
-#     gm = game.Start(socketio)
-
-
 if __name__ == '__main__':
-    # game_thread(target=background).start()
+    atexit.register(close_running_threads)
     SOCKETIO.run(APP, host="0.0.0.0", debug=True)
-    # wsgi.server(eventlet.listen(('0.0.0.0', 5000)), app)
