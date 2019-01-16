@@ -36,7 +36,7 @@ class ChatLog extends React.Component {
                                 type="text"
                                 name="chatInput"
                                 placeholder="Type text here"
-                                autocomplete="off"
+                                autoComplete="off"
                                 required
                                 ref={this.chatInput}
                             />
