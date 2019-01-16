@@ -3,16 +3,13 @@ try:
     from eventlet import monkey_patch
     monkey_patch()
     print("Running Eventlet Server")
-    ASYNC_MODE = 'eventlet'
 except ModuleNotFoundError:
     try:
         from gevent import monkey
         monkey.patch_all()
         print("Running Gevent Server")
-        ASYNC_MODE = 'gevent'
     except ModuleNotFoundError:
         print("Running Flask Server")
-        ASYNC_MODE = None
 
 import atexit
 import threading
@@ -26,7 +23,7 @@ from display_game import DisplayGame
 # initialize Flask
 
 APP = flask.Flask(__name__)
-SOCKETIO = sio.SocketIO(APP, async_mode=ASYNC_MODE)
+SOCKETIO = sio.SocketIO(APP)
 
 USERS = {}
 GAME = None
@@ -75,8 +72,9 @@ def check_thread():
     THREAD.join()
     DISPLAY.update(list(USERS.values()))
 
+@atexit.register
 def close_running_threads():
-    sio.emit("terminated")
+    SOCKETIO.emit("terminated")
 
 def display():
     print("users")
@@ -120,5 +118,5 @@ def send_to_server(data):
         sio.emit('username', USERS.get(flask.request.sid))
 
 if __name__ == '__main__':
-    atexit.register(close_running_threads)
+    # atexit.register(close_running_threads, s)
     SOCKETIO.run(APP, host="0.0.0.0", debug=True)
