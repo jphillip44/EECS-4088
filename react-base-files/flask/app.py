@@ -69,8 +69,7 @@ def create_game(data):
             THREAD = threading.Thread(target=GAME.run_game)
             THREAD.start()
             threading.Thread(target=check_thread).start()
-
-            
+        
 def check_thread():
     THREAD.join()
     DISPLAY.update(list(USERS.values()))
@@ -101,11 +100,17 @@ def send_to_server(data):
 # When the client disconnects from the socket
 @SOCKETIO.on('disconnect')
 def disconnect():
-    if USERS.get(flask.request.sid):
-        del USERS[flask.request.sid]
+    if flask.request.sid in USERS:
+        user = USERS[flask.request.sid]
+        # del USERS[flask.request.sid]
+        USERS.pop(flask.request.sid)
+    else:
+        return
     display()
     if GAME is None or not GAME.active:
         DISPLAY.update(list(USERS.values()))
+    else:
+        GAME.remove_player(user)
     # let every user know when a user disconnects
     sio.emit("userDisconnected", flask.request.sid, broadcast=True)
     # print("dc " + request.sid)

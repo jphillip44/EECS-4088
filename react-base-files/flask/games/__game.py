@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from copy import deepcopy
+from copy import deepcopy, copy
 from abc import ABC, abstractmethod
 from queue import Queue, PriorityQueue
 from collections import OrderedDict
@@ -39,7 +39,7 @@ class Game(ABC):
         self.ranks = self.Ranks()
         self.state['players'] = OrderedDict()
         for player in players:
-            self.state['players'][player] = deepcopy(default)
+            self.state['players'][player] = copy(default)
 
     def __deepcopy__(self, memo):
         cls = self.__class__
@@ -114,3 +114,7 @@ class Game(ABC):
         while not results.empty():
             # self.add_ranks(results.get()[1])
             self.ranks.append(results.get()[1])
+
+    def remove_player(self, player):
+        if player in self.state['players']:
+            self.state['players'].pop(player)

@@ -14,7 +14,7 @@ class Double07(Game):
     __target_queue = Queue()
     __other_queue = Queue()
 
-    def __init__(self, players, timer=15, **kwargs):
+    def __init__(self, players, timer=12, **kwargs):
         '''
         Sets up the games default parameters.
         '''
@@ -79,7 +79,7 @@ class Double07(Game):
             self.display_game.update(self)
             self.socketio.emit('timerExpired', broadcast=True)
             print("Waiting for inputs")
-            self.socketio.sleep(1)
+            self.socketio.sleep(2)
             print("Times up")
             self.end_round()
             self.state['timer'] -= 1
@@ -164,7 +164,9 @@ class Double07(Game):
             self.end_game()
 
 if __name__ == '__main__':
-    GAME = Double07(['A', 'B', 'C'])
+    GAME = Double07(['A', 'B', 'C', 'D'])
+    GAME.display()
+    GAME.remove_player('D')
     GAME.display()
     GAME.action({'player': "C", 'action': 'defend'})
     GAME.action({'player': "B", 'action': 'reload'})
