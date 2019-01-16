@@ -85,10 +85,10 @@ class Double07 extends React.Component {
             });
         });
 
-        this.props.socket.on('gameOver', () => {
-            console.log('gameover');
-            this.props.history.push('/room');
-        });
+        // this.props.socket.on('gameOver', () => {
+        //     console.log('gameover');
+        //     this.props.history.push('/room');
+        // });
     }
 
     componentWillUnmount() {

@@ -37,14 +37,6 @@ class MultiGame extends React.Component {
             }
             this.props.socket.on('action', answer);
         });
-
-        this.props.socket.on('terminated', () => {
-            console.log('TERMINATED');
-        });
-
-        this.props.socket.on('startup', () => {
-            console.log('STARTUP');
-        });
     }
 
     componentWillUnmount() {

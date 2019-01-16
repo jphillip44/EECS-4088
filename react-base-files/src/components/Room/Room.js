@@ -24,6 +24,19 @@ class Room extends React.Component {
 
         this.props.socket.on('gameStarted', (data) => { this.props.history.push(`/${data}`); });
 
+        // When game is over, return to room page
+        this.props.socket.on('gameOver', () => {
+            console.log('gameover');
+            this.props.history.push('/room');
+        });
+
+        // When the server disconnects, remove listeners and return to login page
+        this.props.socket.on('disconnect', () => {
+            console.log("disconnected")
+            this.props.socket.removeAllListeners();
+            this.props.history.push('/');
+        });
+
         // gets the keys from the object returned from the server and loops through
         // the array using the previously gotten keys to get the values
         this.props.socket.on('userList', (data) => {

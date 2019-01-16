@@ -11,7 +11,6 @@ except ModuleNotFoundError:
     except ModuleNotFoundError:
         print("Running Flask Server")
 
-import atexit
 import threading
 import flask
 import flask_socketio as sio
@@ -72,13 +71,6 @@ def check_thread():
     THREAD.join()
     DISPLAY.update(list(USERS.values()))
 
-# @APP.before_first_request
-def startup():
-    SOCKETIO.emit("startup")
-    # SOCKETIO.disconnect()
-    # sio.emit("terminated")
-startup()
-
 def display():
     print("users")
     if USERS:
@@ -121,5 +113,4 @@ def send_to_server(data):
         sio.emit('username', USERS.get(flask.request.sid))
 
 if __name__ == '__main__':
-    # atexit.register(close_running_threads, s)
     SOCKETIO.run(APP, host="0.0.0.0", debug=True)

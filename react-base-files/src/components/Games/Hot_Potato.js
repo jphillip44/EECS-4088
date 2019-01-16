@@ -42,10 +42,10 @@ class Hot_Potato extends React.Component {
             });
             this.props.socket.emit('endOfTurn', { "player": this.state.potatoHolder });
         });
-        // When game is over, return to room page
-        this.props.socket.on('gameOver', () => {
-            this.props.history.push('/room');
-        });
+        // // When game is over, return to room page
+        // this.props.socket.on('gameOver', () => {
+        //     this.props.history.push('/room');
+        // });
     }
 
     componentWillUnmount() {
