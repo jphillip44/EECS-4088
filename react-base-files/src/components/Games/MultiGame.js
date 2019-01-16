@@ -12,7 +12,7 @@ class MultiGame extends React.Component {
             activateButton: 0
         }
     }
-    
+
     componentDidMount() {
         this.props.socket.on('state', (data) => {
             this.setState({
@@ -24,6 +24,7 @@ class MultiGame extends React.Component {
             });
             console.log(data);
         });
+
         this.props.socket.on('timerExpired', (data) => {
             console.log('timerExpired');
             let answer;
@@ -35,6 +36,14 @@ class MultiGame extends React.Component {
                 answer = this.state.simonSequence
             }
             this.props.socket.on('action', answer);
+        });
+
+        this.props.socket.on('terminated', () => {
+            console.log('TERMINATED');
+        });
+
+        this.props.socket.on('startup', () => {
+            console.log('STARTUP');
         });
     }
 
@@ -64,15 +73,11 @@ class MultiGame extends React.Component {
                                     <button className="button is-large is-info">B</button>
                                 </div>
                             </div>
-                                <div className={this.state.name === "MultiTap" ? "box" : "box is-hidden"}>
-                                <p>MultiTap</p>
-                                <p>Tap {this.state.valid} times</p>
-                                <button
-                                    className="button is-large is-primary"
+                                <div
+                                    className={this.state.name === "MultiTap" ? "box" : "box is-hidden"}
                                     onClick={this.submitTap}
                                 >
-                                    TAP
-                                </button>
+                                <h5 className="title is-5">Tap Here</h5>
                             </div>
                                 <div className={this.state.name === "QuickMaff" ? "box" : "box is-hidden"}>
                                 <p>QuickMaff</p>      
