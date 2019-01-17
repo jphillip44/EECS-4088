@@ -30,11 +30,16 @@ class Double07 extends React.Component {
                         ap:  data[keys[i]].ap    
                     };
                 } else {
-                    targetList.push({
-                        username: keys[i],
-                        hp: data[keys[i]].hp,
-                        ap: data[keys[i]].ap 
-                    });
+                    // Remove player from targetList if hp = dead
+                    if (data[keys[i]].hp === "dead") {                          
+                    } else {
+                        targetList.push({
+                            username: keys[i],
+                            hp: data[keys[i]].hp,
+                            ap: data[keys[i]].ap 
+                        });     
+                    }
+                    
                 }
             };
             // Reset button to reload after attack in previous round
