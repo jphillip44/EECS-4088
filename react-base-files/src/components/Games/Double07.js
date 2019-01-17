@@ -39,7 +39,6 @@ class Double07 extends React.Component {
                             ap: data[keys[i]].ap 
                         });     
                     }
-                    
                 }
             };
             // Reset button to reload after attack in previous round
@@ -66,22 +65,25 @@ class Double07 extends React.Component {
 
         this.props.socket.on('timerExpired', () => {
             console.log('timerExpired');
-            // If attack is picked but not a target, default to reload
-            if (this.state.action === 'attack' && Object.keys(this.state.target).length === 0) {
-                this.props.socket.emit('endOfRound', {
-                    target: this.state.target.username,
-                    action: 'reload',
-                    player: this.state.player.username
-                });
-                this.setState({ action: 'reload' });
-            } else {
-                this.props.socket.emit('endOfRound', {
-                    target: this.state.target.username,
-                    action: this.state.action,
-                    player: this.state.player.username
-                });
-            }
-  
+            // Only emit user state to server when player is alive
+            if (!(this.state.player.hp === "dead")) {
+                // If attack is picked but not a target, default to reload
+                if (this.state.action === 'attack' && Object.keys(this.state.target).length === 0) {
+                    this.props.socket.emit('endOfRound', {
+                        target: this.state.target.username,
+                        action: 'reload',
+                        player: this.state.player.username
+                    });
+                    this.setState({ action: 'reload' });
+                } else {
+                    this.props.socket.emit('endOfRound', {
+                        target: this.state.target.username,
+                        action: this.state.action,
+                        player: this.state.player.username
+                    });
+                }
+            }     
+            // reset state to default values
             this.setState({
                 target: {},
                 targetList: [],
@@ -89,7 +91,6 @@ class Double07 extends React.Component {
                 showTargets: false
             });
         });
-
         // this.props.socket.on('gameOver', () => {
         //     console.log('gameover');
         //     this.props.history.push('/room');
