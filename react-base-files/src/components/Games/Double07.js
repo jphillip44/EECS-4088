@@ -159,20 +159,21 @@ class Double07 extends React.Component {
                                         <button
                                             className={this.state.action === "attack" ? "button is-fullwidth is-danger" : "button is-fullwidth is-dark"}
                                             onClick={() => this.chooseAction("attack")}
-                                            disabled={this.state.player.ap === 0}
+                                            disabled={this.state.player.ap === 0 || this.state.player.hp === "dead"}
                                         >
                                             Attack
                                         </button>
                                         <button
                                             className={this.state.action === "defend" ? "button is-fullwidth is-danger" : "button is-fullwidth is-dark"}
                                             onClick={() => this.chooseAction("defend")}
-                                            disabled={this.state.player.ap === 0}
+                                            disabled={this.state.player.ap === 0 || this.state.player.hp === "dead"}
                                         >
                                             Defend
                                         </button>
                                         <button
                                             className={this.state.action === "reload" ? "button is-fullwidth is-danger" : "button is-fullwidth is-dark"}
                                             onClick={() => this.chooseAction("reload")}
+                                            disabled={this.state.player.ap === 0 || this.state.player.hp === "dead"}
                                         >
                                             Reload
                                         </button>
