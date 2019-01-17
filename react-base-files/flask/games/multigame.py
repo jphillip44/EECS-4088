@@ -18,14 +18,14 @@ class MultiGame(Game):
 
     class Simon(SubGame):
         def __init__(self, game, level):
-            choices = ['red', 'blue', 'green', 'yellow']
+            choices = ['Red', 'Blue', 'Green', 'Yellow']
             self.valid = list(np.random.choice(choices, level + 4))
             self.timer = 20
             super().__init__(game)
 
     class MultiTap(SubGame):
         def __init__(self, game, level):
-            self.valid = str(np.random.randint(level + 2, 2*level + 4))
+            self.valid = np.random.randint(level + 2, 2*level + 4)
             self.timer = 20
             super().__init__(game)
 
@@ -39,7 +39,7 @@ class MultiGame(Game):
             val2 = np.random.randint(1, 10)
             op = list(ops.keys())[level % 2]
             self.valid = ops.get(op)(val1, val2)
-            self.timer = 20 - level
+            self.timer = max(20 - level, 5)
             print("{} {} {} = ?".format(val1, op, val2))
             super().__init__(game)
 
@@ -55,21 +55,22 @@ class MultiGame(Game):
         while self.active:
             # for d in dir(MultiGame):
             for game in self.SubGame.__subclasses__():
-                getattr(self, game.__name__)(self, level)
-                self.display_game.update(self.deepcopy)
-                self.socketio.emit('state', self.state, broadcast=True)
-                while self.state['timer'] > 0:
+                if self.active:
+                    getattr(self, game.__name__)(self, level)
+                    self.display_game.update(self.deepcopy)
+                    self.socketio.emit('state', self.state, broadcast=True)
+                    while self.state['timer'] > 0:
+                        self.socketio.sleep(1)
+                        print(self.state['timer'])
+                        self.state['timer'] -= 1
+                    # self.state['timer'] = timer
+                    self.socketio.emit('timerExpired', self.state, broadcast=True)
                     self.socketio.sleep(1)
-                    print(self.state['timer'])
-                    self.state['timer'] -= 1
-                # self.state['timer'] = timer
-                self.socketio.emit('timerExpired', self.state, broadcast=True)
-                self.socketio.sleep(1)
-                self.check_turns()
-                self.display()
-                self.rank_players()
-                self.state.pop('name')
-                self.state.pop('valid')
+                    self.check_turns()
+                    self.display()
+                    self.rank_players()
+                    self.state.pop('name')
+                    self.state.pop('valid')
             level += 1
         self.socketio.emit('gameOver', broadcast=True)
 

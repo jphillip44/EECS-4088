@@ -34,28 +34,35 @@ class DisplayGame():
 
 
     def Hot_Potato(self, obj):
-        print(obj.state)
+        # print(obj.state)
+        pass
 
     def Match(self, obj):
-        print(obj.state)
+        # print(obj.state)
+        pass
 
     def Fragments(self, obj):
-        print(obj.state)
+        # print(obj.state)
+        pass
 
     def MultiGame(self, obj):
         if obj.state.get('name'):
             getattr(self, obj.state['name'])(obj)
         else:
-            print(obj.state)
+            # print(obj.state)
+            pass
 
     def Simon(self, obj):
-        print(obj.state)
+        # print(obj.state)
+        pass
 
     def MultiTap(self, obj):
-        print(obj.state)
+        # print(obj.state)
+        pass
 
     def QuickMaff(self, obj):
-        print(obj.state)
+        # print(obj.state)
+        pass
 
 
 if __name__ == '__main__':
@@ -67,12 +74,12 @@ if __name__ == '__main__':
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     time.sleep(5)
-    #GAME = games.Hot_Potato(PLAYERS)
-    #DISPLAY.update(GAME.deepcopy)
-    #GAME = games.Match(PLAYERS)
-    #DISPLAY.update(GAME.deepcopy)
-   # GAME = games.Fragments(PLAYERS)
-  #  DISPLAY.update(GAME.deepcopy)
-  #  GAME = games.MultiGame(PLAYERS)
-  #  DISPLAY.update(GAME.deepcopy)
+    GAME = games.Hot_Potato(PLAYERS)
+    DISPLAY.update(GAME.deepcopy)
+    GAME = games.Match(PLAYERS)
+    DISPLAY.update(GAME.deepcopy)
+    GAME = games.Fragments(PLAYERS)
+    DISPLAY.update(GAME.deepcopy)
+    GAME = games.MultiGame(PLAYERS)
+    DISPLAY.update(GAME.deepcopy)
  
