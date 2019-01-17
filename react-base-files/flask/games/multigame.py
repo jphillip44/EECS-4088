@@ -4,23 +4,32 @@ import inspect
 import operator
 import numpy as np
 
-from __game import Game
+from __game import Game, ABC
 
 class MultiGame(Game):
-    class Simon():
+    class SubGame(ABC):
+        def __init__(self, game):
+            game.state['timer'] = self.timer
+            game.state['valid'] = self.valid
+            game.state['name'] = self.__class__.__name__
+            if game.display_game is not None:
+                game.display_game.update(game.deepcopy)
+            game.display()
+
+    class Simon(SubGame):
         def __init__(self, game, level):
             choices = ['red', 'blue', 'green', 'yellow']
             self.valid = list(np.random.choice(choices, level + 4))
             self.timer = 20
-            game.init(self)
+            super().__init__(game)
 
-    class MultiTap():
+    class MultiTap(SubGame):
         def __init__(self, game, level):
-            self.valid = np.random.randint(level + 2, 2*level + 4)
+            self.valid = str(np.random.randint(level + 2, 2*level + 4))
             self.timer = 20
-            game.init(self)
+            super().__init__(game)
 
-    class QuickMaff():
+    class QuickMaff(SubGame):
         def __init__(self, game, level):
             ops = {
                 '+': operator.add, 
@@ -32,43 +41,37 @@ class MultiGame(Game):
             self.valid = ops.get(op)(val1, val2)
             self.timer = 20 - level
             print("{} {} {} = ?".format(val1, op, val2))
-            game.init(self)
+            super().__init__(game)
+
 
     def __init__(self, players, lives=5, **kwargs):
         super().__init__(players, {'hp' : lives, 'turn': False}, **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('action', self.action)
 
-    def init(self, game):
-        self.state['timer'] = game.timer
-        self.state['valid'] = game.valid
-        self.state['name'] = game.__class__.__name__
-        if self.display_game is not None:
-            self.display_game.update(self.deepcopy)
-        self.display()
-
     def run_game(self):
         level = 0
         # timer = self.state['timer']
         while self.active:
-            for d in dir(MultiGame):
-                if inspect.isclass(getattr(MultiGame, d)) and d !='__class__':
-                    getattr(self, d)(self, level)
-                    self.display_game.update(self.deepcopy)
-                    self.socketio.emit('state', self.state, broadcast=True)
-                    while self.state['timer'] > 0:
-                        self.socketio.sleep(1)
-                        print(self.state['timer'])
-                        self.state['timer'] -= 1
-                    # self.state['timer'] = timer
-                    self.socketio.emit('timerExpired', self.state, broadcast=True)
+            # for d in dir(MultiGame):
+            for game in self.SubGame.__subclasses__():
+                getattr(self, game.__name__)(self, level)
+                self.display_game.update(self.deepcopy)
+                self.socketio.emit('state', self.state, broadcast=True)
+                while self.state['timer'] > 0:
                     self.socketio.sleep(1)
-                    self.check_turns()
-                    self.display()
-                    self.rank_players()
-                    del self.state['name']
-                    del self.state['valid']
+                    print(self.state['timer'])
+                    self.state['timer'] -= 1
+                # self.state['timer'] = timer
+                self.socketio.emit('timerExpired', self.state, broadcast=True)
+                self.socketio.sleep(1)
+                self.check_turns()
+                self.display()
+                self.rank_players()
+                self.state.pop('name')
+                self.state.pop('valid')
             level += 1
+        self.socketio.emit('gameOver', broadcast=True)
 
     def rank_players(self):
         def check_dead():

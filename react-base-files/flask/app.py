@@ -96,6 +96,10 @@ def disconnect():
     sio.emit("userDisconnected", flask.request.sid, broadcast=True)
     # print("dc " + request.sid)
 
+@SOCKETIO.on('reconnect')
+def reconnect():
+    print("FOO")
+
 # ----------------- Chat ------------------
 
 CHATLOG = []
