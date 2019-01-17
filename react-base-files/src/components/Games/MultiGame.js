@@ -8,7 +8,7 @@ class MultiGame extends React.Component {
             valid: '',
             tapCount: 0,
             simonSequence: [],
-            mathAnswer: '',
+            mathAnswer: 0,
             activateButton: 0
         }
     }
@@ -20,7 +20,7 @@ class MultiGame extends React.Component {
                 valid: data.valid,
                 tapCount: 0,
                 simonSequence: [],
-                mathAnswer: ''
+                mathAnswer: 0
             });
             console.log(data);
         });
@@ -31,12 +31,15 @@ class MultiGame extends React.Component {
             if (this.state.name === "MultiTap") {
                 answer = this.state.tapCount;
             } else if (this.state.name === "QuickMaff") {
-                answer = Number(this.state.mathAnswer);
+                answer = this.state.mathAnswer;
                 console.log(answer);
             } else {
                 answer = this.state.simonSequence
             }
-            this.props.socket.on('action', answer);
+            this.props.socket.emit('action', {
+                player: this.props.userState.username,
+                valid: answer 
+            });
         });
     }
 
@@ -56,13 +59,12 @@ class MultiGame extends React.Component {
     }
 
     submitMaff = (data) => {
-        let mathString = this.state.mathAnswer;
         if (data === "delete") {
-            if (mathString.length > 0) {
-                this.setState({ mathAnswer: mathString.substring(0, mathString.length - 1) });
-            }        
+            this.setState({ mathAnswer: Math.trunc(this.state.mathAnswer / 10) });       
+        } else if (data === "minus") {
+            this.setState({ mathAnswer: this.state.mathAnswer * -1 });
         } else {
-            this.setState({ mathAnswer: mathString + data});
+            this.setState({ mathAnswer: this.state.mathAnswer * 10 + data });
         }
     }
     
@@ -110,25 +112,25 @@ class MultiGame extends React.Component {
                                     <div className="columns is-1 is-variable is-mobile">
                                         <div className="column">
                                             <div className="buttons">
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("1")}>1</span>
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("4")}>4</span>
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("7")}>7</span>
-                                                <span className="button is-fullwidth is-large is-info" disabled></span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(1)}>1</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(4)}>4</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(7)}>7</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("minus")}>-</span>
                                             </div>     
                                         </div>
                                         <div className="column">
                                             <div className="buttons">
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("2")}>2</span>
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("5")}>5</span>
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("8")}>8</span>
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("0")}>0</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(2)}>2</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(5)}>5</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(8)}>8</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(0)}>0</span>
                                             </div>                          
                                         </div>
                                         <div className="column">
                                             <div className="buttons">
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("3")}>3</span>
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("6")}>6</span>
-                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("9")}>9</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(3)}>3</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(6)}>6</span>
+                                                <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff(9)}>9</span>
                                                 <span className="button is-fullwidth is-large is-info" onClick={() => this.submitMaff("delete")}>
                                                     <img src="/images/multigame/reply.png" alt="Delete" />
                                                 </span>
