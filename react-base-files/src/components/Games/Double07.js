@@ -154,10 +154,13 @@ class Double07 extends React.Component {
                                     <h5 className="title is-5">{this.props.userState.username}</h5>
                                     <div className="level">
                                         <div className="level-item">
-                                            <button className="button">Health Points: {this.state.player.hp}</button>
+                                            <span className="button is-white">HP: {this.state.player.hp}</span>
+                                            {this.state.player.hp > 0 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /> </span>}
+                                            {this.state.player.hp > 1 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /> </span>}
+                                            {this.state.player.hp > 2 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>}
                                         </div>
                                         <div className="level-item">
-                                            <button className="button">Action Points: {this.state.player.ap}</button>
+                                            <button className="button is-white">Action Points: {this.state.player.ap}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -193,22 +196,33 @@ class Double07 extends React.Component {
                 <div className={this.state.showTargets ? "modal is-active" : "modal"}>
                     <div className="modal-background"></div>
                     <div className="modal-content">
-                        <div className="box has-text-centered">                                   
-                            <h5 className="title is-5">Choose a Target</h5>
-                            {this.state.allTargets.map((user, index) => (
-                                <div 
-                                    className={this.state.target.username === user.username ? "button level is-mobile is-danger" : "button level is-mobile is-dark"}
-                                    key={index}
-                                    onClick={() => this.choosePlayer(user.username)}
-                                >
-                                    <div className="level-item">
-                                        <span>{user.username}</span>
-                                    </div>
-                                    <div className="level-item">
-                                        <span>{user.hp} Hp</span>
-                                    </div>                                         
+                        <div className="box has-text-centered">
+                            <div className="columns is-centered">
+                                <div className="column is-7">
+                                    <h5 className="title is-5">Choose a Target</h5>
+                                    {this.state.allTargets.map((user, index) => (
+                                        <div 
+                                            className={this.state.target.username === user.username ? "button level is-mobile is-danger" : "button level is-mobile is-dark"}
+                                            key={index}
+                                            onClick={() => this.choosePlayer(user.username)}
+                                        >
+                                            <div className="level-left">
+                                                <div className="level-item">
+                                                    <span>{user.username}</span>                                       
+                                                </div>
+                                                <div className="level-item">
+                                                    <span>HP: {user.hp} </span>     
+                                                </div>
+                                            </div>
+                                            <div className="level-right">
+                                                {user.hp > 0 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>}
+                                                {user.hp > 1 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>}
+                                                {user.hp > 2 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>} 
+                                            </div>                                           
+                                        </div>
+                                    ))}
                                 </div>
-                            ))} 
+                            </div>  
                         </div>
                     </div>
                     <button className="modal-close is-large" aria-label="close" onClick={this.closeTargetList}></button>
