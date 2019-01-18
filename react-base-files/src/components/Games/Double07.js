@@ -16,51 +16,59 @@ class Double07 extends React.Component {
     componentDidMount() {
         // Wait for players data from server and convert it to list of players
         this.props.socket.on('state', (data) => {
-            console.log('state');
-            console.log(data);
-            let keys = Object.keys(data)
-            let targetList = [];
-            let player = {};
-            let i;
-            for(i = 0; i < keys.length; i++) {
-                if(keys[i] === this.props.userState.username) {
-                    player = {
-                        username: keys[i],
-                        hp: data[keys[i]].hp,
-                        ap:  data[keys[i]].ap    
-                    };
-                } else {
-                    // Remove player from targetList if hp = dead
-                    if (data[keys[i]].hp === "dead") {                          
-                    } else {
-                        targetList.push({
+            // reset state to default values
+            this.setState({
+                target: {},
+                targetList: [],
+                showSingleTarget: false,
+                showTargets: false
+            }, () => {
+                console.log('state');
+                console.log(data);
+                let keys = Object.keys(data)
+                let targetList = [];
+                let player = {};
+                let i;
+                for(i = 0; i < keys.length; i++) {
+                    if(keys[i] === this.props.userState.username) {
+                        player = {
                             username: keys[i],
                             hp: data[keys[i]].hp,
-                            ap: data[keys[i]].ap 
-                        });     
+                            ap:  data[keys[i]].ap    
+                        };
+                    } else {
+                        // Remove player from targetList if hp = dead
+                        if (data[keys[i]].hp === "dead") {                          
+                        } else {
+                            targetList.push({
+                                username: keys[i],
+                                hp: data[keys[i]].hp,
+                                ap: data[keys[i]].ap 
+                            });     
+                        }
                     }
+                };
+                // Reset button to reload after attack in previous round
+                if (this.state.action === 'attack' && Object.keys(this.state.target).length === 0) {
+                    this.setState({
+                        action: 'reload'
+                    });
                 }
-            };
-            // Reset button to reload after attack in previous round
-            if (this.state.action === 'attack' && Object.keys(this.state.target).length === 0) {
-                this.setState({
-                    action: 'reload'
-                });
-            }
 
-            // Switch to reload action when user ap is zero
-            if (player.ap === 0) {
-                this.setState({
-                    allTargets: targetList,
-                    player: player,
-                    action: 'reload'
-                });
-            } else {
-                this.setState({
-                    allTargets: targetList,
-                    player: player,
-                });
-            }
+                // Switch to reload action when user ap is zero
+                if (player.ap === 0) {
+                    this.setState({
+                        allTargets: targetList,
+                        player: player,
+                        action: 'reload'
+                    });
+                } else {
+                    this.setState({
+                        allTargets: targetList,
+                        player: player,
+                    });
+                }
+            });
         });
 
         this.props.socket.on('timerExpired', () => {
@@ -83,13 +91,6 @@ class Double07 extends React.Component {
                     });
                 }
             }     
-            // reset state to default values
-            this.setState({
-                target: {},
-                targetList: [],
-                showSingleTarget: false,
-                showTargets: false
-            });
         });
         // this.props.socket.on('gameOver', () => {
         //     console.log('gameover');
