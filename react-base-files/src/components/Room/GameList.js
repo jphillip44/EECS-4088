@@ -2,20 +2,27 @@ import React from 'react';
 
 class GameList extends React.Component {    
     render() {
+        let localGames;
+        if (this.props.gameList.length !== 0) {
+            localGames = this.props.gameList;
+        } else {
+            localGames = localStorage.getItem('gameList').split(",");
+        }
+        
         return (
             <div className="box">
                 <h1 className="title">Games</h1>
                 <div className="content">
                     <div className="buttons">
-                        {this.props.gameList.map((user, index) => (
+                         {localGames.map((game, index) => (
                             <button
                                 className="button"
                                 key={index}
-                                onClick={() => this.props.goToGame(user)}
+                                onClick={() => this.props.goToGame(game)}
                             >
-                                {user}
+                                {game}
                             </button>
-                        ))}   
+                        ))}
                     </div>            
                 </div>          
             </div>

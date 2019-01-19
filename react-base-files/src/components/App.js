@@ -26,12 +26,16 @@ class App extends Component {
 
     updateUsername = (username) => {
         this.setState({ username: username });
+        // Store username in a local storage
+        window.localStorage.setItem('username', username);
     };
     updateSocketId = (socketId) => {
         this.setState({ socketId: socketId });
     };
     updateGameList = (gameList) => {
         this.setState({ gameList: gameList });
+        // Store game list in local storage
+        window.localStorage.setItem('gameList', gameList);
     };
 
     render() {

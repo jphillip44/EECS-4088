@@ -18,8 +18,6 @@ class UsernamePicker extends React.Component {
         this.props.socket.on('username', (data) => {
             this.props.updateUsername(data);
             this.props.updateSocketId(this.props.socket.id);
-            // Save username to localstorage for persistance
-            window.localStorage.setItem('username', data);
             this.setState({
                 username: data,
                 socketId: this.props.socket.id
