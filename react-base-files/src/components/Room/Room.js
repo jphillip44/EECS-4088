@@ -94,7 +94,7 @@ class Room extends React.Component {
             console.log("AfterPageRefresh");
             sessionStorage.setItem('pageRefreshed', "false");
             this.props.socket.emit('joinServer', {
-                username: sessionStorage.getItem('username').split(" ")[0],
+                username: sessionStorage.getItem('username').split("/")[0],
                 socketId: sessionStorage.getItem('socketId')
             });
             this.props.socket.emit('sendToServer', { type: 'retrieveUsers' });
