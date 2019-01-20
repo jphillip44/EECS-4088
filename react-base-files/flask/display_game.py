@@ -27,13 +27,13 @@ class DisplayGame():
         print(obj.ranks)
 
     def Double07(self, obj):
-        print(obj.state)
+        # print(obj.state)
         self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)        
         self.screenSetup.win.update()
 
 
     def Hot_Potato(self, obj):
-        print(obj.state)
+        # print(obj.state)
         self.curScreen = desktop.HotPotatoUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 

@@ -39,6 +39,7 @@ class Hot_Potato(Game):
             self.print_standings()
 
     def run_game(self):
+        self.display_game.update(self.deepcopy)
         while self.active:
             self.socketio.emit('state', self.state, broadcast=True)
             self.__hold_potato = True
@@ -57,7 +58,7 @@ class Hot_Potato(Game):
 
     def __hold(self, player, time):
         self.state['next'] = self.__get_turn()
-        if time and self.state['timer'] > 0:
+        if time is not None:
             self.state['players'][player]['score'] += time
         else:
             self.state['players'][player]['score'] -= min(self.state['players'][player]['score'], self.state['penalty'])
