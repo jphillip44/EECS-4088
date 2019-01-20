@@ -26,8 +26,8 @@ class Hot_Potato(Game):
                 self.end_game()
                 self.rank_players()
             self.display()
-        if self.display_game is not None:
-            self.display_game.update(self.deepcopy)
+        # if self.display_game is not None:
+        #     self.display_game.update(self.deepcopy)
 
     def display(self):
         if self.active:
@@ -40,9 +40,12 @@ class Hot_Potato(Game):
             self.print_standings()
 
     def run_game(self):
-        # self.display_game.update(self.deepcopy)
+        # self.display_game.update(self)
         while self.active:
             self.socketio.emit('state', self.state, broadcast=True)
+            current = self.state['next']
+            self.state['next'] = self.__get_turn()
+            self.display_game.update(self.deepcopy)
             self.__hold_potato = True
             while self.__hold_potato:
                 if self.state['timer'] >= 0:
@@ -50,7 +53,7 @@ class Hot_Potato(Game):
                     print(self.state['timer'])
                     self.state['timer'] -= 1
                 else:
-                    self.socketio.emit('explode', room=self.state['next'])
+                    self.socketio.emit('explode', room=current)
                     self.__hold_potato = False
                     self.socketio.sleep(1)
         else:
@@ -58,7 +61,7 @@ class Hot_Potato(Game):
             self.socketio.emit('gameOver', broadcast=True)
 
     def __hold(self, player, time):
-        self.state['next'] = self.__get_turn()
+        # self.state['next'] = self.__get_turn()
         if time is not None:
             self.state['players'][player]['score'] += time
         else:

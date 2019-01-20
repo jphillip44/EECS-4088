@@ -60,6 +60,7 @@ class HotPotatoUI(desktop.DesktopUI):
             explosion = True
         else:
             result = "palm_potato_Desktop.png"
+            explosion = False
 
         imgFile2 = desktop.os.path.join(imageFolder, result)
         img2 = desktop.Image.open(imgFile2)
