@@ -14,7 +14,6 @@ class Room extends React.Component {
     }
 
     componentDidMount() {
-        // Get all users from server
         this.props.socket.emit('sendToServer', { type: 'retrieveUsers' });
 
         this.props.socket.emit('sendToServer', { type: 'retrieveUsername' });
@@ -41,9 +40,9 @@ class Room extends React.Component {
         this.props.socket.on('reconnect', () => {
             console.log("reconnect")
             this.props.socket.emit('joinServer', {
-                username: this.props.userState.username,
+                username: this.props.userState.username.split(" ")[0],
                 socketId: this.props.socket.id  
-            });
+            }); 
             this.props.socket.emit('sendToServer', { type: 'retrieveUsers' });
         });
 

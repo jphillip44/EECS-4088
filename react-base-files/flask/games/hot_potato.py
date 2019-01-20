@@ -15,13 +15,14 @@ class Hot_Potato(Game):
             self.socketio.on_event('endOfTurn', self.action)
         self.state['timer'] = self.__new_potato_timer()
         self.state['next'] = self.__get_turn()
+        self.state['max'] = 20
 
     def action(self, data):
         self.__hold_potato = False
         if self.active:
             print(data)
             self.__hold(data['player'], data.get('time'))
-            if self.state['players'][data['player']]['score'] > 20:
+            if self.state['players'][data['player']]['score'] > self.state['max']:
                 self.end_game()
                 self.rank_players()
             self.display()
@@ -39,7 +40,7 @@ class Hot_Potato(Game):
             self.print_standings()
 
     def run_game(self):
-        self.display_game.update(self.deepcopy)
+        # self.display_game.update(self.deepcopy)
         while self.active:
             self.socketio.emit('state', self.state, broadcast=True)
             self.__hold_potato = True
