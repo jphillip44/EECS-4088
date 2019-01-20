@@ -2,18 +2,18 @@ import React from 'react';
 
 class GameList extends React.Component {    
     render() {
-        let localGames;
+        let sessionGames;
         if (this.props.gameList.length !== 0) {
-            localGames = this.props.gameList;
+            sessionGames = this.props.gameList;
         } else {
-            localGames = localStorage.getItem('gameList').split(",");
+            sessionGames = sessionStorage.getItem('gameList').split(",");
         }
         return (
             <div className="box">
                 <h1 className="title">Games</h1>
                 <div className="content">
                     <div className="buttons">
-                         {localGames.map((game, index) => (
+                         {sessionGames.map((game, index) => (
                             <button
                                 className="button"
                                 key={index}
