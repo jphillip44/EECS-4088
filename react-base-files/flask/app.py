@@ -41,7 +41,7 @@ def index(path):
 def join_server(data):
     "Create a game lobby"
     print(data['username'])
-    USERS[flask.request.sid] = data["username"] + " #" + flask.request.sid[:4]
+    USERS[flask.request.sid] = data["username"] + "/" + flask.request.sid[:3]
     print(USERS.get(flask.request.sid)  + " has logged in")
     sio.emit('games', {'games': GameList.list_games()})
     sio.emit('username', USERS[flask.request.sid])
