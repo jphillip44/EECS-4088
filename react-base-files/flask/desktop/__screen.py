@@ -20,7 +20,7 @@ class DesktopUI():
         screenWidth = self.win.winfo_screenwidth()
         screenHeight = self.win.winfo_screenheight()
 
-        self.deffont = self.setFontSize(int(screenHeight / 30)) 
+        self.deffont = self.setFontSize(int(screenHeight / 35)) 
         self.setscreen(screenWidth, screenHeight)
 
         if sys.platform == "linux":

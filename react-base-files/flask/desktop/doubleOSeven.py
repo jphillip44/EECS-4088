@@ -20,111 +20,59 @@ class Double07UI(DesktopUI):
 
     def __init__(self, ui, obj):
         self.window = ui
-        self.window.reset()
-        self.setup()
-        # self.topframe = super().framelist[0]
-        # self.leftframe = super().framelist[1]
-        # self.rightframe = super().framelist[2]
-        # self.centerframe = super().framelist[3]
+        super().setscreen(self.window.screenW, self.window.screenH)
+        super().reset()
+        super().setup()
+
         self.display(obj['players'], obj['timer'])
         self.timer(obj['timer'], obj['players'])
-
-    def setup(self):
-        topFrame = Frame(height = self.window.screenH / 10, width = self.window.screenW, bg= self.window.backgroundC)
-        topFrame.pack_propagate(False) # ensures frame doesnt shrink to size of the wigets added down the road
-        topFrame.place(x = 0, y = 0)
-        self.topframe = topFrame
-        self.window.addFrame(topFrame)
-
-        leftFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg = self.window.backgroundC)
-        leftFrame.pack_propagate(False)
-        leftFrame.place(x = 0, y = self.window.screenH / 10)
-        self.leftframe = leftFrame
-        self.window.addFrame(leftFrame)
-
-        rightFrame = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 4, bg =  self.window.backgroundC)
-        rightFrame.pack_propagate(False)
-        rightFrame.place(x = (self.window.screenW / 4) * 3, y = self.window.screenH / 10)
-        self.rightframe = rightFrame
-        self.window.addFrame(rightFrame)
-  
-        centerFrame = Frame(height = (self.window.screenH / 10) * 8, width = (self.window.screenW / 4) * 2, bg =  self.window.backgroundC)
-        centerFrame.pack_propagate(False)
-        centerFrame.place(x = (self.window.screenW / 4), y = self.window.screenH / 10)
-        self.centerframe = centerFrame
-        self.window.addFrame(centerFrame)
-        
 
     def display(self, players, timer):
         numPlay = len(players)
         leftPlay = math.ceil(numPlay / 2)
         rightPlay = math.floor(numPlay / 2)
         center = int(self.window.screenH / 2)
-        offset = int(self.window.screenH / 10)
+        offset = int(self.window.screenH / 8)
         textColour = "white"
         doubleFont = self.window.setFontSize(int(self.window.screenH / 50))
-                
+
+
         for i, player in enumerate(players):
             lives = self.heartDisplay(players[player].get("hp"))
             prevAct = self.actions(players[player].get("defend"))
+           
+            curFrame = super().framelist[2]
+
+            xPosPH = super().getScreenW() / 128
+            xPosA = super().getScreenW() / 4.1
+            yPosP = 0
+            yPosHA = super().getScreenH() / 30
+            
+
             if i < leftPlay:
+                curFrame = super().framelist[1]
                 if  (leftPlay / 2) % 2 == 1:
-                    #background image
-                    #playerFrame = Frame(height = (self.window.screenH / 15), width = (3 * self.window.screenW / 12), bg =  "black")
-                    #playerFrame.pack_propagate(False)
-                    #playerFrame.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW /16)
-                    #self.window.addFrame(playerFrame)
-
-                    label = Label(super().framelist[1], text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)#.pack()
-                    label.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 32)
-
-                    label2 = Label(self.leftframe, text = "HP: ", image = lives, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label2.image = lives #ensures image isnt trash collected
-                    label2.place(anchor = "center", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 7)
-                    
-                    label3 = Label(self.leftframe, text = "Act: /n", image = prevAct, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label3.image = prevAct
-                    label3.place(anchor = "e", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 4)
-
-
+                    yPosP = center - ((((leftPlay - 1) / 2) - i + 1) * offset)
 
                 else:
-                    label = Label(self.leftframe, text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label.place(anchor = "w", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 32) 
-
-
-                    label2 = Label(self.leftframe, text = "HP: ", image = lives, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label2.image = lives
-                    label2.place(anchor = "center", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 7) 
-
-                    label3 = Label(self.leftframe, text = "Act: /n" , image = prevAct, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)
-                    label3.image = prevAct
-                    label3.place(anchor = "e", y = center - (leftPlay / 2 + .5 - i) * offset, x = self.window.screenW / 4) 
+                    yPosP = center - (leftPlay / 2 + .5 - i) * offset
             else:
                 if (rightPlay % 2) == 1:
-                    label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label.place(anchor = "w", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 32)
-
-                    label2 = Label(self.rightframe, text = "HP: ", image = lives, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label2.image = lives
-                    label2.place(anchor = "center", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 7) 
-
-                    label3 = Label(self.rightframe, text = "Act: /n" , image = prevAct, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label3.image = prevAct
-                    label3.place(anchor = "e", y = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset), x = self.window.screenW / 4.1) 
+                    yPosP = center - ((((rightPlay - 1) / 2) - (i - leftPlay) + 1) * offset)
+                    
                 else:
-                    label = Label(self.rightframe, text = player, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label.place(anchor = "w", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 32) 
+                    yPosP = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset
 
-                    label2 = Label(self.rightframe, text = "HP: ", image = lives, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label2.image = lives 
-                    label2.place(anchor = "center", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 7) 
+            label = Label(curFrame, text = player, font = doubleFont, bg = curFrame['bg'], fg = textColour)
+            label.place(anchor = "nw", y = yPosP, x = xPosPH) 
 
-                    label3 = Label(self.rightframe, text = "Act: /n" , image = prevAct, font = doubleFont, bg = self.rightframe['bg'], fg = textColour)
-                    label3.image = prevAct
-                    label3.place(anchor = "e", y = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset, x = self.window.screenW / 4.1) 
+            label2 = Label(curFrame, text = "HP: ", image = lives, font = doubleFont, bg = curFrame['bg'], fg = textColour)
+            label2.image = lives 
+            label2.place(anchor = "nw", y = yPosP + yPosHA, x = xPosPH) 
 
-
+            label3 = Label(curFrame, text = "Act: " , image = prevAct, font = doubleFont, bg = curFrame['bg'], fg = textColour)
+            label3.image = prevAct
+            label3.place(anchor = "e", y = yPosP + yPosHA, x = xPosA)             
 
     def actions(self, act):
         path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images')
@@ -147,11 +95,11 @@ class Double07UI(DesktopUI):
 
     def timer (self, timer, players):
         if timer >= 0:
-            topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") 
+            topFrameLabel = Label(super().framelist[0], text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") 
             topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
 
         if timer == -1:
-            topFrameLabel = Label(self.topframe, text = "Time Remaining to select an action: 0", font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") 
+            topFrameLabel = Label(super().framelist[0], text = "Time Remaining to select an action: 0", font = self.window.deffont, bg = self.rightframe['bg'], fg = "white") 
             topFrameLabel.place(anchor = "center", y = self.window.screenH / 20, x = self.window.screenW / 2) 
 
             self.eventlog(players)
@@ -187,7 +135,7 @@ class Double07UI(DesktopUI):
         result = 0
         posCounter = 0
 
-        ELFont = self.window.setFontSize(int (self.window.screenH / 30))
+        ELFont = self.window.setFontSize(int (self.window.screenH / 50))
         textColour = "white"
 
         path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images')
@@ -219,7 +167,7 @@ class Double07UI(DesktopUI):
 
                     posY = self.window.screenH * (1/10 + 1/10 * posCounter)
 
-                    label1 = Label(self.centerframe, text = player, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
+                    label1 = Label(self.centerframe, text = player, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
                     label1.place(anchor = "nw", y = posY, x = 1/40 * self.window.screenW / 2)
 
                     imgFile = os.path.join(imageFolder, act)
@@ -228,11 +176,11 @@ class Double07UI(DesktopUI):
 
                     actImg = ImageTk.PhotoImage(img)
                     
-                    label2 = Label(self.centerframe, image = actImg, bg = self.centerframe['bg']) 
+                    label2 = Label(self.centerframe, image = actImg, bg = super().framelist[3]['bg']) 
                     label2.image = actImg 
                     label2.place(anchor = "nw", y = posY, x = 17/40 * self.window.screenW / 2)
 
-                    label3 = Label(self.centerframe, text = curPlayerAction, font = ELFont, bg = self.centerframe['bg'], fg = textColour)
+                    label3 = Label(self.centerframe, text = curPlayerAction, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
                     label3.place(anchor = "ne", y = posY, x = 35.5/40 * self.window.screenW / 2)
 
                     if result != 'none':
@@ -242,12 +190,12 @@ class Double07UI(DesktopUI):
 
                         resImg = ImageTk.PhotoImage(img2)
 
-                        label4 = Label(self.centerframe, image = resImg, bg = self.centerframe['bg']) 
+                        label4 = Label(self.centerframe, image = resImg, bg = super().framelist[3]['bg']) 
                         label4.image = resImg 
                         label4.place(anchor = "nw", y = posY, x = 36.5/40 * self.window.screenW / 2)
 
                     posCounter += 1
-                    time.sleep(1)
+                    time.sleep(1.5)
                     self.window.win.update()   
 
             else:
@@ -285,14 +233,10 @@ class Double07UI(DesktopUI):
                 self.window.win.update()   
         
         self.window.win.update()   
-        time.sleep(2)  
+        time.sleep(5)  
 
 def main():
     pass
-    #kek = __screen.DesktopUI()
-    #Double07UI(kek, [], 10)
-    #mainloop()
-
                 
 if __name__ == '__main__':
     main()
