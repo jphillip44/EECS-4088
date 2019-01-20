@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 from __screen import DesktopUI
 
 
-class Double07UI():
+class Double07UI(DesktopUI):
     window = 0 #DesktopUI()
 
     topframe = 0
@@ -20,7 +20,12 @@ class Double07UI():
 
     def __init__(self, ui, obj):
         self.window = ui
+        self.window.reset()
         self.setup()
+        # self.topframe = super().framelist[0]
+        # self.leftframe = super().framelist[1]
+        # self.rightframe = super().framelist[2]
+        # self.centerframe = super().framelist[3]
         self.display(obj['players'], obj['timer'])
         self.timer(obj['timer'], obj['players'])
 
@@ -70,7 +75,7 @@ class Double07UI():
                     #playerFrame.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW /16)
                     #self.window.addFrame(playerFrame)
 
-                    label = Label(self.leftframe, text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)#.pack()
+                    label = Label(super().framelist[1], text = player, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)#.pack()
                     label.place(anchor = "w", y = center - ((((leftPlay - 1) / 2) - i + 1) * offset), x = self.window.screenW / 32)
 
                     label2 = Label(self.leftframe, text = "HP: ", image = lives, font = doubleFont, bg = self.leftframe['bg'], fg = textColour)

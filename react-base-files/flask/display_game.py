@@ -17,7 +17,6 @@ class DisplayGame():
     def update(self, obj):
         getattr(self, obj.__class__.__name__)(obj)
 
-
     def list(self, obj):
         # print(obj)
         self.curScreen = desktop.PlayerUI(self.screenSetup)
@@ -28,14 +27,15 @@ class DisplayGame():
         print(obj.ranks)
 
     def Double07(self, obj):
-        # print(obj.state)
+        print(obj.state)
         self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)        
         self.screenSetup.win.update()
 
 
     def Hot_Potato(self, obj):
-        # print(obj.state)
-        pass
+        print(obj.state)
+        self.curScreen = desktop.HotPotatoUI(self.screenSetup, obj.state)
+        self.screenSetup.win.update()
 
     def Match(self, obj):
         # print(obj.state)
@@ -67,15 +67,15 @@ class DisplayGame():
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
-    #time.sleep(3)
+    # time.sleep(3)
     PLAYERS = ['player1', 'player2', 'player3']
     DISPLAY.update(PLAYERS)
-    # time.sleep(3)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    time.sleep(5)
+    #time.sleep(5)
     GAME = games.Hot_Potato(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
+    time.sleep(5)
     GAME = games.Match(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     GAME = games.Fragments(PLAYERS)
