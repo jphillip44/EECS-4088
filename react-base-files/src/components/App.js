@@ -10,7 +10,6 @@ import MultiGame from './Games/MultiGame';
 import NotFound from './NotFound';
 import io from 'socket.io-client';
 
-
 class App extends Component {
     constructor(props) {
         super(props);

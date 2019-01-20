@@ -8,7 +8,6 @@ class GameList extends React.Component {
         } else {
             localGames = localStorage.getItem('gameList').split(",");
         }
-        
         return (
             <div className="box">
                 <h1 className="title">Games</h1>

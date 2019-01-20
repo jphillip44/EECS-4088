@@ -14,16 +14,19 @@ class Room extends React.Component {
     }
 
     componentDidMount() {
+        // Get all users from server
         this.props.socket.emit('sendToServer', { type: 'retrieveUsers' });
 
         this.props.socket.emit('sendToServer', { type: 'retrieveUsername' });
-        // Get chatlog when room loads
+        // Request chat log from the server
         this.props.socket.emit('sendToServer', { type: 'chatLog' });
 
         this.props.socket.on('username', (data) => this.setState({ username: data }));
 
         this.props.socket.on('gameStarted', (data) => { this.props.history.push(`/${data}`); });
-
+        // Store chatlog from server into state
+        this.props.socket.on('chatLogFromServer', (data) => {this.setState({ chatLog: data })});
+        
         // When game is over, return to room page
         this.props.socket.on('gameOver', () => {
             console.log('gameover');
@@ -37,12 +40,13 @@ class Room extends React.Component {
             this.props.history.push('/room');
         });
 
+        // If the server crashes and restarts, reconnect is emitted and user reconnects
         this.props.socket.on('reconnect', () => {
             console.log("reconnect")
             this.props.socket.emit('joinServer', {
                 username: this.props.userState.username.split(" ")[0],
                 socketId: this.props.socket.id  
-            }); 
+            });
             this.props.socket.emit('sendToServer', { type: 'retrieveUsers' });
         });
 
@@ -74,7 +78,27 @@ class Room extends React.Component {
             this.setState({ users: tempUsers });
         });
 
-        this.props.socket.on('chatLogFromServer', (data) => {this.setState({ chatLog: data })});
+        window.addEventListener('beforeunload', this.onPageRefresh);
+        
+        this.afterPageRefresh(sessionStorage.getItem('pageRefreshed'));
+    }
+
+    // Store state in local storage
+    onPageRefresh = () => {
+        sessionStorage.setItem('users', JSON.stringify(this.state.users));
+        sessionStorage.setItem('pageRefreshed', "true");
+    };
+    // Join server again after page has been refreshed and retrieve user list
+    afterPageRefresh = (refreshed) => {
+        if (refreshed === "true") {
+            console.log("AfterPageRefresh");
+            sessionStorage.setItem('pageRefreshed', "false");
+            this.props.socket.emit('joinServer', {
+                username: sessionStorage.getItem('username').split(" ")[0],
+                socketId: sessionStorage.getItem('socketId')
+            });
+            this.props.socket.emit('sendToServer', { type: 'retrieveUsers' });
+        }
     }
 
     sendMessage = (message) => {
