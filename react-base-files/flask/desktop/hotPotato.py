@@ -17,16 +17,16 @@ class HotPotatoUI(desktop.DesktopUI):
         rightPlay = desktop.math.floor(numPlay / 2)
         center = int(super().getScreenH() / 2)
         offset = int(super().getScreenH() / 10)
-        print(super().getScreenH())
         textColour = "white"
 
         for i, player in enumerate(players):   
             playerScore = players[player].get("score")
             xPos = super().getScreenW() / 32
-            yPos = 0 
-            fontSize = super().setFontSize(int((super().getScreenH()) / 30))
+            yPos = 0
+            yPosS = super().getScreenW() / 40 
+            fontSize = super().setFontSize(int((super().getScreenH()) / 40))
             curFrame = super().framelist[2]
-            sleep = False
+            explosion = False
 
             if i < leftPlay:
                 curFrame = super().framelist[1]
@@ -44,7 +44,7 @@ class HotPotatoUI(desktop.DesktopUI):
             label1.place(anchor = "nw", x = xPos, y = yPos)
 
             label2 = desktop.Label(curFrame, text = "Score: " + str (playerScore), font = fontSize, bg = super().backgroundC, fg = textColour)
-            label2.place (anchor = "ne", x = super().getScreenW() / 4 - xPos, y = yPos)
+            label2.place (anchor = "nw", x = xPos, y = yPos + yPosS)
 
         label3 = desktop.Label(super().framelist[0], text = "First to x points wins!", font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label3.place(anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
