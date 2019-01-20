@@ -19,7 +19,6 @@ class HotPotatoUI(desktop.DesktopUI):
         offset = int(super().getScreenH() / 10)
         print(super().getScreenH())
         textColour = "white"
-        print(nextP)
 
         for i, player in enumerate(players):   
             playerScore = players[player].get("score")
@@ -27,6 +26,7 @@ class HotPotatoUI(desktop.DesktopUI):
             yPos = 0 
             fontSize = super().setFontSize(int((super().getScreenH()) / 30))
             curFrame = super().framelist[2]
+            sleep = False
 
             if i < leftPlay:
                 curFrame = super().framelist[1]
@@ -56,10 +56,11 @@ class HotPotatoUI(desktop.DesktopUI):
         imageFolder = desktop.Path(path)
 
         if timer <= 0:
-            result = "hand_with_explosion.png"
+            result = "palm_explosion_Desktop.png"
+            explosion = True
         else:
-            result = "hand_with_potato.png"
-            
+            result = "palm_potato_Desktop.png"
+
         imgFile2 = desktop.os.path.join(imageFolder, result)
         img2 = desktop.Image.open(imgFile2)
         img2 = img2.resize((int(self.window.screenW / 2.5), int(self.window.screenH / 2.5)))
@@ -68,4 +69,10 @@ class HotPotatoUI(desktop.DesktopUI):
         label5 = desktop.Label(super().framelist[3], image = resImg, bg = super().backgroundC)
         label5.image = resImg 
         label5.place(anchor = "center", y = 4 * super().getScreenH() / 10, x = super().getScreenW() / 4) 
+
+        self.window.win.update()
+
+        if explosion:
+            desktop.time.sleep(3)
+
     
