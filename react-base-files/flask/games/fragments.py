@@ -56,6 +56,7 @@ class Fragments(Game):
                 if count == 5:
                     self.end_game()
                     self.rank_players()
+            super().run_game()
 
 
 if __name__ == '__main__':

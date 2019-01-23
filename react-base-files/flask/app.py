@@ -96,6 +96,14 @@ def disconnect():
     sio.emit("userDisconnected", flask.request.sid, broadcast=True)
     # print("dc " + request.sid)
 
+@SOCKETIO.on('refresh')
+def refresh():
+    if flask.request.sid in USERS:
+        user = USERS[flask.request.sid]
+    if GAME is not None or GAME.active:
+        GAME.add_player(user)
+
+
 
 # ----------------- Chat ------------------
 

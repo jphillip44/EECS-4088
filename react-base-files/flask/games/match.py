@@ -63,6 +63,7 @@ class Match(Game):
                     self.state['next'] = (self.state['next'][1], next(self.__next))
                 self.__waiting = True
                 self.state['timer'] = timer
+            super().run_game()
                 # self.display_game.update(self.deepcopy)
 
 

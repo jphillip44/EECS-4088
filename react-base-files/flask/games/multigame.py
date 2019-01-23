@@ -71,6 +71,7 @@ class MultiGame(Game):
                     self.rank_players()
                     self.state.pop('name')
                     self.state.pop('valid')
+                    super().run_game()
             level += 1
         self.socketio.emit('gameOver', broadcast=True)
 
@@ -79,6 +80,7 @@ class MultiGame(Game):
             for player, stats in self.state['players'].items():
                 if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     stats['hp'] = 'dead'
+                    self.remove_player()
                     self.ranks.append(player)
 
         def check_alive():

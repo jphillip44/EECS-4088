@@ -80,6 +80,7 @@ class Double07(Game):
             self.state['timer'] -= 1
             self.display_game.update(self)
             self.state['timer'] = timer
+            super().run_game()
 
         print("Game Over")
         self.socketio.emit('gameOver', broadcast=True)
@@ -139,6 +140,7 @@ class Double07(Game):
                 if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     dead.put((stats['ap'], player))
                     self.state['players'][player]['hp'] = 'dead'
+                    self.remove_player()
             while not dead.empty():
                 self.ranks.append(dead.get()[1])
 

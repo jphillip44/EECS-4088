@@ -37,6 +37,7 @@ class Game(ABC):
         self.state['players'] = OrderedDict()
         for player in players:
             self.state['players'][player] = copy(default)
+        self.__active_players = len(players)
 
     def __deepcopy__(self, memo):
         cls = self.__class__
@@ -53,7 +54,10 @@ class Game(ABC):
 
     @abstractmethod
     def run_game(self):
-        pass
+        if self.__active_players < 1:
+            self.end_game()
+            self.rank_players()
+            self.display()
 
     def end_game(self):
         '''
@@ -112,6 +116,23 @@ class Game(ABC):
             # self.add_ranks(results.get()[1])
             self.ranks.append(results.get()[1])
 
-    def remove_player(self, player):
-        if player in self.state['players']:
-            self.state['players'].pop(player)
+    def remove_player(self, player=None):
+        if self.check_alive(player):
+            self.__active_players -= 1
+        print("players left: " + str(self.__active_players))
+        # if player in self.state['players']:
+        #     self.state['players'].pop(player)
+
+    def add_player(self, player=None):
+        if self.check_alive(player):
+            self.__active_players += 1
+        print("players left: " + str(self.__active_players))
+
+    def check_alive(self, player):
+        if player is not None:
+            hp = self.state['players'][player].get("hp")
+            print(hp)
+            if hp is not None and hp == "dead":
+                return False
+        return True
+
