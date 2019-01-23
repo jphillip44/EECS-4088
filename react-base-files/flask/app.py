@@ -100,8 +100,8 @@ def disconnect():
 def refresh():
     if flask.request.sid in USERS:
         user = USERS[flask.request.sid]
-    if GAME is not None and GAME.active:
-        GAME.add_player(user)
+        if GAME is not None and GAME.active:
+            GAME.add_player(user)
 
 
 
