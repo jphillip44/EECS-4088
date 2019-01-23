@@ -41,11 +41,17 @@ class MultiGame extends React.Component {
                 valid: answer 
             });
         });
+
+        window.addEventListener('beforeunload', this.onPageRefresh);
     }
 
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
+
+    onPageRefresh = () => {
+        this.props.socket.emit('refresh');
+    };
 
     submitTap = () => {
         this.setState({ tapCount: this.state.tapCount + 1 });

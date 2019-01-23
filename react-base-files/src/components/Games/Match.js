@@ -63,11 +63,17 @@ class Match extends React.Component {
         this.props.socket.on('timeout', (data) => {
             console.log('timeout');
         });
+
+        window.addEventListener('beforeunload', this.onPageRefresh);
     }
 
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
+
+    onPageRefresh = () => {
+        this.props.socket.emit('refresh');
+    };
 
     findUnselectable = (data) => {
         // compare cursor location to unselectableCards location list and disable

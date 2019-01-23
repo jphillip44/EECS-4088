@@ -92,14 +92,30 @@ class Double07 extends React.Component {
                 }
             }     
         });
-        // this.props.socket.on('gameOver', () => {
-        //     console.log('gameover');
-        //     this.props.history.push('/room');
-        // });
+
+        window.addEventListener('beforeunload', this.onPageRefresh);
+
+        this.afterPageRefresh(sessionStorage.getItem('pageRefreshed'));
     }
 
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
+    }
+
+    // Store state in local storage
+    onPageRefresh = () => {
+        this.props.socket.emit('refresh');
+        sessionStorage.setItem('state', JSON.stringify(this.state));
+        sessionStorage.setItem('pageRefreshed', 'true');
+    };
+
+    afterPageRefresh = (refreshed) => {
+        if (refreshed === 'true') {
+            console.log('AfterPageRefresh');
+            sessionStorage.setItem('pageRefreshed', 'false');
+            let sessionState = JSON.parse(sessionStorage.getItem('state'));
+            this.setState(sessionState);
+        }
     }
 
     // Used to be able to toggle selecting a targeted player
@@ -151,7 +167,7 @@ class Double07 extends React.Component {
                                     <p>{this.state.target.username}</p>
                                 </div>
                                 <div className="box">
-                                    <h5 className="title is-5">{this.props.userState.username}</h5>
+                                    <h5 className="title is-5">{sessionStorage.getItem('username')}</h5>
                                     <div className="level">
                                         <div className="level-item">
                                             <span className="button is-white">HP: {this.state.player.hp}</span>

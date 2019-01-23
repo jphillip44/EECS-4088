@@ -13,7 +13,13 @@ class Fragments extends React.Component {
             console.log(data);
             this.setState({ fragments: data.fragments });
         });
+
+        window.addEventListener('beforeunload', this.onPageRefresh);
     }
+
+    onPageRefresh = () => {
+        this.props.socket.emit('refresh');
+    };
 
     selectPicture = (data) => {
         this.props.socket.emit('select', {"selection": data});
