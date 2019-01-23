@@ -6,14 +6,6 @@ from queue import Queue, PriorityQueue
 from __game import Game
 
 class Double07(Game):
-    '''
-    Class Attributes:
-        the queue methods are used to sequence game moves by priority, not timing.
-    '''
-    __attack_queue = Queue()
-    __target_queue = Queue()
-    __other_queue = Queue()
-
     def __init__(self, players, timer=12, **kwargs):
         '''
         Sets up the games default parameters.
@@ -22,6 +14,9 @@ class Double07(Game):
         if self.socketio is not None:
             self.socketio.on_event('endOfRound', self.action)
         self.state['timer'] = timer
+        self.__attack_queue = Queue()
+        self.__target_queue = Queue()
+        self.__other_queue = Queue()
 
     def action(self, data):
         '''

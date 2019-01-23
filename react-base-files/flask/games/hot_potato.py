@@ -6,15 +6,14 @@ import copy
 from __game import Game
 
 class Hot_Potato(Game):
-    __next = None
-    __hold_potato = False
-
     def __init__(self, players, **kwargs):
         super().__init__(players, {'score': 0},  **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('endOfTurn', self.action)
+        self.__next = itertools.cycle(list(self.state['players'].keys()))
+        self.__hold_potato = False
         self.state['timer'] = self.__new_potato_timer()
-        self.state['next'] = self.__get_turn()
+        self.state['next'] = next(self.__next)
         self.state['max'] = 20
 
     def action(self, data):
@@ -44,8 +43,9 @@ class Hot_Potato(Game):
         while self.active:
             self.socketio.emit('state', self.state, broadcast=True)
             current = self.state['next']
-            self.state['next'] = self.__get_turn()
+            self.state['next'] = next(self.__next)
             self.display_game.update(self.deepcopy)
+            print(next(self.__temp))
             self.__hold_potato = True
             while self.__hold_potato:
                 if self.state['timer'] >= 0:
@@ -69,8 +69,8 @@ class Hot_Potato(Game):
             self.state['timer'] = self.__new_potato_timer()
 
     def __get_turn(self):
-        if self.__next is None:
-            self.__next = itertools.cycle(self.state['players'].keys())
+        # if self.__next is None:
+        #     self.__next = itertools.cycle(self.state['players'].keys())
         return next(self.__next)
 
     def __new_potato_timer(self):

@@ -5,11 +5,9 @@ from queue import Queue
 from __game import Game
 
 class Fragments(Game):
-    __move_queue = Queue()
-    __pool = None
-
     def __init__(self, players, images=50, **kwargs):
         super().__init__(players, {'score': 0}, **kwargs)
+        self.__move_queue = Queue()
         if self.socketio is not None:
             self.socketio.on_event('select', self.action)
         self.__pool = [format(x, '02d') + ".fragment.jpg" for x in range(images)] 

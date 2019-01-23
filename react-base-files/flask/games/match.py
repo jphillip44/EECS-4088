@@ -6,14 +6,10 @@ import numpy
 from __game import Game
 
 class Match(Game):
-    __next = None
-    __p1 = None
-    __p2 = None
-    __waiting = True
-
     def __init__(self, players, rows=4, columns=10, shuffle=True, **kwargs):
         def init_state(players, rows, columns, shuffle):
-            self.state['next'] = (self.__get_turn(), self.__get_turn())
+            self.__next = itertools.cycle(list(self.state['players'].keys()))
+            self.state['next'] = (next(self.__next), next(self.__next))
             board = [format(x, '02d') for x in range(rows*columns//2) for _ in range(2)]
             if shuffle:
                 random.shuffle(board)
@@ -23,6 +19,9 @@ class Match(Game):
             self.state['gameBoard'] = numpy.asarray([['XX'] * columns for _ in range(rows)])
             self.state['cursor'] = [0,0]
             self.state['timer'] = 30
+            self.__p1 = None
+            self.__p2 = None
+            self.__waiting = True
 
         super().__init__(players, {'score': 0},  **kwargs)
         if self.socketio is not None:
@@ -61,7 +60,7 @@ class Match(Game):
             else:
                 if self.state['timer'] == 0:
                     self.socketio.emit('timeout', room=self.state['next'][0])
-                    self.state['next'] = (self.state['next'][1], self.__get_turn())
+                    self.state['next'] = (self.state['next'][1], next(self.__next))
                 self.__waiting = True
                 self.state['timer'] = timer
                 # self.display_game.update(self.deepcopy)
@@ -96,7 +95,7 @@ class Match(Game):
             self.__p2 = self.state['next'][0], data
             self.state['gameBoard'][self.__p1[1]] = 'XX'    
             is_match()
-        self.state['next'] = (self.state['next'][1], self.__get_turn())
+        self.state['next'] = (self.state['next'][1], next(self.__next))
         self.display() 
 
 
@@ -153,8 +152,6 @@ class Match(Game):
     #     return self.state['cursor'] != 'XX'
 
     def __get_turn(self):
-        if self.__next is None:
-            self.__next = itertools.cycle(self.state['players'].keys())
         return next(self.__next)
 
 if __name__ == '__main__':

@@ -20,8 +20,6 @@ class Game(ABC):
         def ranks(self):
             return self.__ranks
 
-    __active_game = False
-
     def __init__(self, players, default, **kwargs):
         '''
         Sets up the games default parameters.
@@ -29,7 +27,6 @@ class Game(ABC):
         self.__state = {}
         super().__init__()
         self.nocopy = list(kwargs.keys())
-        # self.nocopy.append('_Game__ranks')
         self.socketio = kwargs.get('socketio', None)
         self.display_game = kwargs.get('display_game', None)
         self.__players = players
