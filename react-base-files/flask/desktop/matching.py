@@ -14,7 +14,6 @@ class MatchingUI(desktop.DesktopUI):
         super().setup()
         
         for i in range(2):
-            print(super().framelist)
             super().framelist[1].destroy
             del super().framelist[1]
 
