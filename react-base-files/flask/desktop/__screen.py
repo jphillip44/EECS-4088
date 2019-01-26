@@ -1,16 +1,15 @@
 from tkinter import Tk, Frame
 from tkinter.font import Font
 import sys
-#from colour import Color
+import os
+from pathlib import Path
+from PIL import Image, ImageTk
 
 class DesktopUI():
     screenW = 0
     screenH = 0
     win = 0
     framelist = []
-    #top = Color("black")
-    #bottom = Color("#001a35")
-    #colours = list(top.range_to(bottom, 100))
     backgroundC = "#001a35"
     deffont = 0
     fontFamily = "Times"
@@ -27,9 +26,9 @@ class DesktopUI():
             SS = str(screenWidth) + "x" + str(screenHeight)
             self.win.geometry(SS)
         else:
-            self.win.state('zoomed') #make maximized (on windows)
+            self.win.state('zoomed') # make maximized (on windows)
 
-        #self.win.attributes('-fullscreen', True) #make fullscreen
+        # self.win.attributes('-fullscreen', True) #make fullscreen
         self.win.focus_set() #focus on fullscreen
         self.win.configure(background = self.backgroundC)
 
@@ -39,25 +38,21 @@ class DesktopUI():
         topFrame = Frame(height = self.screenH / 10, width = self.screenW, bg= self.backgroundC)
         topFrame.pack_propagate(False) # ensures frame doesnt shrink to size of the wigets added down the road
         topFrame.place(x = 0, y = 0)
-        self.topframe = topFrame
         self.addFrame(topFrame)
 
         leftFrame = Frame(height = (self.screenH / 10) * 8, width = self.screenW / 4, bg = self.backgroundC)
         leftFrame.pack_propagate(False)
         leftFrame.place(x = 0, y = self.screenH / 10)
-        self.leftframe = leftFrame
         self.addFrame(leftFrame)
 
         rightFrame = Frame(height = (self.screenH / 10) * 8, width = self.screenW / 4, bg =  self.backgroundC)
         rightFrame.pack_propagate(False)
         rightFrame.place(x = (self.screenW / 4) * 3, y = self.screenH / 10)
-        self.rightframe = rightFrame
         self.addFrame(rightFrame)
 
         centerFrame = Frame(height = (self.screenH / 10) * 8, width = (self.screenW / 4) * 2, bg =  self.backgroundC)
         centerFrame.pack_propagate(False)
         centerFrame.place(x = (self.screenW / 4), y = self.screenH / 10)
-        self.centerframe = centerFrame
         self.addFrame(centerFrame)   
       
     def setscreen(self, width, height):
@@ -80,6 +75,18 @@ class DesktopUI():
 
     def getScreenW(self):
         return int (self.screenW)
+
+    def imageCreation (self, filename, height, width, folder = ""):
+        path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images/' + str(folder))
+        imageFolder = Path(path)
+
+        imgFile2 = os.path.join(imageFolder, filename)
+        img2 = Image.open(imgFile2)
+        img2 = img2.resize((int(width), int(height)))
+        resImg = ImageTk.PhotoImage(img2)
+
+        return resImg
+        
 
     @property
     def screen(self):

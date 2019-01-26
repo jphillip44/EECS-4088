@@ -52,9 +52,6 @@ class HotPotatoUI(desktop.DesktopUI):
         label4 = desktop.Label(super().framelist[0], text = "Next player: " + nextP, font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label4.place(anchor = "n", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
-        path = desktop.os.path.join(desktop.os.path.relpath(desktop.os.path.dirname(__file__)),  '../../public/images')
-        imageFolder = desktop.Path(path)
-
         if timer <= 0:
             result = "palm_explosion_Desktop.png"
             explosion = True
@@ -62,16 +59,11 @@ class HotPotatoUI(desktop.DesktopUI):
             result = "palm_potato_Desktop.png"
             explosion = False
 
-        imgFile2 = desktop.os.path.join(imageFolder, result)
-        img2 = desktop.Image.open(imgFile2)
-        img2 = img2.resize((int(self.window.screenW / 2.5), int(self.window.screenH / 2.5)))
-        resImg = desktop.ImageTk.PhotoImage(img2)
-
+        resImg = super().imageCreation(result, super().getScreenH() / 2.5, super().getScreenW() / 2.5)
+  
         label5 = desktop.Label(super().framelist[3], image = resImg, bg = super().backgroundC)
         label5.image = resImg 
         label5.place(anchor = "center", y = 4 * super().getScreenH() / 10, x = super().getScreenW() / 4) 
-
-        self.window.win.update()
 
         if explosion:
             desktop.time.sleep(3)

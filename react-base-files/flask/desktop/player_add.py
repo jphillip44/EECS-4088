@@ -22,8 +22,6 @@ class PlayerUI (DesktopUI):
         super().framelist[2] = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 3, bg =  self.window.backgroundC)
         super().framelist[2].pack_propagate(False)
         super().framelist[2].place(x = (self.window.screenW / 3) * 2, y = self.window.screenH / 10)
-        
-
 
         super().framelist[3] = Frame(height = (self.window.screenH / 10) * 8, width = (self.window.screenW / 3), bg =  self.window.backgroundC)
         super().framelist[3].pack_propagate(False)
