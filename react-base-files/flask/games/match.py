@@ -48,12 +48,14 @@ class Match(Game):
     def run_game(self):
         timer = self.state['timer']
         while self.active:
+            self.display_game.update(self.deepcopy)
             self.state['board'] = self.state['board'].tolist()
             self.state['gameBoard'] = self.state['gameBoard'].tolist()
             self.socketio.emit('turn', self.state, broadcast=True)
             self.state['board'] = numpy.asarray(self.state['board'])
             self.state['gameBoard'] = numpy.asarray(self.state['gameBoard'])
             while self.__waiting and self.state['timer'] > 0:
+                # self.display_game.update(self.deepcopy)
                 self.socketio.sleep(1)
                 print(self.state['timer'])
                 self.state['timer'] -= 1
@@ -64,7 +66,6 @@ class Match(Game):
                 self.__waiting = True
                 self.state['timer'] = timer
             super().run_game()
-                # self.display_game.update(self.deepcopy)
 
 
 
@@ -79,8 +80,8 @@ class Match(Game):
                 self.state['players'][self.__p2[0]]['score'] +=1
             self.__p1 = None
             self.__p2 = None
-            # if self.display_game is not None:
-            #     self.display_game.update(self.deepcopy)
+            if self.display_game is not None:
+                self.display_game.update(self.deepcopy)
             self.check_end()
 
         if data is None:
@@ -107,46 +108,46 @@ class Match(Game):
 
     def left(self):
         if self.state['cursor'][1] > 0:
-            # self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] - 1)
             self.state['cursor'][1] -= 1
         else:
-            # self.state['cursor'] = (self.state['cursor'][0], self.columns - 1)
             self.state['cursor'][1] = self.columns - 1
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        if self.display_game is not None:
+            self.display_game.update(self.deepcopy)
         print(self.state['cursor'])
 
     def right(self):
         if self.state['cursor'][1] < self.columns - 1:
-            # self.state['cursor'] = (self.state['cursor'][0], self.state['cursor'][1] + 1)
             self.state['cursor'][1] += 1
         else:
-            # self.state['cursor'] = (self.state['cursor'][0], 0)
             self.state['cursor'][1] = 0
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        if self.display_game is not None:
+            self.display_game.update(self.deepcopy)
         print(self.state['cursor'])
 
     def up(self):
         if self.state['cursor'][0] > 0:
-            # self.state['cursor'] = (self.state['cursor'][0] - 1, self.state['cursor'][1])
             self.state['cursor'][0] -= 1
         else:
-            # self.state['cursor'] = (self.rows - 1, self.state['cursor'][1])
             self.state['cursor'][0] = self.rows - 1
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        if self.display_game is not None:
+            self.display_game.update(self.deepcopy)
         print(self.state['cursor'])
 
     def down(self):
         if self.state['cursor'][0] < self.rows - 1:
-            # self.state['cursor'] = (self.state['cursor'][0] + 1, self.state['cursor'][1])
             self.state['cursor'][0] += 1
         else:
-            # self.state['cursor'] = (0, self.state['cursor'][1])
             self.state['cursor'][0] = 0
         if self.socketio is not None:
             self.socketio.emit('cursor', self.state['cursor'], room=self.state['next'][0])
+        if self.display_game is not None:
+            self.display_game.update(self.deepcopy)
         print(self.state['cursor'])
 
     # def selected(self, data):

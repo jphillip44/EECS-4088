@@ -25,8 +25,6 @@ class Hot_Potato(Game):
                 self.end_game()
                 self.rank_players()
             self.display()
-        # if self.display_game is not None:
-        #     self.display_game.update(self.deepcopy)
 
     def display(self):
         if self.active:
@@ -39,7 +37,6 @@ class Hot_Potato(Game):
             self.print_standings()
 
     def run_game(self):
-        # self.display_game.update(self)
         while self.active:
             self.socketio.emit('state', self.state, broadcast=True)
             self.state['current'] = self.state['next']

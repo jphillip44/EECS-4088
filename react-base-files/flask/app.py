@@ -73,11 +73,8 @@ def check_thread():
     DISPLAY.update(list(USERS.values()))
 
 def display():
-    print("users")
     if USERS:
-        print(*USERS.values(), sep='\n')
-    else:
-        print('none')
+        print(list(USERS.values()))
 
 # When the client disconnects from the socket
 @SOCKETIO.on('disconnect')
