@@ -42,7 +42,7 @@ class Hot_Potato(Game):
         # self.display_game.update(self)
         while self.active:
             self.socketio.emit('state', self.state, broadcast=True)
-            current = self.state['next']
+            self.state['current'] = self.state['next']
             self.state['next'] = next(self.__next)
             self.display_game.update(self.deepcopy)
             self.__hold_potato = True
@@ -52,7 +52,7 @@ class Hot_Potato(Game):
                     print(self.state['timer'])
                     self.state['timer'] -= 1
                 else:
-                    self.socketio.emit('explode', room=current)
+                    self.socketio.emit('explode', room=self.state['current'])
                     self.__hold_potato = False
                     self.socketio.sleep(1)
             super().run_game()
