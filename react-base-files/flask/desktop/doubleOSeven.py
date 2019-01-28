@@ -95,15 +95,15 @@ class Double07UI(DesktopUI):
     def heartDisplay(self, number):
 
         if number == 0 or number == 'dead':
-            imgName ="0Heart.png"
+            imgName ="0Heart3.png"
         elif number == 1:
-            imgName ="1Heart.png"
+            imgName ="1Heart3.png"
         elif number == 2:
-            imgName ="2Heart.png"
+            imgName ="2Heart3.png"
         elif number == 3:
-            imgName ="3Heart.png"
+            imgName ="3Heart3.png"
 
-        return super().imageCreation(imgName, super().getScreenH() / 20,  super().getScreenW() / 15)
+        return super().imageCreation(imgName, super().getScreenH() / 20,  super().getScreenW() / 15, "/double07")
 
     def eventlog(self, players):
         playerActed = []

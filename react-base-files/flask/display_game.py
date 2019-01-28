@@ -47,18 +47,26 @@ class DisplayGame():
             getattr(self, obj.state['name'])(obj)
         else:
             print(obj.state)
+            self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+            self.screenSetup.win.update()
             pass
 
     def Simon(self, obj):
         print(obj.state)
+        self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        self.screenSetup.win.update()
         pass
 
     def MultiTap(self, obj):
         print(obj.state)
+        self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        self.screenSetup.win.update()
         pass
 
     def QuickMaff(self, obj):
         print(obj.state)
+        self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        self.screenSetup.win.update()
         pass
 
 
@@ -69,7 +77,7 @@ if __name__ == '__main__':
     # time.sleep(3)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME)
-    # time.sleep(2)
+    time.sleep(5)
     GAME = games.Hot_Potato(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(2)
@@ -80,5 +88,5 @@ if __name__ == '__main__':
     DISPLAY.update(GAME)
     GAME = games.MultiGame(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    time.sleep(5)
+    # time.sleep(5)
  

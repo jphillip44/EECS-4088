@@ -68,7 +68,7 @@ class DesktopUI():
         self.framelist.append(fname)
 
     def setFontSize(self, fSize):
-        return Font(family = self.fontFamily, size = fSize)
+        return Font(family = self.fontFamily, size = int(fSize))
 
     def getScreenH(self):
         return int (self.screenH)

@@ -50,7 +50,7 @@ class MatchingUI(desktop.DesktopUI):
                 label.img = cardImage
                 label.place(x = 0, y = 0)
         
-        label = desktop.Label (super().framelist[0], text = nextP[0] + " select a card from the board", bg = super().backgroundC, font = super().setFontSize(int((super().getScreenH() / 30))), fg = 'white')
+        label = desktop.Label (super().framelist[0], text = nextP[0] + " select a card from the board. Time Remaining: " + str(timer), bg = super().backgroundC, font = super().setFontSize(int((super().getScreenH() / 30))), fg = 'white')
         label.place(anchor = "center", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
         label2 = desktop.Label (super().framelist[2], text = "Next Player: " + nextP[1], bg = super().backgroundC, font = super().setFontSize(int((super().getScreenH() / 30))), fg = 'white')
