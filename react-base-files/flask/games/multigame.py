@@ -33,11 +33,12 @@ class MultiGame(Game):
         def __init__(self, game, level):
             ops = {
                 '+': operator.add, 
-                '*': operator.mul,
+                '-': operator.sub,
+                '*': operator.mul
             }
             val1 = np.random.randint(1, 10)
             val2 = np.random.randint(1, 10)
-            op = list(ops.keys())[level % 2]
+            op = list(ops.keys())[level % 3]
             self.valid = ops.get(op)(val1, val2)
             self.timer = max(20 - level, 5)
             game.state['formula'] = "{} {} {} = ?".format(val1, op, val2)
