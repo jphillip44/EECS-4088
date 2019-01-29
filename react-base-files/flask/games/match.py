@@ -55,7 +55,7 @@ class Match(Game):
             self.state['board'] = numpy.asarray(self.state['board'])
             self.state['gameBoard'] = numpy.asarray(self.state['gameBoard'])
             while self.__waiting and self.state['timer'] > 0:
-                # self.display_game.update(self.deepcopy)
+                self.display_game.update(self.deepcopy)
                 self.socketio.sleep(1)
                 print(self.state['timer'])
                 self.state['timer'] -= 1
@@ -99,6 +99,8 @@ class Match(Game):
             is_match()
         self.state['next'] = (self.state['next'][1], next(self.__next))
         self.display() 
+        if self.socketio is not None:
+            self.socketio.sleep(5)
 
 
     def check_end(self):

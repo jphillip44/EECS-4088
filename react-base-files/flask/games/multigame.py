@@ -12,8 +12,8 @@ class MultiGame(Game):
             game.state['timer'] = self.timer
             game.state['valid'] = self.valid
             game.state['name'] = self.__class__.__name__
-            if game.display_game is not None:
-                game.display_game.update(game.deepcopy)
+            # if game.display_game is not None:
+            #     game.display_game.update(game.deepcopy)
             game.display()
 
     class Simon(SubGame):
@@ -40,12 +40,13 @@ class MultiGame(Game):
             op = list(ops.keys())[level % 2]
             self.valid = ops.get(op)(val1, val2)
             self.timer = max(20 - level, 5)
-            print("{} {} {} = ?".format(val1, op, val2))
+            game.state['formula'] = "{} {} {} = ?".format(val1, op, val2)
+            print(game.state['formula'])
             super().__init__(game)
 
 
     def __init__(self, players, lives=5, **kwargs):
-        super().__init__(players, {'hp' : lives, 'turn': False}, **kwargs)
+        super().__init__(players, {'hp' : lives, 'correct': False}, **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('action', self.action)
 
@@ -60,12 +61,14 @@ class MultiGame(Game):
                     self.display_game.update(self.deepcopy)
                     self.socketio.emit('state', self.state, broadcast=True)
                     while self.state['timer'] > 0:
+                        self.display_game.update(self.deepcopy)
                         self.socketio.sleep(1)
                         print(self.state['timer'])
                         self.state['timer'] -= 1
                     # self.state['timer'] = timer
                     self.socketio.emit('timerExpired', self.state, broadcast=True)
                     self.socketio.sleep(1)
+                    self.display_game.update(self.deepcopy)
                     self.check_turns()
                     self.display()
                     self.rank_players()
@@ -104,15 +107,15 @@ class MultiGame(Game):
 
     def action(self, data):
         print(data)
-        if data['valid'] != self.state['valid']:
-            self.state['players'][data['player']]['hp'] -= 1
-        self.state['players'][data['player']]['turn'] = True
+        if data['valid'] == self.state['valid']:
+            # self.state['players'][data['player']]['turn'] = False
+            self.state['players'][data['player']]['correct'] = True
 
     def check_turns(self):
         for player, state in self.state['players'].items():
             if state['hp'] != 'dead' and state['hp'] > 0:
-                if state['turn']:
-                    state['turn'] = False
+                if state['correct']:
+                    state['correct'] = False
                 else:
                     state['hp'] -= 1
         self.rank_players()
