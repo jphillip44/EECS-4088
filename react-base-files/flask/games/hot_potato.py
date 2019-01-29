@@ -53,9 +53,9 @@ class Hot_Potato(Game):
                     self.__hold_potato = False
                     self.socketio.sleep(1)
             super().run_game()
-        else:
-            print("Game Over")
-            self.socketio.emit('gameOver', broadcast=True)
+        # else:
+        #     print("Game Over")
+        #     self.socketio.emit('gameOver', broadcast=True)
 
     def __hold(self, player, time):
         # self.state['next'] = self.__get_turn()

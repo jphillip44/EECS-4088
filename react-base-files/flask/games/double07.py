@@ -82,9 +82,9 @@ class Double07(Game):
             self.state['timer'] = timer
             super().run_game()
 
-        print("Game Over")
-        self.socketio.emit('gameOver', broadcast=True)
-        self.display_game.update(self.ranks)
+        # print("Game Over")
+        # self.socketio.emit('gameOver', broadcast=True)
+        # self.display_game.update(self.ranks)
         # game.sleep(5)
         # self.display_game.update(list(self.state['players'].keys()))
 

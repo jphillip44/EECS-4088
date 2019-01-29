@@ -64,6 +64,12 @@ class Game(ABC):
         Signal for ending a game.
         '''
         self.active = False
+        if self.display_game is not None:
+            self.display_game.update(self.ranks)
+        print("Game Over")
+        if self.socketio is not None:
+            self.socketio.emit('gameOver', broadcast=True)
+
 
     @property
     def active(self):

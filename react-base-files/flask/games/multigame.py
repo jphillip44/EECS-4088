@@ -76,7 +76,7 @@ class MultiGame(Game):
                     self.state.pop('valid')
                     super().run_game()
             level += 1
-        self.socketio.emit('gameOver', broadcast=True)
+        # self.socketio.emit('gameOver', broadcast=True)
 
     def rank_players(self):
         def check_dead():
