@@ -8,7 +8,7 @@ class MatchingUI(desktop.DesktopUI):
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         self.setup()
-        self.display(obj['gameBoard'], obj['next'], obj['cursor'], obj['timer'], obj['formula'])
+        self.display(obj['gameBoard'], obj['next'], obj['cursor'], obj['timer'])
 
     def setup(self): 
         super().setup()
@@ -55,3 +55,8 @@ class MatchingUI(desktop.DesktopUI):
 
         label2 = desktop.Label (super().framelist[2], text = "Next Player: " + nextP[1], bg = super().backgroundC, font = super().setFontSize(int((super().getScreenH() / 30))), fg = 'white')
         label2.place(anchor = "center", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
+    
+    def standings(self, standings):
+        super().standings(standings)
+        self.window.win.update()
+        desktop.time.sleep(10)  

@@ -68,4 +68,8 @@ class HotPotatoUI(desktop.DesktopUI):
         if explosion:
             desktop.time.sleep(3)
 
+    def standings(self, standings):
+        super().standings(standings)
+        self.window.win.update()
+        desktop.time.sleep(10)  
     

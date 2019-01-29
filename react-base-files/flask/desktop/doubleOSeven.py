@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 from PIL import Image, ImageTk
 from __screen import DesktopUI
-
+import desktop
 
 class Double07UI(DesktopUI):
     window = 0 #DesktopUI()
@@ -194,3 +194,8 @@ class Double07UI(DesktopUI):
         
         self.window.win.update()   
         time.sleep(3)  
+    
+    def standings(self, standings):
+        super().standings(standings)
+        self.window.win.update()
+        desktop.time.sleep(10)  

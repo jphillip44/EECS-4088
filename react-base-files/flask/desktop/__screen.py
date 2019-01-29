@@ -1,7 +1,9 @@
-from tkinter import Tk, Frame
+from tkinter import Tk, Frame, Label
 from tkinter.font import Font
 import sys
 import os
+import math
+import time
 from pathlib import Path
 from PIL import Image, ImageTk
 
@@ -90,16 +92,35 @@ class DesktopUI():
     def standings(self, standings):
         self.reset()
 
+        print(standings)
+
         topFrame = Frame(height = self.screenH / 10, width = self.screenW, bg= self.backgroundC)
         topFrame.pack_propagate(False) # ensures frame doesnt shrink to size of the wigets added down the road
         topFrame.place(x = 0, y = 0)
         self.addFrame(topFrame)
 
-        label = Label(topFrame, text = "Standings", bg = self.backgroundC, fg = 'white', font = self.setFontSize(self.getscreenH() / 10))
+        label = Label(topFrame, text = "Standings", bg = self.backgroundC, fg = 'white', font = self.setFontSize(self.getScreenH() / 20))
         label.place (anchor = "center", x = self.getScreenW() / 2, y = self.getScreenH() / 20)
 
-    def instructions(self, game):
-        pass
+        numPlay = len(standings)
+        numCol =  math.ceil(numPlay / 8)
+
+        for i in range(numCol):
+            print("standings i")
+            frame = Frame(height = self.getScreenH() * 9/10, width = self.getScreenW () / numCol, bg = self.backgroundC)
+            frame.place(x = i * int(self.getScreenW() / numCol), y = self.getScreenH() / 10)
+            for j in range(8):
+                if i * 8 + j < numPlay:
+                    print(standings[i * 8 + j])
+                    label = Label(frame, text = str(i) + ". " + str(standings[i * 8 + j]), bg = self.backgroundC, fg = 'white', font = self.setFontSize(self.getScreenH() / (20 * numCol)))
+                    label.place(anchor = "nw", y = j * self.getScreenH() / 10, x = self.getScreenW() / numCol / 2)
+
+
+            self.addFrame(frame)
+
+
+    def instructions(self, game, obj):
+         pass
 
     @property
     def screen(self):

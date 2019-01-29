@@ -21,6 +21,8 @@ class DisplayGame():
 
     def Ranks(self, obj):
         print(obj.ranks)
+        self.curScreen.standings(obj.ranks)
+        self.screenSetup.win.update()
 
     def Double07(self, obj):
         # print(obj.state)
