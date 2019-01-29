@@ -86,7 +86,20 @@ class DesktopUI():
         resImg = ImageTk.PhotoImage(img2)
 
         return resImg
-        
+
+    def standings(self, standings):
+        self.reset()
+
+        topFrame = Frame(height = self.screenH / 10, width = self.screenW, bg= self.backgroundC)
+        topFrame.pack_propagate(False) # ensures frame doesnt shrink to size of the wigets added down the road
+        topFrame.place(x = 0, y = 0)
+        self.addFrame(topFrame)
+
+        label = Label(topFrame, text = "Standings", bg = self.backgroundC, fg = 'white', font = self.setFontSize(self.getscreenH() / 10))
+        label.place (anchor = "center", x = self.getScreenW() / 2, y = self.getScreenH() / 20)
+
+    def instructions(self, game):
+        pass
 
     @property
     def screen(self):

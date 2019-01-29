@@ -194,9 +194,3 @@ class Double07UI(DesktopUI):
         
         self.window.win.update()   
         time.sleep(3)  
-
-def main():
-    pass
-                
-if __name__ == '__main__':
-    main()

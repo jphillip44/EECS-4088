@@ -8,7 +8,7 @@ class MatchingUI(desktop.DesktopUI):
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         self.setup()
-        self.display(obj['gameBoard'], obj['next'], obj['cursor'], obj['timer'])
+        self.display(obj['gameBoard'], obj['next'], obj['cursor'], obj['timer'], obj['formula'])
 
     def setup(self): 
         super().setup()
@@ -26,7 +26,7 @@ class MatchingUI(desktop.DesktopUI):
         bottomFrame.place (y = super().getScreenH() * 9/10, x = 0)
         super().addFrame(bottomFrame)
 
-    def display(self, boardState, nextP, cursor, timer):
+    def display(self, boardState, nextP, cursor, timer, formula):
         for i in range (4):
             for j in range (10):
                 if boardState[i, j] == "XX":
