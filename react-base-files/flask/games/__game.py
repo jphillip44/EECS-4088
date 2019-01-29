@@ -55,15 +55,15 @@ class Game(ABC):
     @abstractmethod
     def run_game(self):
         if self.__active_players < 1:
-            self.end_game()
-            self.rank_players()
-            self.display()
+            self.end_game()   
 
     def end_game(self):
         '''
         Signal for ending a game.
         '''
         self.active = False
+        self.rank_players()
+        self.display()
         if self.display_game is not None:
             self.display_game.update(self.ranks)
         print("Game Over")
