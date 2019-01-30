@@ -55,7 +55,7 @@ class Fragments(Game):
                 count += 1
                 if count == 5:
                     self.end_game()
-                    self.rank_players()
+                    # self.rank_players()
             super().run_game()
 
 

@@ -62,10 +62,10 @@ class MultiGame(Game):
                     self.display_game.update(self.deepcopy)
                     self.socketio.emit('state', self.state, broadcast=True)
                     while self.state['timer'] > 0:
-                        self.display_game.update(self.deepcopy)
                         self.socketio.sleep(1)
-                        print(self.state['timer'])
                         self.state['timer'] -= 1
+                        print(self.state['timer'])
+                        self.display_game.update(self.deepcopy)
                     # self.state['timer'] = timer
                     self.socketio.emit('timerExpired', self.state, broadcast=True)
                     self.socketio.sleep(1)

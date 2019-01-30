@@ -55,10 +55,10 @@ class Match(Game):
             self.state['board'] = numpy.asarray(self.state['board'])
             self.state['gameBoard'] = numpy.asarray(self.state['gameBoard'])
             while self.__waiting and self.state['timer'] > 0:
-                self.display_game.update(self.deepcopy)
                 self.socketio.sleep(1)
-                print(self.state['timer'])
                 self.state['timer'] -= 1
+                print(self.state['timer'])
+                self.display_game.update(self.deepcopy)
             else:
                 if self.state['timer'] == 0:
                     self.socketio.emit('timeout', room=self.state['next'][0])
@@ -106,7 +106,7 @@ class Match(Game):
     def check_end(self):
         if list(self.state['gameBoard'].flatten()).count('XX') == 0:
             self.end_game()
-            self.rank_players()
+            # self.rank_players()
 
     def left(self):
         if self.state['cursor'][1] > 0:

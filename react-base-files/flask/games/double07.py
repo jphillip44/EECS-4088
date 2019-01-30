@@ -67,10 +67,10 @@ class Double07(Game):
         while self.active:
             self.socketio.emit('state', self.state['players'], broadcast=True)
             while self.state['timer'] > 0:
-                self.display_game.update(self)
                 self.socketio.sleep(1)
-                print(self.state['timer'])
                 self.state['timer'] -= 1
+                print(self.state['timer'])
+                self.display_game.update(self.deepcopy)
             self.display_game.update(self)
             self.socketio.emit('timerExpired', broadcast=True)
             print("Waiting for inputs")

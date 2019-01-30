@@ -23,7 +23,7 @@ class Hot_Potato(Game):
             self.__hold(data['player'], data.get('time'))
             if self.state['players'][data['player']]['score'] > self.state['max']:
                 self.end_game()
-                self.rank_players()
+                # self.rank_players()
             self.display()
 
     def display(self):
