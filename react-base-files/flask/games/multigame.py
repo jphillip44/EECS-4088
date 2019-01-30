@@ -47,7 +47,7 @@ class MultiGame(Game):
 
 
     def __init__(self, players, lives=5, **kwargs):
-        super().__init__(players, {'hp' : lives, 'correct': False}, **kwargs)
+        super().__init__(players, {'hp' : lives, 'correct': False, 'old_correct': None}, **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('action', self.action)
 
@@ -115,6 +115,7 @@ class MultiGame(Game):
     def check_turns(self):
         for player, state in self.state['players'].items():
             if state['hp'] != 'dead' and state['hp'] > 0:
+                state['old_correct'] = state['correct']
                 if state['correct']:
                     state['correct'] = False
                 else:
