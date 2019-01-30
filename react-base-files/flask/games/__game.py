@@ -45,6 +45,7 @@ class Game(ABC):
         memo[id(self)] = result
         for k, v in self.__dict__.items():
             if k not in self.nocopy:
+                print(k)
                 setattr(result, k, deepcopy(v, memo))
         return result
 

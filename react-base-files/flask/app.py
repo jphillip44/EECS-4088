@@ -18,6 +18,7 @@ import flask_socketio as sio
 import desktop
 from game_list import GameList
 from display_game import DisplayGame
+from instructions import Instructions
 
 # initialize Flask
 
@@ -52,13 +53,16 @@ def join_server(data):
     # if DISPLAY is None:
     #     DISPLAY = DisplayGame()
     if DISPLAY is not None and (GAME is None or not GAME.active):
-        DISPLAY.update(list(USERS.values()))
+        DISPLAY.update(Players())
 
 @SOCKETIO.on('createGame')
 def create_game(data):
     global GAME
     print(USERS)
     if GAME is None or not GAME.active:
+        GAME = False
+        print(data)
+        DISPLAY.update(Instructions().get(data))
         GAME = GameList.select_game(data, list(USERS.values()), \
             socketio=SOCKETIO, display_game=DISPLAY)
         sio.emit('gameStarted', GAME.__name__, broadcast=True)
@@ -70,7 +74,7 @@ def create_game(data):
         
 def check_thread():
     THREAD.join()
-    DISPLAY.update(list(USERS.values()))
+    DISPLAY.update(Players())
 
 def display():
     if USERS:
@@ -86,7 +90,7 @@ def disconnect():
         return
     display()
     if GAME is None or not GAME.active:
-        DISPLAY.update(list(USERS.values()))
+        DISPLAY.update(Players())
     else:
         GAME.remove_player(user)
     # let every user know when a user disconnects
@@ -118,6 +122,13 @@ def send_to_server(data):
         sio.emit('userList', USERS, broadcast=True)
     elif data["type"] == "retrieveUsername":
         sio.emit('username', USERS.get(flask.request.sid))
+
+class Players():
+    def __init__(self):
+        self.players = list(USERS.values())
+
+    def get(self):
+        return self.players
 
 if __name__ == '__main__':
     SOCKETIO.run(APP, host="0.0.0.0", debug=True)

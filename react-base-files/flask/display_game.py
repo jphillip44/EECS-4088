@@ -11,71 +11,75 @@ class DisplayGame():
         self.screenSetup.win.update()
         
     def update(self, obj):
-        getattr(self, obj.__class__.__name__)(obj)
+        getattr(self, obj.__class__.__name__.lower())(obj)
 
-    def list(self, obj):
-        # print(obj)
+    # def list(self, obj):
+    #     # print(obj)
+    #     self.curScreen = desktop.PlayerUI(self.screenSetup)
+    #     self.curScreen.PlayerShow(obj)
+    #     self.screenSetup.win.update()
+
+    def players(self, obj):
         self.curScreen = desktop.PlayerUI(self.screenSetup)
-        self.curScreen.PlayerShow(obj)
+        self.curScreen.PlayerShow(obj.players)
         self.screenSetup.win.update()
 
-    def Ranks(self, obj):
+    def ranks(self, obj):
         print(obj.ranks)
         self.curScreen.standings(obj.ranks)
         self.screenSetup.win.update()
 
-    def Double07(self, obj):
+    def double07(self, obj):
         # print(obj.state)
         self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)        
         self.screenSetup.win.update()
 
 
-    def Hot_Potato(self, obj):
+    def hot_potato(self, obj):
         # print(obj.state)
         self.curScreen = desktop.HotPotatoUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
-    def Match(self, obj):
+    def match(self, obj):
         # print(obj.state)
         self.curScreen = desktop.MatchingUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
-    def Fragments(self, obj):
+    def fragments(self, obj):
         # print(obj.state)
         pass
 
-    def MultiGame(self, obj):
+    def multigame(self, obj):
         if obj.state.get('name'):
             getattr(self, obj.state['name'])(obj)
         else:
             print(obj.state)
             self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
             self.screenSetup.win.update()
-            pass
 
-    def Simon(self, obj):
+    def simon(self, obj):
         print(obj.state)
         self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
-        pass
 
-    def MultiTap(self, obj):
+    def multitap(self, obj):
         print(obj.state)
         self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
-        pass
 
-    def QuickMaff(self, obj):
+    def quickmaff(self, obj):
         print(obj.state)
         self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
-        pass
+
+    def instructions(self, obj):
+        print(obj.string)
 
 
 if __name__ == '__main__':
     DISPLAY = DisplayGame()
     PLAYERS = ['WWWWWWWWWW/ddd', 'player2', 'player3', 'player4']
-    DISPLAY.update(PLAYERS)
+    # DISPLAY.update(PLAYERS)
     # time.sleep(3)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME)
