@@ -11,7 +11,7 @@ class DisplayGame():
         self.screenSetup.win.update()
         
     def update(self, obj):
-        getattr(self, obj.__class__.__name__.lower())(obj)
+        getattr(self, obj.__class__.__name__.casefold())(obj)
 
     # def list(self, obj):
     #     # print(obj)
@@ -83,15 +83,15 @@ if __name__ == '__main__':
     # time.sleep(3)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME)
-    time.sleep(5)
+    # time.sleep(5)
     GAME = games.Hot_Potato(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(2)
     GAME = games.Match(PLAYERS)
-    DISPLAY.update(GAME.deepcopy)
+    # DISPLAY.update(GAME.deepcopy)
     # time.sleep(5)
     GAME = games.Fragments(PLAYERS)
-    DISPLAY.update(GAME)
+    DISPLAY.update(GAME.deepcopy)
     GAME = games.MultiGame(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(5)

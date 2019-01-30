@@ -3,7 +3,7 @@ class Instructions():
         self.string = ""
 
     def get(self, name):
-        getattr(self, name.lower())()
+        getattr(self, name.casefold())()
         return self
 
     def double07(self):

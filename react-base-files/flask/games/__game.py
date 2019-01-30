@@ -24,7 +24,7 @@ class Game(ABC):
         '''
         Sets up the games default parameters.
         '''
-        self.__state = {}
+        self.state = {}
         super().__init__()
         self.nocopy = list(kwargs.keys())
         self.socketio = kwargs.get('socketio', None)
@@ -32,7 +32,7 @@ class Game(ABC):
         self.__players = players
         self.__name__ = self.__class__.__name__
         print("New "+self.__name__+" Started")
-        self.__active_game = True
+        self.active = True
         self.ranks = self.Ranks()
         self.state['players'] = OrderedDict()
         for player in players:
@@ -44,8 +44,7 @@ class Game(ABC):
         result = cls.__new__(cls)
         memo[id(self)] = result
         for k, v in self.__dict__.items():
-            if k not in self.nocopy:
-                print(k)
+            if k not in self.nocopy and not k.startswith('_'):
                 setattr(result, k, deepcopy(v, memo))
         return result
 
@@ -72,32 +71,32 @@ class Game(ABC):
             self.socketio.emit('gameOver', broadcast=True)
 
 
-    @property
-    def active(self):
-        '''
-        Query to determine if a game is active.
-        '''
-        return self.__active_game
+    # @property
+    # def active(self):
+    #     '''
+    #     Query to determine if a game is active.
+    #     '''
+    #     return self.__active_game
 
-    @active.setter
-    def active(self, value):
-        self.__active_game = value
+    # @active.setter
+    # def active(self, value):
+    #     self.__active_game = value
 
-    @active.deleter
-    def active(self):
-        del self.__active_game
+    # @active.deleter
+    # def active(self):
+    #     del self.__active_game
 
-    @property
-    def state(self):
-        return self.__state
+    # @property
+    # def state(self):
+    #     return self.__state
 
-    @state.setter
-    def state(self, value):
-        self.__state = value
+    # @state.setter
+    # def state(self, value):
+    #     self.__state = value
 
-    @state.deleter
-    def state(self):
-        del self.__state
+    # @state.deleter
+    # def state(self):
+    #     del self.__state
 
     @property
     def players(self):
