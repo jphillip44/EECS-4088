@@ -47,7 +47,7 @@ class Fragments extends React.Component {
                             <div className="column">
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[0]}`}
                                         alt="Fragment 1"
                                         onClick={() => this.selectPicture(this.state.fragments[0])}
@@ -55,7 +55,7 @@ class Fragments extends React.Component {
                                 </div>
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[3]}`}
                                         alt="Fragment 4"
                                         onClick={() => this.selectPicture(this.state.fragments[3])}
@@ -63,7 +63,7 @@ class Fragments extends React.Component {
                                 </div>
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[6]}`}
                                         alt="Fragment 7"
                                         onClick={() => this.selectPicture(this.state.fragments[6])}
@@ -73,7 +73,7 @@ class Fragments extends React.Component {
                             <div className="column">
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[1]}`}
                                         alt="Fragment 2"
                                         onClick={() => this.selectPicture(this.state.fragments[1])}
@@ -81,7 +81,7 @@ class Fragments extends React.Component {
                                 </div>
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[4]}`}
                                         alt="Fragment 5"
                                         onClick={() => this.selectPicture(this.state.fragments[4])}
@@ -89,7 +89,7 @@ class Fragments extends React.Component {
                                 </div>
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[7]}`}
                                         alt="Fragment 8"
                                         onClick={() => this.selectPicture(this.state.fragments[7])}
@@ -97,7 +97,7 @@ class Fragments extends React.Component {
                                 </div>
                             </div>
                             <div className="column">
-                                <div className="level">
+                                <div className="level level-item">
                                     <img
                                         className="image"
                                         src={`/images/fragments/${this.state.fragments[2]}`}
@@ -107,7 +107,7 @@ class Fragments extends React.Component {
                                 </div>
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[5]}`}
                                         alt="Fragment 6"
                                         onClick={() => this.selectPicture(this.state.fragments[5])}
@@ -115,7 +115,7 @@ class Fragments extends React.Component {
                                 </div>
                                 <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[8]}`}
                                         alt="Fragment 9"
                                         onClick={() => this.selectPicture(this.state.fragments[8])}
