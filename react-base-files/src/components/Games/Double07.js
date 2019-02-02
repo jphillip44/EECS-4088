@@ -94,12 +94,17 @@ class Double07 extends React.Component {
         });
 
         window.addEventListener('beforeunload', this.onPageRefresh);
+        window.addEventListener('onbeforeunload', this.refreshConfirm);
 
         this.afterPageRefresh(sessionStorage.getItem('pageRefreshed'));
     }
 
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
+    }
+
+    refreshConfirm = () => {
+        return "Data will be lost if you leave the page, are you sure?";    
     }
 
     // Store state in local storage
