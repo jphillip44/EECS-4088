@@ -94,6 +94,7 @@ if __name__ == '__main__':
     # time.sleep(5)
     GAME = games.Fragments(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
+    time.sleep(5)
     GAME = games.MultiGame(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(5)

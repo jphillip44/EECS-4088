@@ -11,7 +11,7 @@ class Double07UI(desktop.DesktopUI):
         super().setup()
 
         self.display(obj.get('players'), obj.get('timer'))
-        self.timer(obj.get('timer'), obj('players'))
+        self.timer(obj.get('timer'), obj.get('players'))
 
     def display(self, players, timer):
         numPlay = len(players)
