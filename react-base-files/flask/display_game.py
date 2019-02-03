@@ -46,8 +46,10 @@ class DisplayGame():
         self.screenSetup.win.update()
 
     def fragments(self, obj):
-        # print(obj.state)
-        pass
+        print(obj.state)
+        self.curScreen = desktop.FragmentsUI(self.screenSetup, obj.state)
+        self.screenSetup.win.update()
+    
 
     def multigame(self, obj):
         if obj.state.get('name'):

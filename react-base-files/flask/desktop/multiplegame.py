@@ -2,19 +2,18 @@ import desktop
 
 class MultiGameUI (desktop.DesktopUI):
     timerLabel = ""
-    newRound = True
 
     def __init__(self, ui, obj):
         self.window = ui
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         super().setup()
-        if obj['name'] == "QuickMaff":
-            formula = obj['formula']
+        if obj.get('name') == "QuickMaff":
+            formula = obj.get('formula')
         else:
             formula = ""
 
-        self.display(obj['players'], obj['valid'], obj['name'], obj['timer'], formula)
+        self.display(obj.get('players'), obj.get('valid'), obj.get('name'), obj.get('timer'), formula)
 
     def display(self, players, valid, game, timer, formula):
         numPlay = len(players)
@@ -57,7 +56,7 @@ class MultiGameUI (desktop.DesktopUI):
             label2.image = lives 
             label2.place(anchor = "nw", y = yPosP + yPosHA, x = xPosPH) 
 
-            if not (players[player].get('correct')):
+            if not (players[player].get('old_correct')):
                 imgLast = "xMark.png"
             else:
                 imgLast = "Checkmark.png"
@@ -94,8 +93,7 @@ class MultiGameUI (desktop.DesktopUI):
     
     def displaySimon(self, seq, timer):
 
-        if timer == 20 and self.newRound:
-            self.newRound = False
+        if timer == 20:
             
             label = desktop.Label(super().framelist[0], text = "Watch the sequence", font = super().setFontSize(super().getScreenH() / 20), bg = super().backgroundC, fg = "white")
             label.place (anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 10)
@@ -133,9 +131,6 @@ class MultiGameUI (desktop.DesktopUI):
     def displayTimer(self, timer):
         timerHeader = desktop.Label(super().framelist[3], text = "Time Remaining: ", fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 30))
         timerHeader.place(anchor = "s", x = super().getScreenW() / 4, y = super().getScreenH() * 1/5)
-
-        if timer == 5:
-            self.newRound = True
 
         self.timerLabel = desktop.Label(super().framelist[3], text = str(timer), fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 10))
         self.timerLabel.place(anchor = "center", x = super().getScreenW() / 4, y = super().getScreenH() * 2/5)

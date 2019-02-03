@@ -1,16 +1,7 @@
-from tkinter import Tk, Label, Frame
-from tkinter.font import Font
-import math
-import os
-import time
-from pathlib import Path
-from PIL import Image, ImageTk
-from __screen import DesktopUI
 import desktop
 
-class Double07UI(DesktopUI):
-    window = 0 #DesktopUI()
-
+class Double07UI(desktop.DesktopUI):
+    window = 0 
     topFrameLabel = ""
 
     def __init__(self, ui, obj):
@@ -19,17 +10,17 @@ class Double07UI(DesktopUI):
         super().reset()
         super().setup()
 
-        self.display(obj['players'], obj['timer'])
-        self.timer(obj['timer'], obj['players'])
+        self.display(obj.get('players'), obj.get('timer'))
+        self.timer(obj.get('timer'), obj('players'))
 
     def display(self, players, timer):
         numPlay = len(players)
-        leftPlay = math.ceil(numPlay / 2)
-        rightPlay = math.floor(numPlay / 2)
+        leftPlay = desktop.math.ceil(numPlay / 2)
+        rightPlay = desktop.math.floor(numPlay / 2)
         center = int(super().getScreenH() / 2)
         offset = int(super().getScreenH() / 8)
         textColour = "white"
-        doubleFont = self.window.setFontSize(int(super().getScreenH() / 50))
+        doubleFont = super().setFontSize(int(super().getScreenH() / 50))
 
 
         for i, player in enumerate(players):
@@ -58,14 +49,14 @@ class Double07UI(DesktopUI):
                 else:
                     yPosP = center - (rightPlay / 2 + .5 - (i - leftPlay)) * offset
 
-            label = Label(curFrame, text = player, font = doubleFont, bg = curFrame['bg'], fg = textColour)
+            label = desktop.Label(curFrame, text = player, font = doubleFont, bg = curFrame['bg'], fg = textColour)
             label.place(anchor = "nw", y = yPosP, x = xPosPH) 
 
-            label2 = Label(curFrame, text = "HP: ", image = lives, font = doubleFont, bg = curFrame['bg'], fg = textColour)
+            label2 = desktop.Label(curFrame, text = "HP: ", image = lives, font = doubleFont, bg = curFrame['bg'], fg = textColour)
             label2.image = lives 
             label2.place(anchor = "nw", y = yPosP + yPosHA, x = xPosPH) 
 
-            label3 = Label(curFrame, text = "Act: " , image = prevAct, font = doubleFont, bg = curFrame['bg'], fg = textColour)
+            label3 = desktop.Label(curFrame, text = "Act: " , image = prevAct, font = doubleFont, bg = curFrame['bg'], fg = textColour)
             label3.image = prevAct
             label3.place(anchor = "e", y = yPosP + yPosHA, x = xPosA)             
 
@@ -82,11 +73,11 @@ class Double07UI(DesktopUI):
 
     def timer (self, timer, players):
         if timer >= 0:
-            topFrameLabel = Label(super().framelist[0], text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = super().framelist[2]['bg'], fg = "white") 
+            topFrameLabel = desktop.Label(super().framelist[0], text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = super().framelist[2]['bg'], fg = "white") 
             topFrameLabel.place(anchor = "center", y = super().getScreenH() / 20, x = super().getScreenW() / 2) 
 
         if timer == -1:
-            topFrameLabel = Label(super().framelist[0], text = "Time Remaining to select an action: 0", font = self.window.deffont, bg = super().framelist[2]['bg'], fg = "white") 
+            topFrameLabel = desktop.Label(super().framelist[0], text = "Time Remaining to select an action: 0", font = self.window.deffont, bg = super().framelist[2]['bg'], fg = "white") 
             topFrameLabel.place(anchor = "center", y = super().getScreenH() / 20, x = super().getScreenW() / 2) 
 
             self.eventlog(players)
@@ -112,7 +103,7 @@ class Double07UI(DesktopUI):
         result = 0
         posCounter = 0
 
-        ELFont = self.window.setFontSize(int (super().getScreenH() / 50))
+        ELFont = super().setFontSize(int (super().getScreenH() / 50))
         textColour = "white"
 
         for player in players:
@@ -141,28 +132,28 @@ class Double07UI(DesktopUI):
 
                     posY = super().getScreenH() * (1/10 + 1/10 * posCounter)
 
-                    label1 = Label(super().framelist[3], text = player, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
+                    label1 = desktop.Label(super().framelist[3], text = player, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
                     label1.place(anchor = "nw", y = posY, x = 1/40 * super().getScreenW() / 2)
 
                     actImg = super().imageCreation(act, int(super().getScreenH() / 20), int(super().getScreenW() / 30))
                     
-                    label2 = Label(super().framelist[3], image = actImg, bg = super().framelist[3]['bg']) 
+                    label2 = desktop.Label(super().framelist[3], image = actImg, bg = super().framelist[3]['bg']) 
                     label2.image = actImg 
                     label2.place(anchor = "nw", y = posY, x = 17/40 * super().getScreenW() / 2)
 
-                    label3 = Label(super().framelist[3], text = curPlayerAction, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
+                    label3 = desktop.Label(super().framelist[3], text = curPlayerAction, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
                     label3.place(anchor = "ne", y = posY, x = 35.5/40 * super().getScreenW() / 2)
 
                     if result != 'none':
                         resImg = super().imageCreation(result, int(super().getScreenH() / 20), int(super().getScreenW() / 30))
 
-                        label4 = Label(super().framelist[3], image = resImg, bg = super().framelist[3]['bg']) 
+                        label4 = desktop.Label(super().framelist[3], image = resImg, bg = super().framelist[3]['bg']) 
                         label4.image = resImg 
                         label4.place(anchor = "nw", y = posY, x = 36.5/40 * super().getScreenW() / 2)
 
                     posCounter += 1
                     self.window.win.update()   
-                    time.sleep(2)
+                    desktop.time.sleep(2)
 
             else:
                 playerActed.append(player)
@@ -179,21 +170,21 @@ class Double07UI(DesktopUI):
                 
                 posY = (1/10 + 1/10 * posCounter) * super().getScreenH() 
 
-                label1 = Label(super().framelist[3], text = player, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
+                label1 = desktop.Label(super().framelist[3], text = player, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
                 label1.place(anchor = "nw", y = posY, x = 1/40 * super().getScreenW() / 2)
 
                 actImg = super().imageCreation(act, super().getScreenH() / 20, super().getScreenW() / 30)
                 
-                label2 = Label(super().framelist[3], image = actImg, bg = super().framelist[3]['bg']) 
+                label2 = desktop.Label(super().framelist[3], image = actImg, bg = super().framelist[3]['bg']) 
                 label2.image = actImg
                 label2.place(anchor = "nw", y = posY, x = 17/40 * super().getScreenW() / 2)
                 
                 posCounter += 1
                 self.window.win.update()   
-                time.sleep(1)
+                desktop.time.sleep(1)
         
         self.window.win.update()   
-        time.sleep(3)  
+        desktop.time.sleep(3)  
     
     def standings(self, standings):
         super().standings(standings)
