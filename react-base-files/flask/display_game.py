@@ -46,12 +46,23 @@ class DisplayGame():
 
     def hot_potato(self, obj):
         # print(obj.state)
-        self.curScreen = desktop.HotPotatoUI(self.screenSetup, obj.state)
+        if not (isinstance(self.curScreen, desktop.HotPotatoUI)):
+            self.curScreen = desktop.HotPotatoUI(self.screenSetup, obj.state)
+        else:
+            self.curScreen.__init__(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
     def match(self, obj):
         # print(obj.state)
-        self.curScreen = desktop.MatchingUI(self.screenSetup, obj.state)
+        if not (isinstance(self.curScreen, desktop.MatchingUI)):
+            self.curScreen = desktop.MatchingUI(self.screenSetup, obj.state)
+        elif not (self.curScreen.prevCursor == obj.state.get('cursor')):
+            self.curScreen.cursorMove(obj.state.get('cursor'), obj.state.get('gameBoard'))
+        # elif True:
+            # self.curScreen.__init__(self.screenSetup, obj.state)
+        else:
+            self.curScreen.displayTimer(obj.state.get('timer'), obj.state.get('next', ['broken'])[0])
+            
         self.screenSetup.win.update()
 
     def fragments(self, obj):
@@ -100,8 +111,8 @@ if __name__ == '__main__':
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(2)
     GAME = games.Match(PLAYERS)
-    # DISPLAY.update(GAME.deepcopy)
-    # time.sleep(5)
+    DISPLAY.update(GAME.deepcopy)
+    time.sleep(5)
     GAME = games.Fragments(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(5)
