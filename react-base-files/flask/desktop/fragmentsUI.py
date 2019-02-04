@@ -1,17 +1,16 @@
 import desktop
 
-class HotPotatoUI(desktop.DesktopUI):
+class FragmentsUI (desktop.DesktopUI):
     window = 0
-
 
     def __init__(self, ui, obj):
         self.window = ui
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         super().setup()
-        self.display(obj.get('players'), obj.get('timer'), obj.get('next'))
+        self.display(obj.get('players'), obj.get('timer'), obj.get('display'))
 
-    def display(self, players, timer, nextP):
+    def display(self, players, timer, fragment):
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -26,7 +25,6 @@ class HotPotatoUI(desktop.DesktopUI):
             yPosS = super().getScreenW() / 40 
             fontSize = super().setFontSize(int((super().getScreenH()) / 40))
             curFrame = super().framelist[2]
-            explosion = False
 
             if i < leftPlay:
                 curFrame = super().framelist[1]
@@ -46,30 +44,16 @@ class HotPotatoUI(desktop.DesktopUI):
             label2 = desktop.Label(curFrame, text = "Score: " + str (playerScore), font = fontSize, bg = super().backgroundC, fg = textColour)
             label2.place (anchor = "nw", x = xPos, y = yPos + yPosS)
 
-        label3 = desktop.Label(super().framelist[0], text = "First to x points wins!", font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
+        label3 = desktop.Label(super().framelist[0], text = "Find the fragment that matches the image", font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label3.place(anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
-        label4 = desktop.Label(super().framelist[0], text = "Next player: " + nextP, font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
+        label4 = desktop.Label(super().framelist[0], text = "Time Remaining: " + str(timer), font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label4.place(anchor = "n", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
-        if timer <= 0:
-            result = "palm_explosion_Desktop.png"
-            explosion = True
-        else:
-            result = "palm_potato_Desktop.png"
-            explosion = False
-
-        resImg = super().imageCreation(result, super().getScreenH() / 2.5, super().getScreenW() / 2.5)
-  
-        label5 = desktop.Label(super().framelist[3], image = resImg, bg = super().backgroundC)
-        label5.image = resImg 
-        label5.place(anchor = "center", y = 4 * super().getScreenH() / 10, x = super().getScreenW() / 4) 
-
-        if explosion:
-            desktop.time.sleep(3)
+        # label5 = desktop.Label(super().framelist[3], image = super().imageCreation(display, super().getScreenH() / 2.5,  super().getScreenW() / 2.5, "/fragments"), bg = super().backgroundC)
+        # label5.place(anchor = "center", x = super().getScreenW() * (2 / 5), y = super().getScreenH() / 4)
 
     def standings(self, standings):
         super().standings(standings)
         self.window.win.update()
         desktop.time.sleep(10)  
-    

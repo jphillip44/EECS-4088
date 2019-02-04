@@ -46,8 +46,10 @@ class DisplayGame():
         self.screenSetup.win.update()
 
     def fragments(self, obj):
-        # print(obj.state)
-        pass
+        print(obj.state)
+        self.curScreen = desktop.FragmentsUI(self.screenSetup, obj.state)
+        self.screenSetup.win.update()
+    
 
     def multigame(self, obj):
         if obj.state.get('name'):
@@ -92,6 +94,7 @@ if __name__ == '__main__':
     # time.sleep(5)
     GAME = games.Fragments(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
+    time.sleep(5)
     GAME = games.MultiGame(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(5)

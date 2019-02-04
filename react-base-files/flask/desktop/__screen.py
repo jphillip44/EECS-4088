@@ -92,8 +92,6 @@ class DesktopUI():
     def standings(self, standings):
         self.reset()
 
-        print(standings)
-
         topFrame = Frame(height = self.screenH / 10, width = self.screenW, bg= self.backgroundC)
         topFrame.pack_propagate(False) # ensures frame doesnt shrink to size of the wigets added down the road
         topFrame.place(x = 0, y = 0)
@@ -111,8 +109,7 @@ class DesktopUI():
             frame.place(x = i * int(self.getScreenW() / numCol), y = self.getScreenH() / 10)
             for j in range(8):
                 if i * 8 + j < numPlay:
-                    print(standings[i * 8 + j])
-                    label = Label(frame, text = str(i) + ". " + str(standings[i * 8 + j]), bg = self.backgroundC, fg = 'white', font = self.setFontSize(self.getScreenH() / (20 * numCol)))
+                    label = Label(frame, text = str(i * 8 + j + 1) + ". " + str(standings[i * 8 + j]), bg = self.backgroundC, fg = 'white', font = self.setFontSize(self.getScreenH() / (20 * numCol)))
                     label.place(anchor = "nw", y = j * self.getScreenH() / 10, x = self.getScreenW() / numCol / 2)
 
 
