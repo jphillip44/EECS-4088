@@ -43,8 +43,8 @@ class Fragments extends React.Component {
             <div className="hero is-fullheight">
                 <div className="hero-body">
                     <div className="container has-text-centered">
-                        <div className="columns is-1 is-variable is-mobile">
-                            <div className="column">
+                        <div className="columns is-1 is-variable is-mobile is-centered">
+                            <div className="column is-one-fifth-desktop">
                                 <div className="level">
                                     <img
                                         className="image level-item"
@@ -70,7 +70,7 @@ class Fragments extends React.Component {
                                     />
                                 </div> 
                             </div>
-                            <div className="column">
+                            <div className="column is-one-fifth-desktop">
                                 <div className="level">
                                     <img
                                         className="image level-item"
@@ -96,10 +96,10 @@ class Fragments extends React.Component {
                                     />
                                 </div>
                             </div>
-                            <div className="column">
-                                <div className="level level-item">
+                            <div className="column is-one-fifth-desktop">
+                                <div className="level">
                                     <img
-                                        className="image"
+                                        className="image level-item"
                                         src={`/images/fragments/${this.state.fragments[2]}`}
                                         alt="Fragment 3"
                                         onClick={() => this.selectPicture(this.state.fragments[2])}

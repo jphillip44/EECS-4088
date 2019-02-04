@@ -13,6 +13,10 @@ class MultiGame extends React.Component {
         }
     }
 
+    componentWillMount() {
+        onbeforeunload = e => "Don't leave"
+    }
+
     componentDidMount() {
         this.props.socket.on('state', (data) => {
             this.setState({
@@ -41,8 +45,7 @@ class MultiGame extends React.Component {
                 valid: answer 
             });
         });
-
-        window.addEventListener('beforeunload', this.onPageRefresh);
+        //window.addEventListener('beforeunload', this.onPageRefresh);
     }
 
     componentWillUnmount() {
@@ -50,7 +53,8 @@ class MultiGame extends React.Component {
     }
 
     onPageRefresh = () => {
-        this.props.socket.emit('refresh');
+        console.log('LKJSDFLKJ');
+        prompt("Are you sure you want to refresh the page?");
     };
 
     submitTap = () => {
