@@ -6,12 +6,17 @@ class Double07UI(desktop.DesktopUI):
 
     def __init__(self, ui, obj):
         self.window = ui
+        
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         super().setup()
 
-        self.display(obj.get('players'), obj.get('timer'))
+        self.topFrameLabel = desktop.Label(super().framelist[0], text = 'init', font = self.window.deffont, bg = super().framelist[2]['bg'], fg = "white")
+        self.topFrameLabel.place(anchor = "center", y = super().getScreenH() / 20, x = super().getScreenW() / 2) 
+
         self.timer(obj.get('timer'), obj.get('players'))
+        self.display(obj.get('players'), obj.get('timer'))
+        
 
     def display(self, players, timer):
         numPlay = len(players)
@@ -71,14 +76,11 @@ class Double07UI(desktop.DesktopUI):
 
         return super().imageCreation(imgName, super().getScreenH() / 10,  super().getScreenW() / 15)
 
-    def timer (self, timer, players):
-        if timer >= 0:
-            topFrameLabel = desktop.Label(super().framelist[0], text = "Time Remaining to select an action: " + str(timer), font = self.window.deffont, bg = super().framelist[2]['bg'], fg = "white") 
-            topFrameLabel.place(anchor = "center", y = super().getScreenH() / 20, x = super().getScreenW() / 2) 
-
-        if timer == -1:
-            topFrameLabel = desktop.Label(super().framelist[0], text = "Time Remaining to select an action: 0", font = self.window.deffont, bg = super().framelist[2]['bg'], fg = "white") 
-            topFrameLabel.place(anchor = "center", y = super().getScreenH() / 20, x = super().getScreenW() / 2) 
+    def timer (self, timer, players = []):
+        if timer > -1:
+            self.topFrameLabel.config(text = "Time Remaining to select an action: " + str(timer))
+        elif timer == -1:
+            self.topFrameLabel.config(text = "Time Remaining to select an action: 0" )
 
             self.eventlog(players)
 
@@ -184,7 +186,7 @@ class Double07UI(desktop.DesktopUI):
                 desktop.time.sleep(1)
         
         self.window.win.update()   
-        desktop.time.sleep(3)  
+        desktop.time.sleep(1)  
     
     def standings(self, standings):
         super().standings(standings)

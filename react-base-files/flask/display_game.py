@@ -31,7 +31,16 @@ class DisplayGame():
 
     def double07(self, obj):
         # print(obj.state)
-        self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)        
+        timerVal = obj.state.get('timer')
+        
+        if not (isinstance(self.curScreen, desktop.Double07UI)):
+            self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)
+        else:
+            if timerVal > 0:
+                self.curScreen.timer(timerVal) 
+            else:
+                self.curScreen.__init__(self.screenSetup, obj.state)
+   
         self.screenSetup.win.update()
 
 
@@ -46,7 +55,7 @@ class DisplayGame():
         self.screenSetup.win.update()
 
     def fragments(self, obj):
-        print(obj.state)
+        # print(obj.state)
         self.curScreen = desktop.FragmentsUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
     
@@ -55,27 +64,28 @@ class DisplayGame():
         if obj.state.get('name'):
             getattr(self, obj.state['name'])(obj)
         else:
-            print(obj.state)
+            # print(obj.state)
             self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
             self.screenSetup.win.update()
 
     def simon(self, obj):
-        print(obj.state)
+        # print(obj.state)
         self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
     def multitap(self, obj):
-        print(obj.state)
+        # print(obj.state)
         self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
     def quickmaff(self, obj):
-        print(obj.state)
+        # print(obj.state)
         self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
     def instructions(self, obj):
-        print(obj.string)
+        # print(obj.string)
+        pass
 
 
 if __name__ == '__main__':
@@ -94,7 +104,7 @@ if __name__ == '__main__':
     # time.sleep(5)
     GAME = games.Fragments(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    time.sleep(5)
+    # time.sleep(5)
     GAME = games.MultiGame(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(5)
