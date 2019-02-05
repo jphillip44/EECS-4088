@@ -73,7 +73,7 @@ class DisplayGame():
 
     def multigame(self, obj):
         if obj.state.get('name'):
-            getattr(self, obj.state['name'])(obj)
+            getattr(self, obj.state['name'].casefold())(obj)
         else:
             # print(obj.state)
             self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
