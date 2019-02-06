@@ -5,6 +5,8 @@ import time
 
 class DisplayGame():
 
+    prevGame = ""
+
     def __init__(self):
         self.screenSetup = desktop.DesktopUI()
         self.curScreen = desktop.PlayerUI(self.screenSetup)
@@ -73,25 +75,47 @@ class DisplayGame():
 
     def multigame(self, obj):
         if obj.state.get('name'):
-            getattr(self, obj.state['name'])(obj)
+            getattr(self, obj.state['name'].casefold())(obj, self.prevGame)
+            self.prevGame = obj.state.get('name')
         else:
             # print(obj.state)
             self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
             self.screenSetup.win.update()
 
-    def simon(self, obj):
+    def simon(self, obj, prev):
         # print(obj.state)
-        self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        if not (isinstance(self.curScreen, desktop.MultiGameUI)):
+            self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        else:
+            timerVal = obj.state.get('timer')
+            if not(timerVal == 0) and prev == obj.state.get('name'):
+                self.curScreen.displayTimer(timerVal)
+            else:
+                self.curScreen.__init__(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
-    def multitap(self, obj):
+    def multitap(self, obj, prev):
         # print(obj.state)
-        self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        if not (isinstance(self.curScreen, desktop.MultiGameUI)):
+                self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        else:
+            timerVal = obj.state.get('timer')
+            if not(timerVal == 0) and prev == obj.state.get('name'):
+                self.curScreen.displayTimer(timerVal)
+            else:
+                self.curScreen.__init__(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
-    def quickmaff(self, obj):
+    def quickmaff(self, obj, prev):
         # print(obj.state)
-        self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        if not (isinstance(self.curScreen, desktop.MultiGameUI)):
+            self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+        else:
+            timerVal = obj.state.get('timer')
+            if not(timerVal == 0) and prev == obj.state.get('name'):
+                self.curScreen.displayTimer(timerVal)
+            else:
+                self.curScreen.__init__(self.screenSetup, obj.state)
         self.screenSetup.win.update()
 
     def instructions(self, obj):
