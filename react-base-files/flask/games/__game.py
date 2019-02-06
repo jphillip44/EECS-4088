@@ -9,6 +9,9 @@ class Game(ABC):
         def __init__(self, start=0):
             self.__ranks = []
 
+        def prepend(self, player):
+            self.__ranks.prepend(player)
+
         def append(self, player):
             self.__ranks.append(player)
 
@@ -120,7 +123,7 @@ class Game(ABC):
             results.put((stats['score'], player))
         while not results.empty():
             # self.add_ranks(results.get()[1])
-            self.ranks.append(results.get()[1])
+            self.ranks.prepend(results.get()[1])
 
     def remove_player(self, player=None):
         if self.check_alive(player):

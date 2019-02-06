@@ -6,7 +6,7 @@ from __game import Game
 
 class Fragments(Game):
     
-    def __init__(self, players, images=50, **kwargs):
+    def __init__(self, players, images=12, **kwargs):
         super().__init__(players, {'score': 0}, **kwargs)
         self.__move_queue = Queue()
         if self.socketio is not None:
@@ -49,6 +49,7 @@ class Fragments(Game):
                 for _ in range(100):
                     self.socketio.sleep(0.01)
                     self.state['timer'] -= 0.01
+                self.display_game.update(self.deepcopy)
             else:
                 self.display()
                 self.state['timer'] = timer
