@@ -29,18 +29,22 @@ USERS = {}
 GAME = None
 THREAD = None
 DISPLAY = DisplayGame()
-# DISPLAY = None
 
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
 @APP.route('/', defaults={'path': ''})
 @APP.route('/<path:path>')
 def index(path):
+    '''
+    Landing page for the app.
+    '''
     return flask.render_template('index.html')
 
 @SOCKETIO.on('joinServer')
 def join_server(data):
-    "Create a game lobby"
+    '''
+    Routine for connecting to the server as a player.
+    '''
     print(data['username'])
     USERS[flask.request.sid] = data["username"] + "/" + flask.request.sid[:3]
     print(USERS.get(flask.request.sid)  + " has logged in")
@@ -50,13 +54,14 @@ def join_server(data):
     global GAME
     display()
     global DISPLAY
-    # if DISPLAY is None:
-    #     DISPLAY = DisplayGame()
     if DISPLAY is not None and (GAME is None or not GAME.active):
         DISPLAY.update(Players())
 
 @SOCKETIO.on('createGame')
 def create_game(data):
+    '''
+    Launches a game in a seperate thread.
+    '''
     global GAME
     print(USERS)
     if GAME is None or not GAME.active:
@@ -73,16 +78,25 @@ def create_game(data):
             threading.Thread(target=check_thread).start()
         
 def check_thread():
+    '''
+    Used to check if the game thread has died and alerts the GUI.
+    '''
     THREAD.join()
     DISPLAY.update(Players())
 
 def display():
+    '''
+    Displayers user list to the console.
+    '''
     if USERS:
         print(list(USERS.values()))
 
 # When the client disconnects from the socket
 @SOCKETIO.on('disconnect')
 def disconnect():
+    '''
+    Handles server disconnect.
+    '''
     if flask.request.sid in USERS:
         user = USERS[flask.request.sid]
         USERS.pop(flask.request.sid)
@@ -125,6 +139,11 @@ def send_to_server(data):
 
 class Players():
     def __init__(self):
+        '''
+        The Players object is used by the display_game class to display users.
+        Its functionally a wrapper for a list but exists as to define a function that
+        expects a "Players" obect vs a "list" object which is a common class.
+        '''
         self.players = list(USERS.values())
 
     def get(self):
