@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 import random
 
-from queue import Queue
-from __game import Game
+from queue import Queue, Game
 
 class Fragments(Game):
-    
     def __init__(self, players, images=12, **kwargs):
+        '''
+        Sets up the games default parameters.
+        '''
         super().__init__(players, {'score': 0}, **kwargs)
         self.__move_queue = Queue()
         if self.socketio is not None:
@@ -15,12 +16,18 @@ class Fragments(Game):
         self.reset_state()
 
     def reset_state(self):
-            self.state['fragments'] = random.sample(self.__pool, 9)
-            self.state['selection'] = random.choice(self.state['fragments'])
-            self.state['display'] = self.state['selection'].replace('.fragment', '')
-            self.state['timer'] = 30
+        '''
+        Resets the game state back to default for a new round.
+        '''
+        self.state['fragments'] = random.sample(self.__pool, 9)
+        self.state['selection'] = random.choice(self.state['fragments'])
+        self.state['display'] = self.state['selection'].replace('.fragment', '')
+        self.state['timer'] = 30
 
     def display(self):
+        '''
+        Displays game state to the terminal.
+        '''
         if self.active:
             print(self.state['players'])
             print("Fragments: " + str(self.state['fragments']))
@@ -30,6 +37,9 @@ class Fragments(Game):
             self.print_standings()
 
     def action(self, data, timer=None):
+        '''
+        Handles input logic. Increases score for correct answer, decreases for incorrect.
+        '''
         print(data)
         if timer is None:
             timer = round(self.state['timer'], 2)
@@ -39,6 +49,9 @@ class Fragments(Game):
             self.state['players'][data['player']]['score'] -= min(self.state['players'][data['player']]['score'], timer)
 
     def run_game(self):
+        '''
+        Function that runs the gameloop from the server.
+        '''
         count = 0
         timer = self.state['timer']
         while self.active:
@@ -57,7 +70,6 @@ class Fragments(Game):
                 count += 1
                 if count == 5:
                     self.end_game()
-                    # self.rank_players()
             super().run_game()
 
 

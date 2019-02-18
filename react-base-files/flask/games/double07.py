@@ -2,8 +2,7 @@
 '''
 Double07 game class
 '''
-from queue import Queue, PriorityQueue
-from __game import Game
+from __game import Game, Queue, PriorityQueue
 
 class Double07(Game):
     def __init__(self, players, timer=12, **kwargs):
@@ -20,8 +19,7 @@ class Double07(Game):
 
     def action(self, data):
         '''
-        Inherited from Game. Handles controller input.
-        In Double07, passes off input to a series of queues for later processing.
+        Handles controller input, passes off input to a series of queues for later processing.
         '''
         print(data)
         if data['action'] == "attack":
@@ -47,8 +45,6 @@ class Double07(Game):
             self.__attack(*self.__attack_queue.get())
         self.rank_players()
         self.display()
-        # if self.display_game is not None:
-        #     self.display_game.update(self.deepcopy)
 
 
     def display(self):
@@ -68,7 +64,6 @@ class Double07(Game):
             self.display_game.update(self)
             self.socketio.emit('state', self.state['players'], broadcast=True)
             while self.state['timer'] > 0:
-                # self.display_game.update(self)
                 self.socketio.sleep(1)
                 print(self.state['timer'])
                 self.state['timer'] -= 1
@@ -79,16 +74,8 @@ class Double07(Game):
             print("Times up")
             self.end_round()
             self.state['timer'] -= 1
-            # self.display_game.update(self)
             self.state['timer'] = timer
             super().run_game()
-
-        # print("Game Over")
-        # self.socketio.emit('gameOver', broadcast=True)
-        # self.display_game.update(self.ranks)
-        # game.sleep(5)
-        # self.display_game.update(list(self.state['players'].keys()))
-
 
     def __defend(self, player):
         '''
@@ -129,7 +116,6 @@ class Double07(Game):
         Ranks players based on order of death.
         Simultaneous deaths are tie-broken by the player with greater AP.
             If that is tied, it is broken arbitrarily
-            (pretty sure reverse alphabetical order kicks in)
         '''
         dead = PriorityQueue()
         def check_dead():

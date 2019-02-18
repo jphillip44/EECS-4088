@@ -7,6 +7,9 @@ from __game import Game
 
 class Hot_Potato(Game):
     def __init__(self, players, **kwargs):
+        '''
+        Sets up the games default parameters.
+        '''
         super().__init__(players, {'score': 0},  **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('endOfTurn', self.action)
@@ -17,16 +20,21 @@ class Hot_Potato(Game):
         self.state['max'] = 20
 
     def action(self, data):
+        '''
+        Handles controller input.
+        '''
         self.__hold_potato = False
         if self.active:
             print(data)
             self.__hold(data['player'], data.get('time'))
             if self.state['players'][data['player']]['score'] > self.state['max']:
                 self.end_game()
-                # self.rank_players()
             self.display()
 
     def display(self):
+        '''
+        Displays game state to the terminal.
+        '''
         if self.active:
             print("timer: " + str(self.state['timer']), end = ", ")
             print("penalty: " + str(self.state['penalty']), end=", ")
@@ -37,6 +45,9 @@ class Hot_Potato(Game):
             self.print_standings()
 
     def run_game(self):
+        '''
+        Function that runs the gameloop from the server.
+        '''
         while self.active:
             self.socketio.emit('state', self.state, broadcast=True)
             self.state['current'] = self.state['next']
@@ -53,12 +64,12 @@ class Hot_Potato(Game):
                     self.__hold_potato = False
                     self.socketio.sleep(1)
             super().run_game()
-        # else:
-        #     print("Game Over")
-        #     self.socketio.emit('gameOver', broadcast=True)
 
     def __hold(self, player, time):
-        # self.state['next'] = self.__get_turn()
+        '''
+        Handles logic for holding the potato. Score increases after it passed,
+        decreases if potato explodes.
+        '''
         if time is not None:
             self.state['players'][player]['score'] += time
         else:
@@ -66,6 +77,9 @@ class Hot_Potato(Game):
             self.state['timer'] = self.__new_potato_timer()
 
     def __new_potato_timer(self):
+        '''
+        Generates a new timer for the potato.
+        '''
         self.state['penalty'] = random.randint(1, 20)
         return self.state['penalty']
 

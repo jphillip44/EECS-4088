@@ -7,6 +7,9 @@ from __game import Game
 
 class Match(Game):
     def __init__(self, players, rows=4, columns=10, shuffle=True, **kwargs):
+        '''
+        Sets up the games default parameters.
+        '''
         def init_state(players, rows, columns, shuffle):
             self.__next = itertools.cycle(list(self.state['players'].keys()))
             self.state['next'] = (next(self.__next), next(self.__next))
@@ -33,6 +36,9 @@ class Match(Game):
         init_state(self.players, rows, columns, shuffle)
 
     def display(self):
+        '''
+        Displays the game state to the console.
+        '''
         if self.active:
             print("Board")
             print(*self.state['board'], sep='\n')
@@ -46,6 +52,9 @@ class Match(Game):
             self.print_standings()
 
     def run_game(self):
+        '''
+        Function that runs the gameloop from the server.
+        '''
         timer = self.state['timer']
         while self.active:
             self.display_game.update(self.deepcopy)
@@ -68,9 +77,14 @@ class Match(Game):
             super().run_game()
 
 
-
     def action(self, data=None):
+        '''
+        Handles input logic for card selection.
+        '''
         def is_match():
+            '''
+            Handles logic for matching cards.
+            '''
             if self.socketio is not None:
                 self.socketio.emit('flip', broadcast=True)
             if self.state['board'][self.__p1[1]] == self.state['board'][self.__p2[1]]:
@@ -87,7 +101,6 @@ class Match(Game):
         if data is None:
             data = tuple(self.state['cursor'])
             
-    
         print("value: " + self.state['board'][data])
         self.__waiting = False
         if self.__p1 is None:
@@ -104,11 +117,16 @@ class Match(Game):
 
 
     def check_end(self):
+        '''
+        checks if the game is over.
+        '''
         if list(self.state['gameBoard'].flatten()).count('XX') == 0:
             self.end_game()
-            # self.rank_players()
 
     def left(self):
+        '''
+        Handles logic for left on the controller including wraparound.
+        '''
         if self.state['cursor'][1] > 0:
             self.state['cursor'][1] -= 1
         else:
@@ -120,6 +138,9 @@ class Match(Game):
         print(self.state['cursor'])
 
     def right(self):
+        '''
+        Handles logic for right on the controller including wraparound.
+        '''
         if self.state['cursor'][1] < self.columns - 1:
             self.state['cursor'][1] += 1
         else:
@@ -131,6 +152,9 @@ class Match(Game):
         print(self.state['cursor'])
 
     def up(self):
+        '''
+        Handles logic for up on the controller including wraparound.
+        '''
         if self.state['cursor'][0] > 0:
             self.state['cursor'][0] -= 1
         else:
@@ -142,6 +166,9 @@ class Match(Game):
         print(self.state['cursor'])
 
     def down(self):
+        '''
+        Handles logic for down on the controller including wraparound.
+        '''
         if self.state['cursor'][0] < self.rows - 1:
             self.state['cursor'][0] += 1
         else:
@@ -152,10 +179,10 @@ class Match(Game):
             self.display_game.update(self.deepcopy)
         print(self.state['cursor'])
 
-    # def selected(self, data):
-    #     return self.state['cursor'] != 'XX'
-
     def __get_turn(self):
+        '''
+        Gets the next players turn.
+        '''
         return next(self.__next)
 
 if __name__ == '__main__':

@@ -2,25 +2,46 @@
 from copy import deepcopy, copy
 from abc import ABC, abstractmethod
 from queue import Queue, PriorityQueue
-from collections import OrderedDict
+from collections import OrderedDict, deque
 
 class Game(ABC):
+    
     class Ranks():
-        def __init__(self, start=0):
-            self.__ranks = []
+        '''
+        The ranks object is used by the display_game class to display standings.
+        Its functionally a wrapper for a deque but exists as to define a function that
+        expects a "Rank" object vs a "deque" object which is a common class.
+        '''
+        def __init__(self):
+            '''
+            Initializes Ranks as a deque().
+            '''
+            self.__ranks = deque()
 
         def prepend(self, player):
-            self.__ranks.prepend(player)
+            '''
+            Prepends player to ranks.
+            '''
+            self.__ranks.appendleft(player)
 
         def append(self, player):
+            '''
+            Appends player to ranks.
+            '''
             self.__ranks.append(player)
 
         def __iter__(self):
+            '''
+            Makes ranks iterable.
+            '''
             for item in self.__ranks:
                 yield item
 
         @property
         def ranks(self):
+            '''
+            Public accessor for private object __ranks
+            '''
             return self.__ranks
 
     def __init__(self, players, default, **kwargs):
@@ -40,9 +61,13 @@ class Game(ABC):
         self.state['players'] = OrderedDict()
         for player in players:
             self.state['players'][player] = copy(default)
-        self.__active_players = len(players)
+        self.__active_players = len(list(players))
 
     def __deepcopy__(self, memo):
+        '''
+        Redefines deepcopy to not include to not deepcopy private objects
+        and items produced by optional arguments.
+        '''
         cls = self.__class__
         result = cls.__new__(cls)
         memo[id(self)] = result
@@ -53,10 +78,18 @@ class Game(ABC):
 
     @abstractmethod
     def display(self):
+        '''
+        Abstract method display forces the child to redefine it.
+        Used to display data to the console.
+        '''
         pass
 
     @abstractmethod
     def run_game(self):
+        '''
+        Abstract method run_game forces the child to redefine it.
+        Current version is only usable by calling super from child.
+        '''
         if self.__active_players < 1:
             self.end_game()   
 
@@ -73,40 +106,18 @@ class Game(ABC):
         if self.socketio is not None:
             self.socketio.emit('gameOver', broadcast=True)
 
-
-    # @property
-    # def active(self):
-    #     '''
-    #     Query to determine if a game is active.
-    #     '''
-    #     return self.__active_game
-
-    # @active.setter
-    # def active(self, value):
-    #     self.__active_game = value
-
-    # @active.deleter
-    # def active(self):
-    #     del self.__active_game
-
-    # @property
-    # def state(self):
-    #     return self.__state
-
-    # @state.setter
-    # def state(self, value):
-    #     self.__state = value
-
-    # @state.deleter
-    # def state(self):
-    #     del self.__state
-
     @property
     def players(self):
+        '''
+        Public accessor for __players
+        '''
         return self.__players
 
     @property
     def deepcopy(self):
+        '''
+        Allows functions in game to call obj.deepcopy without importing deepcopy.
+        '''
         return deepcopy(self)
 
     def print_standings(self):
@@ -118,26 +129,35 @@ class Game(ABC):
             print(str(i) + ": " + str(item))
 
     def rank_players(self):
+        '''
+        Function for ranking players. Stores data in a priority queue to heapsort it.
+        '''
         results = PriorityQueue()
         for player, stats in self.state['players'].items():
             results.put((stats['score'], player))
         while not results.empty():
-            # self.add_ranks(results.get()[1])
             self.ranks.prepend(results.get()[1])
 
     def remove_player(self, player=None):
+        '''
+        Decrements player count if a player drops from a game.
+        '''
         if self.check_alive(player):
             self.__active_players -= 1
         print("players left: " + str(self.__active_players))
-        # if player in self.state['players']:
-        #     self.state['players'].pop(player)
 
     def add_player(self, player=None):
+        '''
+        Increments player if a player rejoins game.
+        '''
         if self.check_alive(player):
             self.__active_players += 1
         print("players left: " + str(self.__active_players))
 
     def check_alive(self, player):
+        '''
+        Checks if a player is alive in the current game.
+        '''
         if player is not None:
             hp = self.state['players'][player].get("hp")
             print(hp)

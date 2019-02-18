@@ -8,16 +8,21 @@ from __game import Game, ABC
 
 class MultiGame(Game):
     class SubGame(ABC):
+        '''
+        The SubGame object is used to be the parent class of any subgames for multigame.
+        It handles common default parameters for all the games.
+        '''
         def __init__(self, game):
             game.state['timer'] = self.timer
             game.state['valid'] = self.valid
             game.state['name'] = self.__class__.__name__
-            # if game.display_game is not None:
-            #     game.display_game.update(game.deepcopy)
             game.display()
 
     class Simon(SubGame):
         def __init__(self, game, level):
+            '''
+            Sets up the games default parameters.
+            '''
             choices = ['Red', 'Blue', 'Green', 'Yellow']
             self.valid = list(np.random.choice(choices, level + 4))
             self.timer = 20
@@ -25,12 +30,18 @@ class MultiGame(Game):
 
     class MultiTap(SubGame):
         def __init__(self, game, level):
+            '''
+            Sets up the games default parameters.
+            '''
             self.valid = np.random.randint(level + 2, 2*level + 4)
             self.timer = 20
             super().__init__(game)
 
     class QuickMaff(SubGame):
         def __init__(self, game, level):
+            '''
+            Sets up the games default parameters.
+            '''
             ops = {
                 '+': operator.add, 
                 '-': operator.sub,
@@ -47,15 +58,19 @@ class MultiGame(Game):
 
 
     def __init__(self, players, lives=5, **kwargs):
+        '''
+        Sets up the games default parameters.
+        '''
         super().__init__(players, {'hp' : lives, 'correct': False, 'old_correct': None}, **kwargs)
         if self.socketio is not None:
             self.socketio.on_event('action', self.action)
 
     def run_game(self):
+        '''
+        Function that runs the gameloop from the server.
+        '''
         level = 0
-        # timer = self.state['timer']
         while self.active:
-            # for d in dir(MultiGame):
             for game in self.SubGame.__subclasses__():
                 if self.active:
                     getattr(self, game.__name__)(self, level)
@@ -66,11 +81,10 @@ class MultiGame(Game):
                         self.state['timer'] -= 1
                         print(self.state['timer'])
                         self.display_game.update(self.deepcopy)
-                    # self.state['timer'] = timer
                     self.socketio.emit('timerExpired', self.state, broadcast=True)
                     self.socketio.sleep(1)
                     self.display_game.update(self.deepcopy)
-                    self.check_turns()
+                    self.check_answers()
                     self.display()
                     self.rank_players()
                     self.state.pop('name')
@@ -80,7 +94,15 @@ class MultiGame(Game):
             level += 1
 
     def rank_players(self):
+        '''
+        Ranks players based on order of death.
+        Simultaneous deaths are broken arbitrarily.
+        '''
         def check_dead():
+            '''
+            A local function to __rank_players().
+            Adds players to ranking queue if they are dead.
+            '''
             for player, stats in self.state['players'].items():
                 if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     stats['hp'] = 'dead'
@@ -88,6 +110,10 @@ class MultiGame(Game):
                     self.ranks.append(player)
 
         def check_alive():
+            '''
+            A local function to __rank_players().
+            Returns a list of living players.
+            '''
             for player, stats in self.state['players'].items():
                 if stats['hp'] != 'dead':
                     yield player
@@ -101,18 +127,27 @@ class MultiGame(Game):
             
 
     def display(self):
+        '''
+        Displays the game state to the console.
+        '''
         if self.active:
             print(self.state)
         else:
             self.print_standings()
 
     def action(self, data):
+        '''
+        Checks if controller input is valid.
+        '''
         print(data)
         if data['valid'] == self.state['valid']:
-            # self.state['players'][data['player']]['turn'] = False
             self.state['players'][data['player']]['correct'] = True
 
-    def check_turns(self):
+    def check_answers(self):
+        '''
+        Checks to make sure a players input is valid, otherwise they lose a life.
+        If they didn't go, they also lose a life.
+        '''
         for player, state in self.state['players'].items():
             if state['hp'] != 'dead' and state['hp'] > 0:
                 state['old_correct'] = state['correct']
@@ -131,14 +166,14 @@ if __name__ == '__main__':
         game.MultiTap(game, level)
         game.action({'player': 'A', 'valid': game.state['valid']})
         game.action({'player': 'B', 'valid': None})
-        game.check_turns()
+        game.check_answers()
         game.QuickMaff(game, level)
         game.action({'player': 'B', 'valid': game.state['valid']})
         game.action({'player': 'A', 'valid': None})
-        game.check_turns()
+        game.check_answers()
         game.Simon(game, level)
         game.action({'player': 'A', 'valid': game.state['valid']})
-        game.check_turns()
+        game.check_answers()
         level += 1
         game.display()
 
