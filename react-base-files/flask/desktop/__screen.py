@@ -110,7 +110,7 @@ class DesktopUI():
             for j in range(8):
                 if i * 8 + j < numPlay:
                     label = Label(frame, text = str(i * 8 + j + 1) + ". " + str(standings[i * 8 + j]), bg = self.backgroundC, fg = 'white', font = self.setFontSize(self.getScreenH() / (20 * numCol)))
-                    label.place(anchor = "nw", y = j * self.getScreenH() / 10, x = self.getScreenW() / numCol / 2)
+                    label.place(anchor = "nw", y = j * self.getScreenH() / 10, x = self.getScreenW() / numCol / 2 - self.getScreenW() / 15)
 
 
             self.addFrame(frame)

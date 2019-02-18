@@ -7,7 +7,10 @@ class MatchingUI(desktop.DesktopUI):
 
     prevCursor = [0, 0]
 
-    def __init__(self, ui, obj):
+    columns = 0
+    rows = 0
+
+    def __init__(self, ui, obj, columns, rows):
         self.window = ui
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
@@ -16,7 +19,10 @@ class MatchingUI(desktop.DesktopUI):
         self.topFrameLabel = desktop.Label (super().framelist[0], text = "init", bg = super().backgroundC, font = super().setFontSize(int((super().getScreenH() / 30))), fg = 'white')
         self.topFrameLabel.place(anchor = "center", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
-        self.display(obj['gameBoard'], obj['next'], obj['cursor'], obj['timer'])
+        self.columns = columns
+        self.rows = rows
+
+        self.display(obj.get('gameBoard'), obj.get('next'), obj.get('cursor'), obj.get('timer'))
 
     def setup(self): 
         super().setup()
@@ -25,18 +31,19 @@ class MatchingUI(desktop.DesktopUI):
             super().framelist[1].destroy
             del super().framelist[1]
 
-        super().framelist[1] = desktop.Frame(height = (super().getScreenH() / 10) * 8, width = super().getScreenW(), bg = super().backgroundC)
+        super().framelist[1] = desktop.Frame(height = (super().getScreenH() / 10) * 8, width = super().getScreenW() * self.rows / 10, bg = super().backgroundC)
         super().framelist[1].pack_propagate(False)
-        super().framelist[1].place(x = 0, y = super().getScreenH() / 10)
+        super().framelist[1].place(anchor = 'center', x = super().getScreenW() / 2, y = super().getScreenH() / 2)
 
         bottomFrame = desktop.Frame(height = super().getScreenH() / 10, width = super().getScreenW(), bg = super().backgroundC)
         bottomFrame.pack_propagate(False)
         bottomFrame.place (y = super().getScreenH() * 9/10, x = 0)
         super().addFrame(bottomFrame)
 
+
     def display(self, boardState, nextP, cursor, timer):
-        for i in range (4):
-            for j in range (10):
+        for i in range (self.rows):
+            for j in range (self.columns):
                 cardFilename = self.getCardImgName(boardState[i, j])
 
                 if cursor == [i, j]:

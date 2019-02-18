@@ -57,11 +57,11 @@ class DisplayGame():
     def match(self, obj):
         # print(obj.state)
         if not (isinstance(self.curScreen, desktop.MatchingUI)):
-            self.curScreen = desktop.MatchingUI(self.screenSetup, obj.state)
+            self.curScreen = desktop.MatchingUI(self.screenSetup, obj.state, obj.columns, obj.rows)
         elif not (self.curScreen.prevCursor == obj.state.get('cursor')):
             self.curScreen.cursorMove(obj.state.get('cursor'), obj.state.get('gameBoard'))
-        # elif True:
-            # self.curScreen.__init__(self.screenSetup, obj.state)
+        elif obj.get('gameBoard')[obj.get('cursor')] == 'ZZ':
+           self.curScreen.prevCursor = obj.get('cursor')
         else:
             self.curScreen.displayTimer(obj.state.get('timer'), obj.state.get('next', ['broken'])[0])
             
@@ -75,52 +75,27 @@ class DisplayGame():
 
     def multigame(self, obj):
         if obj.state.get('name'):
-            getattr(self, obj.state['name'].casefold())(obj, self.prevGame)
+            # getattr(self, obj.state['name'].casefold())(obj, self.prevGame)
+            if not (isinstance(self.curScreen, desktop.MultiGameUI)):
+                self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
+                self.prevGame = obj.state.get('name')
+            else:
+                timerVal = obj.state.get('timer')
+                if not(timerVal == 0) and prevGame == obj.state.get('name'):
+                    self.curScreen.displayTimer(timerVal)
+                else:
+                    self.curScreen.__init__(self.screenSetup, obj.state)
+                    self.screenSetup.win.update()
             self.prevGame = obj.state.get('name')
         else:
             # print(obj.state)
             self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
             self.screenSetup.win.update()
 
-    def simon(self, obj, prev):
-        # print(obj.state)
-        if not (isinstance(self.curScreen, desktop.MultiGameUI)):
-            self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
-        else:
-            timerVal = obj.state.get('timer')
-            if not(timerVal == 0) and prev == obj.state.get('name'):
-                self.curScreen.displayTimer(timerVal)
-            else:
-                self.curScreen.__init__(self.screenSetup, obj.state)
-        self.screenSetup.win.update()
-
-    def multitap(self, obj, prev):
-        # print(obj.state)
-        if not (isinstance(self.curScreen, desktop.MultiGameUI)):
-                self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
-        else:
-            timerVal = obj.state.get('timer')
-            if not(timerVal == 0) and prev == obj.state.get('name'):
-                self.curScreen.displayTimer(timerVal)
-            else:
-                self.curScreen.__init__(self.screenSetup, obj.state)
-        self.screenSetup.win.update()
-
-    def quickmaff(self, obj, prev):
-        # print(obj.state)
-        if not (isinstance(self.curScreen, desktop.MultiGameUI)):
-            self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
-        else:
-            timerVal = obj.state.get('timer')
-            if not(timerVal == 0) and prev == obj.state.get('name'):
-                self.curScreen.displayTimer(timerVal)
-            else:
-                self.curScreen.__init__(self.screenSetup, obj.state)
-        self.screenSetup.win.update()
-
     def instructions(self, obj):
-        # print(obj.string)
-        pass
+        print(obj.string)
+        self.curScreen = desktop.instructionsUI(self.screenSetup, obj.state)
+        # pass
 
 
 if __name__ == '__main__':
@@ -136,7 +111,7 @@ if __name__ == '__main__':
     # time.sleep(2)
     GAME = games.Match(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
-    time.sleep(5)
+    # time.sleep(5)
     GAME = games.Fragments(PLAYERS)
     DISPLAY.update(GAME.deepcopy)
     # time.sleep(5)

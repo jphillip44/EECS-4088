@@ -47,11 +47,14 @@ class FragmentsUI (desktop.DesktopUI):
         label3 = desktop.Label(super().framelist[0], text = "Find the fragment that matches the image", font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label3.place(anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
-        label4 = desktop.Label(super().framelist[0], text = "Time Remaining: " + str(timer), font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
+        label4 = desktop.Label(super().framelist[0], text = "Time Remaining: " + str(int(timer)), font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label4.place(anchor = "n", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
-        # label5 = desktop.Label(super().framelist[3], image = super().imageCreation(display, super().getScreenH() / 2.5,  super().getScreenW() / 2.5, "/fragments"), bg = super().backgroundC)
-        # label5.place(anchor = "center", x = super().getScreenW() * (2 / 5), y = super().getScreenH() / 4)
+        fragmentImg = super().imageCreation(fragment, super().getScreenW() / 2.5,  super().getScreenW() / 2.5, "/fragments")
+
+        label5 = desktop.Label(super().framelist[3], image = fragmentImg, bg = super().backgroundC)
+        label5.img = fragmentImg
+        label5.place(anchor = "center", y = super().getScreenH() * (2 / 5), x = super().getScreenW() / 4)
 
     def standings(self, standings):
         super().standings(standings)

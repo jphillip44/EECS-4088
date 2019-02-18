@@ -7,13 +7,19 @@ class MultiGameUI (desktop.DesktopUI):
         self.window = ui
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
-        super().setup()
+        self.setup()
+        
         if obj.get('name') == "QuickMaff":
             formula = obj.get('formula')
         else:
             formula = ""
 
         self.display(obj.get('players'), obj.get('valid'), obj.get('name'), obj.get('timer'), formula)
+
+    def setup(self):
+        super().setup()
+        self.timerLabel = desktop.Label(super().framelist[3], text = "", fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 10))
+        self.timerLabel.place(anchor = "center", x = super().getScreenW() / 4, y = super().getScreenH() * 2/5) 
 
     def display(self, players, valid, game, timer, formula):
         numPlay = len(players)
@@ -72,7 +78,7 @@ class MultiGameUI (desktop.DesktopUI):
         elif game == "QuickMaff":
             self.displayQM(formula, timer)
         else:
-            self.displayTap(timer, timer)         
+            self.displayTap(valid, timer)         
 
     def heartDisplay(self, lives):
         if lives == 0 or lives == 'dead':
@@ -100,9 +106,11 @@ class MultiGameUI (desktop.DesktopUI):
 
             for i in seq:
                 super().framelist[3]['bg'] = i.lower()
+                self.timerLabel['bg'] = i.lower()
                 desktop.time.sleep(1)
                 self.window.win.update()
                 super().framelist[3]['bg'] = super().framelist[2]['bg']
+                self.timerLabel['bg'] = super().framelist[2]['bg']
                 desktop.time.sleep(.5)
                 self.window.win.update()
 
@@ -132,8 +140,7 @@ class MultiGameUI (desktop.DesktopUI):
         timerHeader = desktop.Label(super().framelist[3], text = "Time Remaining: ", fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 30))
         timerHeader.place(anchor = "s", x = super().getScreenW() / 4, y = super().getScreenH() * 1/5)
 
-        self.timerLabel = desktop.Label(super().framelist[3], text = str(timer), fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 10))
-        self.timerLabel.place(anchor = "center", x = super().getScreenW() / 4, y = super().getScreenH() * 2/5)
+        self.timerLabel.configure(text = str(timer))
 
     def standings(self, standings):
         super().standings(standings)
