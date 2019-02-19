@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import random
 
-from queue import Queue, Game
+from __game import Queue, Game
 
 class Fragments(Game):
     def __init__(self, players, images=12, **kwargs):

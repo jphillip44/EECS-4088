@@ -20,7 +20,7 @@ class App extends Component {
             gameList: []
         };
 
-        this.socket = io('http://192.168.0.14:5000');
+        this.socket = io('http://localhost:5000');
     }
 
     updateUsername = (username) => {
