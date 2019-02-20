@@ -56,20 +56,40 @@ class DisplayGame():
 
     def match(self, obj):
         # print(obj.state)
+        
         if not (isinstance(self.curScreen, desktop.MatchingUI)):
             self.curScreen = desktop.MatchingUI(self.screenSetup, obj.state, obj.columns, obj.rows)
         elif not (self.curScreen.prevCursor == obj.state.get('cursor')):
             self.curScreen.cursorMove(obj.state.get('cursor'), obj.state.get('gameBoard'))
-        elif obj.get('gameBoard')[obj.get('cursor')] == 'ZZ':
-           self.curScreen.prevCursor = obj.get('cursor')
+        elif obj.state.get('gameBoard')[obj.state.get('cursor')[0], obj.state.get('cursor')[1]] == 'ZZ':
+           self.curScreen.cardTaken = True
+           self.curScreen.cardTakenPos = obj.state.get('cursor')
+           self.curScreen.updateCard(obj.state.get('gameBoard')[obj.state.get('cursor')[0], obj.state.get('cursor')[1]], obj.state.get('cursor'), True)
+
         else:
             self.curScreen.displayTimer(obj.state.get('timer'), obj.state.get('next', ['broken'])[0])
-            
+        
+        if self.curScreen.cardTaken and not (obj.state.get('gameBoard')[self.curScreen.cardTakenPos[0], self.curScreen.cardTakenPos[1]] == "ZZ"):
+            self.curScreen.updateCard("ZZ", obj.state.get('cursor'), True)
+            self.screenSetup.win.update()
+            time.sleep(5)
+            self.curScreen.cardTaken = False
+            self.curScreen.updateCard(obj.state.get('gameBoard')[self.curScreen.cardTakenPos[0], self.curScreen.cardTakenPos[1]], self.curScreen.cardTakenPos, False)
+            self.curScreen.updateCard(obj.state.get('gameBoard')[obj.state.get('cursor')[0], obj.state.get('cursor')[1]], obj.state.get('cursor'), True)
+
+
         self.screenSetup.win.update()
 
     def fragments(self, obj):
         # print(obj.state)
-        self.curScreen = desktop.FragmentsUI(self.screenSetup, obj.state)
+        if not (isinstance(self.curScreen, desktop.FragmentsUI)):
+            self.curScreen = desktop.FragmentsUI(self.screenSetup, obj.state)
+        else:
+            if obj.state.get('timer') > 0:
+                self.curScreen.timer(obj.state.get('timer'))
+            else: 
+                self.curScreen.__init__(self.screenSetup, obj.state)
+
         self.screenSetup.win.update()
     
 
@@ -94,8 +114,9 @@ class DisplayGame():
 
     def instructions(self, obj):
         print(obj.string)
-        self.curScreen = desktop.instructionsUI(self.screenSetup, obj.state)
-        # pass
+        self.curScreen = desktop.instructionsUI(self.screenSetup, obj.string)
+        self.screenSetup.win.update()
+        # time.sleep(20)
 
 
 if __name__ == '__main__':

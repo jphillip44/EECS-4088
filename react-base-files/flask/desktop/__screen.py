@@ -78,6 +78,9 @@ class DesktopUI():
     def getScreenW(self):
         return int (self.screenW)
 
+    def setWindow (self, window):
+        self.win = window
+
     def imageCreation (self, filename, height, width, folder = ""):
         path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images/' + str(folder))
         imageFolder = Path(path)
@@ -115,9 +118,9 @@ class DesktopUI():
 
             self.addFrame(frame)
 
+        self.win.update()
+        time.sleep(10) 
 
-    def instructions(self, game, obj):
-         pass
 
     @property
     def screen(self):

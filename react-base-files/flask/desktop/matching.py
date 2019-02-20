@@ -10,8 +10,12 @@ class MatchingUI(desktop.DesktopUI):
     columns = 0
     rows = 0
 
+    cardTaken = False
+    cardTakenPos = [0, 0]
+
     def __init__(self, ui, obj, columns, rows):
         self.window = ui
+        super().setWindow(self.window.win)
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         self.setup()
@@ -44,21 +48,12 @@ class MatchingUI(desktop.DesktopUI):
     def display(self, boardState, nextP, cursor, timer):
         for i in range (self.rows):
             for j in range (self.columns):
-                cardFilename = self.getCardImgName(boardState[i, j])
-
+        
                 if cursor == [i, j]:
-                    cardFrame = desktop.Frame(super().framelist[1], height = super().getScreenH() / 5 - 20, width = super().getScreenW() / 10 - 20, bg = super().backgroundC, highlightthickness = 10)
-                    cardImage = super().imageCreation(cardFilename, super().getScreenH() / 5 - 45, super().getScreenW() / 10 - 45, "/match/cards")
-                else:
-                    cardFrame = desktop.Frame(super().framelist[1], height = super().getScreenH() / 5 - 20, width = super().getScreenW() / 10 - 20, bg = super().backgroundC)
-                    cardImage = super().imageCreation(cardFilename, super().getScreenH() / 5 - 20, super().getScreenW() / 10 - 20, "/match/cards")
-               
-                cardFrame.pack_propagate(False)
-                cardFrame.grid(row = i, column = j, padx = 10, pady = 10) 
+                    self.updateCard(boardState[i, j], [i, j], True)
 
-                label = desktop.Label(cardFrame, image = cardImage, bg = super().backgroundC)
-                label.img = cardImage
-                label.place(x = 0, y = 0)
+                else:
+                    self.updateCard(boardState[i, j], [i, j], False)
         
         self.displayTimer(timer, nextP[0])
 
@@ -69,25 +64,9 @@ class MatchingUI(desktop.DesktopUI):
         self.topFrameLabel.config(text = str(nextPlayer) + " select a card for the board. Time Remaining: " + str(timer))
 
     def cursorMove (self, cursor, boardState):
-        cardFrame = desktop.Frame(super().framelist[1], height = super().getScreenH() / 5 - 20, width = super().getScreenW() / 10 - 20, bg = super().backgroundC)
-        cardImage = super().imageCreation(self.getCardImgName(boardState[self.prevCursor[0], self.prevCursor[1]]), super().getScreenH() / 5 - 20, super().getScreenW() / 10 - 20, "/match/cards")
+        self.updateCard(boardState[self.prevCursor[0], self.prevCursor[1]], [self.prevCursor[0], self.prevCursor[1]], False)
 
-        cardFrame.pack_propagate(False)
-        cardFrame.grid(row = self.prevCursor[0], column = self.prevCursor[1], padx = 10, pady = 10) 
-
-        label = desktop.Label(cardFrame, image = cardImage, bg = super().backgroundC)
-        label.img = cardImage
-        label.place(x = 0, y = 0)
-
-        cardFrame = desktop.Frame(super().framelist[1], height = super().getScreenH() / 5 - 20, width = super().getScreenW() / 10 - 20, bg = super().backgroundC, highlightthickness = 10)
-        cardImage = super().imageCreation(self.getCardImgName(boardState[cursor[0], cursor[1]]), super().getScreenH() / 5 - 45, super().getScreenW() / 10 - 45, "/match/cards")
-
-        cardFrame.pack_propagate(False)
-        cardFrame.grid(row = cursor[0], column = cursor[1], padx = 10, pady = 10) 
-
-        label2 = desktop.Label(cardFrame, image = cardImage, bg = super().backgroundC)
-        label2.img = cardImage
-        label2.place(x = 0, y = 0)
+        self.updateCard(boardState[cursor[0], cursor[1]], [cursor[0], cursor[1]], True)
 
         self.prevCursor = cursor
 
@@ -101,7 +80,27 @@ class MatchingUI(desktop.DesktopUI):
 
         return cardFileName
 
+    def updateCard (self, card, position, highlighted):
+        if highlighted:
+            cardFrame = desktop.Frame(super().framelist[1], height = super().getScreenH() / 5 - 20, width = super().getScreenW() / 10 - 20, bg = super().backgroundC, highlightthickness = 10)
+            cardImage = super().imageCreation(self.getCardImgName(card), super().getScreenH() / 5 - 45, super().getScreenW() / 10 - 45, "/match/cards")
+
+            cardFrame.pack_propagate(False)
+            cardFrame.grid(row = position[0], column = position[1], padx = 10, pady = 10) 
+
+            label2 = desktop.Label(cardFrame, image = cardImage, bg = super().backgroundC)
+            label2.img = cardImage
+            label2.place(x = 0, y = 0)
+        else:
+            cardFrame = desktop.Frame(super().framelist[1], height = super().getScreenH() / 5 - 20, width = super().getScreenW() / 10 - 20, bg = super().backgroundC)
+            cardImage = super().imageCreation(self.getCardImgName(card), super().getScreenH() / 5 - 20, super().getScreenW() / 10 - 20, "/match/cards")
+
+            cardFrame.pack_propagate(False)
+            cardFrame.grid(row = position[0], column = position[1], padx = 10, pady = 10) 
+
+            label = desktop.Label(cardFrame, image = cardImage, bg = super().backgroundC)
+            label.img = cardImage
+            label.place(x = 0, y = 0)
+
     def standings(self, standings):
         super().standings(standings)
-        self.window.win.update()
-        desktop.time.sleep(10)  

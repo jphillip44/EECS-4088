@@ -5,6 +5,7 @@ class MultiGameUI (desktop.DesktopUI):
 
     def __init__(self, ui, obj):
         self.window = ui
+        super().setWindow(self.window.win)  
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         self.setup()
@@ -144,7 +145,6 @@ class MultiGameUI (desktop.DesktopUI):
 
     def standings(self, standings):
         super().standings(standings)
-        self.window.win.update()
-        desktop.time.sleep(10)    
+
 
 

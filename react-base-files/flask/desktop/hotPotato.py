@@ -3,13 +3,13 @@ import desktop
 class HotPotatoUI(desktop.DesktopUI):
     window = 0
 
-
     def __init__(self, ui, obj):
         self.window = ui
+        super().setWindow(self.window.win)
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         self.setup()
-        self.display(obj.get('players'), obj.get('timer'), obj.get('next'))
+        self.display(obj.get('players'), obj.get('timer'), obj.get('next'), obj.get('max'))
 
     def setup(self):
         super().setup()
@@ -25,7 +25,7 @@ class HotPotatoUI(desktop.DesktopUI):
         super().framelist[2].pack_propagate(False)
         super().framelist[2].place(x = 2/3 * super().getScreenW(), y = super().getScreenH() / 10)
 
-    def display(self, players, timer, nextP):
+    def display(self, players, timer, nextP, max):
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -74,7 +74,7 @@ class HotPotatoUI(desktop.DesktopUI):
                 label5.image = resImg 
                 label5.place(anchor = "nw", y = yPos, x = super().getScreenW() / 4) 
 
-        label3 = desktop.Label(super().framelist[0], text = "First to X points wins!", font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
+        label3 = desktop.Label(super().framelist[0], text = "First to " + str(max) + " points wins!", font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label3.place(anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
         label4 = desktop.Label(super().framelist[0], text = "Next player: " + nextP, font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
@@ -85,6 +85,5 @@ class HotPotatoUI(desktop.DesktopUI):
 
     def standings(self, standings):
         super().standings(standings)
-        self.window.win.update()
-        desktop.time.sleep(10)  
+ 
     

@@ -2,13 +2,23 @@ import desktop
 
 class FragmentsUI (desktop.DesktopUI):
     window = 0
+    timerLabel = ""
 
     def __init__(self, ui, obj):
         self.window = ui
+
         super().setscreen(self.window.screenW, self.window.screenH)
+        super().setWindow(self.window.win)
         super().reset()
+        self.setup()
+        self.display(obj.get('players'), obj.get('timer'), obj.get('display'))\
+    
+    def setup(self):
         super().setup()
-        self.display(obj.get('players'), obj.get('timer'), obj.get('display'))
+
+        self.timerLabel = desktop.Label(super().framelist[0], text = "Time Remaining: " , font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = 'white')
+        self.timerLabel.place(anchor = "n", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
+
 
     def display(self, players, timer, fragment):
         numPlay = len(players)
@@ -47,16 +57,14 @@ class FragmentsUI (desktop.DesktopUI):
         label3 = desktop.Label(super().framelist[0], text = "Find the fragment that matches the image", font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
         label3.place(anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
-        label4 = desktop.Label(super().framelist[0], text = "Time Remaining: " + str(int(timer)), font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = textColour)
-        label4.place(anchor = "n", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
-
         fragmentImg = super().imageCreation(fragment, super().getScreenW() / 2.5,  super().getScreenW() / 2.5, "/fragments")
 
         label5 = desktop.Label(super().framelist[3], image = fragmentImg, bg = super().backgroundC)
         label5.img = fragmentImg
         label5.place(anchor = "center", y = super().getScreenH() * (2 / 5), x = super().getScreenW() / 4)
 
+    def timer (self, timer):
+        self.timerLabel.configure(text = "Time Remaining: " + str(int(timer)))
+
     def standings(self, standings):
         super().standings(standings)
-        self.window.win.update()
-        desktop.time.sleep(10)  

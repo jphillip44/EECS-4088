@@ -6,7 +6,7 @@ class Double07UI(desktop.DesktopUI):
 
     def __init__(self, ui, obj):
         self.window = ui
-        
+        super().setWindow(self.window.win)
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         super().setup()
@@ -77,9 +77,9 @@ class Double07UI(desktop.DesktopUI):
         return super().imageCreation(imgName, super().getScreenH() / 10,  super().getScreenW() / 15)
 
     def timer (self, timer, players = []):
-        if timer > -1:
+        if timer > 0:
             self.topFrameLabel.config(text = "Time Remaining to select an action: " + str(timer))
-        elif timer == -1:
+        elif timer <= 0:
             self.topFrameLabel.config(text = "Time Remaining to select an action: 0" )
 
             self.eventlog(players)
@@ -190,5 +190,3 @@ class Double07UI(desktop.DesktopUI):
     
     def standings(self, standings):
         super().standings(standings)
-        self.window.win.update()
-        desktop.time.sleep(10)  

@@ -4,8 +4,9 @@ class instructionsUI(desktop.DesktopUI):
     
     window = 0
 
-    def __init__(self, ui, obj):
+    def __init__(self, ui, instructions):
         self.window = ui
+        super().setWindow(self.window)
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
 
@@ -14,8 +15,6 @@ class instructionsUI(desktop.DesktopUI):
         windowFrame.place(x = 0, y = 0)
         super().addFrame(windowFrame)
 
-        instr = desktop.Label(windowFrame, text = obj.state, font = super().setFontSize(super().getScreenH() / 20), bg = super().backgroundC, fg = 'white')
-        instr.place(anchor = 'center', x = super().getScreenW() / 2, y = super().getScreenH / 2)
-
-        desktop.time.sleep(20)
+        instr = desktop.Label(windowFrame, text = instructions, font = super().setFontSize(super().getScreenH() / 30), bg = super().backgroundC, fg = 'white', justify = 'left', wraplength = super().getScreenW())
+        instr.place(anchor = 'center', x = super().getScreenW() / 2, y = super().getScreenH() / 2)
 
