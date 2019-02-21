@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 import itertools
-import random
 import numpy
 
 from __game import Game
 
 class Match(Game):
-    def __init__(self, players, rows=4, columns=10, shuffle=True, **kwargs):
+    def __init__(self, players, rows=3, columns=6, shuffle=True, **kwargs):
         '''
         Sets up the games default parameters.
         '''
@@ -15,11 +14,11 @@ class Match(Game):
             self.state['next'] = (next(self.__next), next(self.__next))
             board = [format(x, '02d') for x in range(rows*columns//2) for _ in range(2)]
             if shuffle:
-                random.shuffle(board)
+                numpy.random.shuffle(board)
             self.rows = rows
             self.columns = columns
-            self.state['board'] = numpy.asarray([board[i*columns:i*columns+columns] for i in range(rows)])
-            self.state['gameBoard'] = numpy.asarray([['XX'] * columns for _ in range(rows)])
+            self.state['board'] = numpy.array(board).reshape(rows, columns)
+            self.state['gameBoard'] = numpy.full((rows, columns), 'XX')
             self.state['cursor'] = [0,0]
             self.state['timer'] = 30
             self.__p1 = None
@@ -61,8 +60,8 @@ class Match(Game):
             self.state['board'] = self.state['board'].tolist()
             self.state['gameBoard'] = self.state['gameBoard'].tolist()
             self.socketio.emit('turn', self.state, broadcast=True)
-            self.state['board'] = numpy.asarray(self.state['board'])
-            self.state['gameBoard'] = numpy.asarray(self.state['gameBoard'])
+            self.state['board'] = numpy.array(self.state['board'])
+            self.state['gameBoard'] = numpy.array(self.state['gameBoard'])
             while self.__waiting and self.state['timer'] > 0:
                 self.socketio.sleep(1)
                 self.state['timer'] -= 1
@@ -192,6 +191,6 @@ if __name__ == '__main__':
     game.down()
     game.up()
     game.action()
-    game = Match(['A', 'B', 'C'], shuffle=False)
-    game.display()
-    [game.action((i, j)) for i in range(4) for j in range(10)]
+    # game = Match(['A', 'B', 'C'], shuffle=False)
+    # game.display()
+    # [game.action((i, j)) for i in range(4) for j in range(10)]
