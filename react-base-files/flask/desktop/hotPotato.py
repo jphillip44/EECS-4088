@@ -9,7 +9,7 @@ class HotPotatoUI(desktop.DesktopUI):
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         self.setup()
-        self.display(obj.get('players'), obj.get('timer'), obj.get('next'), obj.get('max'))
+        self.display(obj.get('players'), obj.get('timer'), obj.get('next'), obj.get('current'), obj.get('max'))
 
     def setup(self):
         super().setup()
@@ -25,7 +25,7 @@ class HotPotatoUI(desktop.DesktopUI):
         super().framelist[2].pack_propagate(False)
         super().framelist[2].place(x = 2/3 * super().getScreenW(), y = super().getScreenH() / 10)
 
-    def display(self, players, timer, nextP, max):
+    def display(self, players, timer, currentP, nextP, max):
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -69,7 +69,7 @@ class HotPotatoUI(desktop.DesktopUI):
             label2 = desktop.Label(curFrame, text = "Score: " + str (playerScore), font = fontSize, bg = super().backgroundC, fg = textColour)
             label2.place (anchor = "nw", x = xPos, y = yPos + yPosS)
 
-            if nextP == player:
+            if currentP == player:
                 label5 = desktop.Label(curFrame, image = resImg, bg = super().backgroundC)
                 label5.image = resImg 
                 label5.place(anchor = "nw", y = yPos, x = super().getScreenW() / 4) 

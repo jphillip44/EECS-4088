@@ -35,7 +35,7 @@ class MatchingUI(desktop.DesktopUI):
             super().framelist[1].destroy
             del super().framelist[1]
 
-        super().framelist[1] = desktop.Frame(height = (super().getScreenH() / 10) * 8, width = super().getScreenW() * self.rows / 10, bg = super().backgroundC)
+        super().framelist[1] = desktop.Frame(height = (super().getScreenH() / 10) * (self.columns * 2 / 8), width = super().getScreenW() * self.rows / 10, bg = super().backgroundC)
         super().framelist[1].pack_propagate(False)
         super().framelist[1].place(anchor = 'center', x = super().getScreenW() / 2, y = super().getScreenH() / 2)
 

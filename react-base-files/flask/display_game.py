@@ -38,7 +38,7 @@ class DisplayGame():
         if not (isinstance(self.curScreen, desktop.Double07UI)):
             self.curScreen = desktop.Double07UI(self.screenSetup, obj.state)
         else:
-            if timerVal > 0:
+            if timerVal > -1:
                 self.curScreen.timer(timerVal) 
             else:
                 self.curScreen.__init__(self.screenSetup, obj.state)
