@@ -22,7 +22,6 @@ class Fragments(Game):
         '''
         self.state['fragments'] = random.sample(self.__pool, 9)
         self.state['selection'] = random.choice(self.state['fragments'])
-        # self.state['display'] = self.state['selection'].replace('.fragment', '')
         self.state['display'] = re.sub(r"\.\d",'',self.state['selection'],)
         self.state['timer'] = 30
 
