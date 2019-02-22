@@ -12,7 +12,7 @@ class Fragments(Game):
         self.__move_queue = Queue()
         if self.socketio is not None:
             self.socketio.on_event('select', self.action)
-        self.__pool = [format(x, '02d') + ".fragment.jpg" for x in range(images)] 
+        self.__pool = [format(x, '02d') +"." + str(random.randint(0,9)) + ".jpg" for x in range(images)] 
         self.reset_state()
 
     def reset_state(self):
