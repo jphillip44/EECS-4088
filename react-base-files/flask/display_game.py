@@ -15,15 +15,12 @@ class DisplayGame():
     def update(self, obj):
         getattr(self, obj.__class__.__name__.casefold())(obj)
 
-    # def list(self, obj):
-    #     # print(obj)
-    #     self.curScreen = desktop.PlayerUI(self.screenSetup)
-    #     self.curScreen.PlayerShow(obj)
-    #     self.screenSetup.win.update()
-
     def players(self, obj):
-        self.curScreen = desktop.PlayerUI(self.screenSetup)
-        self.curScreen.PlayerShow(obj.players)
+        if not(isinstance(self.curScreen, desktop.PlayerUI)):
+            self.curScreen = desktop.PlayerUI(self.screenSetup)
+        else:
+            self.curScreen.PlayerShow(obj.players)
+
         self.screenSetup.win.update()
 
     def ranks(self, obj):
@@ -116,7 +113,7 @@ class DisplayGame():
         print(obj.string)
         self.curScreen = desktop.instructionsUI(self.screenSetup, obj.string)
         self.screenSetup.win.update()
-        # time.sleep(20)
+        time.sleep(20)
 
 
 if __name__ == '__main__':

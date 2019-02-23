@@ -9,7 +9,7 @@ class HotPotatoUI(desktop.DesktopUI):
         super().setscreen(self.window.screenW, self.window.screenH)
         super().reset()
         self.setup()
-        self.display(obj.get('players'), obj.get('timer'), obj.get('next'), obj.get('current'), obj.get('max'))
+        self.display(obj.get('players'), obj.get('timer'), obj.get('current'), obj.get('next'),  obj.get('max'))
 
     def setup(self):
         super().setup()
