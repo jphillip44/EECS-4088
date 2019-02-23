@@ -33,11 +33,10 @@ class Room extends React.Component {
             this.props.history.push('/room');
         });
 
-        // When the server disconnects, remove listeners and return to login page
+        // When the server disconnects, and return to login page, works for entire app
         this.props.socket.on('disconnect', () => {
             console.log("disconnected")
-            // this.props.socket.removeAllListeners();
-            this.props.history.push('/room');
+            this.props.history.push('/');
         });
 
         // If the server crashes and restarts, reconnect is emitted and user reconnects
@@ -77,6 +76,8 @@ class Room extends React.Component {
             }         
             this.setState({ users: tempUsers });
         });
+
+        document.getElementById('endOfChat').scrollIntoView({ behavior: "smooth" });
 
         window.addEventListener('beforeunload', this.onPageRefresh);
         

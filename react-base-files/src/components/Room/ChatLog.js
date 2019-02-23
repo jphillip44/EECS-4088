@@ -27,6 +27,7 @@ class ChatLog extends React.Component {
                 <h1 className="title">Chat</h1>
                 <div className="content">
                     {userChat}
+                    <div id="endOfChat"></div>
                 </div>
                 <form onSubmit={this.sendMessage}>
                     <div className="field is-grouped">
