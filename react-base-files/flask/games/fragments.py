@@ -46,9 +46,9 @@ class Fragments(Game):
         if timer is None:
             timer = round(self.state['timer'], 2)
         if data['selection'] == self.state['selection']:
-            self.state['players'][data['player']]['score'] += timer
+            self.state['players'][data['player']]['score'] += timer*100
         else:
-            self.state['players'][data['player']]['score'] -= min(self.state['players'][data['player']]['score'], timer)
+            self.state['players'][data['player']]['score'] -= min(self.state['players'][data['player']]['score'], timer*100)
 
     def run_game(self):
         '''
