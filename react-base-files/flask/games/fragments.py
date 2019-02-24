@@ -20,7 +20,7 @@ class Fragments(Game):
         '''
         Resets the game state back to default for a new round.
         '''
-        self.__pool = [format(x, '02d') +"." + str(random.randint(0,9)) + ".jpg" for x in range(self.images)] 
+        self.__pool = [format(x, '02d') +"." + str(random.randint(0,8)) + ".jpg" for x in range(self.images)] 
         self.state['fragments'] = random.sample(self.__pool, 9)
         self.state['selection'] = random.choice(self.state['fragments'])
         self.state['display'] = re.sub(r"\.\d",'',self.state['selection'],)
@@ -57,16 +57,16 @@ class Fragments(Game):
         count = 0
         timer = self.state['timer']
         while self.active:
+            self.display()
             self.display_game.update(self.deepcopy)
             self.socketio.emit('turn', self.state, broadcast=True)
             while self.state['timer'] > 0:
-                print(round(self.state['timer']))
                 for _ in range(100):
                     self.socketio.sleep(0.01)
                     self.state['timer'] -= 0.01
+                print(round(self.state['timer']))
                 self.display_game.update(self.deepcopy)
             else:
-                self.display()
                 self.state['timer'] = timer
                 self.reset_state()
                 count += 1
