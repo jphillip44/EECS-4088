@@ -127,11 +127,9 @@ class Fragments extends React.Component {
                     <div className={this.state.fragmentChosen ? "modal is-active" : "modal"}>
                         <div className="modal-background"></div>
                         <div className="modal-content">
-                            <div className="columns is-centered has-text-centered">
-                                <div className="column">
-                                    <h5 className="title is-5 has-text-white">Fragment Chosen</h5>    
-                                </div>
-                            </div>  
+                            <div className="box has-text-centered">
+                                <h5 className="title is-5">Fragment Chosen</h5>
+                            </div>     
                         </div>
                     </div>
                 </div>  
