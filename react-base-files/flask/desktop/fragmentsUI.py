@@ -64,7 +64,7 @@ class FragmentsUI (desktop.DesktopUI):
         label5.place(anchor = "center", y = super().getScreenH() * (2 / 5), x = super().getScreenW() / 4)
 
     def timer (self, timer):
-        self.timerLabel.configure(text = "Time Remaining: " + str(int(timer)))
+        self.timerLabel.configure(text = "Time Remaining: " + str(round(timer)))
 
     def standings(self, standings):
         super().standings(standings)
