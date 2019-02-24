@@ -11,15 +11,16 @@ class Fragments(Game):
         '''
         super().__init__(players, {'score': 0}, **kwargs)
         self.__move_queue = Queue()
+        self.images = images
         if self.socketio is not None:
             self.socketio.on_event('select', self.action)
-        self.__pool = [format(x, '02d') +"." + str(random.randint(0,9)) + ".jpg" for x in range(images)] 
         self.reset_state()
 
     def reset_state(self):
         '''
         Resets the game state back to default for a new round.
         '''
+        self.__pool = [format(x, '02d') +"." + str(random.randint(0,9)) + ".jpg" for x in range(self.images)] 
         self.state['fragments'] = random.sample(self.__pool, 9)
         self.state['selection'] = random.choice(self.state['fragments'])
         self.state['display'] = re.sub(r"\.\d",'',self.state['selection'],)
@@ -80,15 +81,18 @@ if __name__ == '__main__':
     game.action({'player': 'A', 'selection': game.state['selection']}, 25.77)
     game.action({'player': 'B', 'selection': game.state['selection']}, 19.31)
     game.action({'player': 'C', 'selection': "XX"}, 11.64)
+    game.reset_state()
     game.display()
     game.action({'player': 'A', 'selection': "XX"}, 5.61)
     game.action({'player': 'B', 'selection': "XX"}, 22.5)
     game.action({'player': 'C', 'selection': game.state['selection']}, 17.44)
+    game.reset_state()
     game.display()
     game.end_game()
     game.rank_players()
     game.display()
     game = Fragments(['A', 'B', 'C'])
+    game.display()
     game.end_game()
     game.rank_players()
     game.display()
