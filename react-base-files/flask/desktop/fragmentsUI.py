@@ -11,7 +11,7 @@ class FragmentsUI (desktop.DesktopUI):
         super().setWindow(self.window.win)
         super().reset()
         self.setup()
-        self.display(obj.get('players'), obj.get('timer'), obj.get('display'))\
+        self.display(obj.get('players'), obj.get('timer'), obj.get('display'))
     
     def setup(self):
         super().setup()
