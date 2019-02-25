@@ -64,16 +64,16 @@ class Match extends React.Component {
             console.log('timeout');
         });
 
-        window.addEventListener('beforeunload', this.onPageRefresh);
+        // Custom text is not allowed, so the string below is just used to get 
+        // the pop up warning
+        window.addEventListener('beforeunload', (event) => {
+            event.returnValue = "Refreshing the page will break things";
+        });
     }
 
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
-
-    onPageRefresh = () => {
-        this.props.socket.emit('refresh');
-    };
 
     findUnselectable = (data) => {
         // compare cursor location to unselectableCards location list and disable

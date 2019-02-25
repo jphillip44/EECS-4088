@@ -41,20 +41,17 @@ class MultiGame extends React.Component {
                 valid: answer 
             });
         });
+        
+        // Custom text is not allowed, so the string below is just used to get 
+        // the pop up warning
         window.addEventListener('beforeunload', (event) => {
-           event.preventDefault();
-            //this.props.history.push('/');
+            event.returnValue = "Refreshing the page will break things";
         });
     }
 
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
-
-    onPageRefresh = () => {
-        return "hello";
-        //this.props.history.push('/');
-    };
 
     submitTap = () => {
         this.setState({ tapCount: this.state.tapCount + 1 });

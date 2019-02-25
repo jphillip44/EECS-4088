@@ -93,8 +93,13 @@ class Double07 extends React.Component {
             }     
         });
 
-        window.addEventListener('beforeunload', this.onPageRefresh);
-        window.addEventListener('onbeforeunload', this.refreshConfirm);
+        // Custom text is not allowed, so the string below is just used to get 
+        // the pop up warning
+        window.addEventListener('beforeunload', (event) => {
+            sessionStorage.setItem('state', JSON.stringify(this.state));
+            sessionStorage.setItem('pageRefreshed', 'true');
+            event.returnValue = "Refreshing the page will break things";
+        });
 
         this.afterPageRefresh(sessionStorage.getItem('pageRefreshed'));
     }
@@ -102,17 +107,6 @@ class Double07 extends React.Component {
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
-
-    refreshConfirm = () => {
-        return "Data will be lost if you leave the page, are you sure?";    
-    }
-
-    // Store state in local storage
-    onPageRefresh = () => {
-        this.props.socket.emit('refresh');
-        sessionStorage.setItem('state', JSON.stringify(this.state));
-        sessionStorage.setItem('pageRefreshed', 'true');
-    };
 
     afterPageRefresh = (refreshed) => {
         if (refreshed === 'true') {

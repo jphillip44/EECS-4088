@@ -43,16 +43,16 @@ class Hot_Potato extends React.Component {
             this.props.socket.emit('endOfTurn', { "player": this.state.potatoHolder });
         });
         
-        window.addEventListener('beforeunload', this.onPageRefresh);
+        // Custom text is not allowed, so the string below is just used to get 
+        // the pop up warning
+        window.addEventListener('beforeunload', (event) => {
+            event.returnValue = "Refreshing the page will break things";
+        });
     }
 
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
-
-    onPageRefresh = () => {
-        this.props.socket.emit('refresh');
-    };
 
     updateTimer = () => {
         this.setState({ timer: this.state.timer + 1 });

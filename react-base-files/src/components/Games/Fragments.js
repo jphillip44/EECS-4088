@@ -18,12 +18,12 @@ class Fragments extends React.Component {
             });
         });
 
-        window.addEventListener('beforeunload', this.onPageRefresh);
+        // Custom text is not allowed, so the string below is just used to get 
+        // the pop up warning
+        window.addEventListener('beforeunload', (event) => {
+            event.returnValue = "Refreshing the page will break things";
+        });
     }
-
-    onPageRefresh = () => {
-        this.props.socket.emit('refresh');
-    };
 
     selectPicture = (data) => {     
         // Only submit chosen image once per turn
