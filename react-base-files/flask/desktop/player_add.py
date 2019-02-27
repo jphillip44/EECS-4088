@@ -2,6 +2,9 @@ from tkinter import Tk, Label, Frame
 from tkinter.font import Font
 import math
 from __screen import DesktopUI
+import socket
+import qrcode
+from PIL import ImageTk
 
 class PlayerUI (DesktopUI):
     window = 0 #DesktopUI()
@@ -27,8 +30,19 @@ class PlayerUI (DesktopUI):
         super().framelist[3].pack_propagate(False)
         super().framelist[3].place(x = (self.window.screenW / 3), y = self.window.screenH / 10)
 
-        label1 = Label(super().framelist[0], text="Go to website or scan the below code to enter the lobby", bg = super().framelist[0]['bg'], fg = "white", font = self.window.deffont)
+        IP = socket.gethostbyname(socket.gethostname())
+
+        label1 = Label(super().framelist[0], text="Go to " + str(IP) + ":3000 or scan the below code to enter the lobby", bg = super().framelist[0]['bg'], fg = "white", font = self.window.deffont)
         label1.place(x = self.window.screenW / 2, y = self.window.screenH / 20, anchor = 'center')
+
+        img = qrcode.make(IP)
+
+        resImg = ImageTk.PhotoImage(img)
+
+        label2 = Label(super().framelist[3], image = resImg)
+        label2.image = resImg
+        label2.place(anchor = 'center', x = super().getScreenW() / 6, y = super().getScreenH() * 2/5)
+
         
     def PlayerShow (self, players):
         numPlay = len(players)

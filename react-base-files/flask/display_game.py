@@ -18,6 +18,8 @@ class DisplayGame():
     def players(self, obj):
         if not(isinstance(self.curScreen, desktop.PlayerUI)):
             self.curScreen = desktop.PlayerUI(self.screenSetup)
+            self.curScreen.PlayerShow(obj.players)
+
         else:
             self.curScreen.PlayerShow(obj.players)
 
@@ -82,7 +84,7 @@ class DisplayGame():
         if not (isinstance(self.curScreen, desktop.FragmentsUI)):
             self.curScreen = desktop.FragmentsUI(self.screenSetup, obj.state)
         else:
-            if obj.state.get('timer') < 30:
+            if obj.state.get('timer') < obj.get('maxTimer'):
                 self.curScreen.timer(obj.state.get('timer'))
             else: 
                 self.curScreen.__init__(self.screenSetup, obj.state)
@@ -95,15 +97,14 @@ class DisplayGame():
             # getattr(self, obj.state['name'].casefold())(obj, self.prevGame)
             if not (isinstance(self.curScreen, desktop.MultiGameUI)):
                 self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
-                self.prevGame = obj.state.get('name')
             else:
                 timerVal = obj.state.get('timer')
-                if not(timerVal == 0) and prevGame == obj.state.get('name'):
+                if not(timerVal == 0) and self.curScreen.prevGame == obj.state.get('name'):
                     self.curScreen.displayTimer(timerVal)
                 else:
                     self.curScreen.__init__(self.screenSetup, obj.state)
                     self.screenSetup.win.update()
-            self.prevGame = obj.state.get('name')
+            self.curScreenprevGame = obj.state.get('name')
         else:
             # print(obj.state)
             self.curScreen = desktop.MultiGameUI(self.screenSetup, obj.state)
@@ -120,7 +121,7 @@ if __name__ == '__main__':
     DISPLAY = DisplayGame()
     PLAYERS = ['WWWWWWWWWW/ddd', 'player2', 'player3', 'player4']
     # DISPLAY.update(PLAYERS)
-    # time.sleep(3)
+    # time.sleep(30)
     GAME = games.Double07(PLAYERS)
     DISPLAY.update(GAME)
     # time.sleep(5)

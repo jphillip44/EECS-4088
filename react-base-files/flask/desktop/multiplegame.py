@@ -2,6 +2,7 @@ import desktop
 
 class MultiGameUI (desktop.DesktopUI):
     timerLabel = ""
+    prevGame = ""
 
     def __init__(self, ui, obj):
         self.window = ui
@@ -15,14 +16,14 @@ class MultiGameUI (desktop.DesktopUI):
         else:
             formula = ""
 
-        self.display(obj.get('players'), obj.get('valid'), obj.get('name'), obj.get('timer'), formula)
+        self.display(obj.get('players'), obj.get('valid'), obj.get('name'), obj.get('timer'), formula, obj.get('maxTimer'))
 
     def setup(self):
         super().setup()
         self.timerLabel = desktop.Label(super().framelist[3], text = "", fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 10))
         self.timerLabel.place(anchor = "center", x = super().getScreenW() / 4, y = super().getScreenH() * 2/5) 
 
-    def display(self, players, valid, game, timer, formula):
+    def display(self, players, valid, game, timer, formula, maxTimer):
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -75,7 +76,7 @@ class MultiGameUI (desktop.DesktopUI):
             label3.place(anchor = "e", y = yPosP + yPosHA, x = xPosA)    
 
         if game == "Simon":
-            self.displaySimon(valid, timer)
+            self.displaySimon(valid, timer, maxTimer)
         elif game == "QuickMaff":
             self.displayQM(formula, timer)
         else:
@@ -98,9 +99,9 @@ class MultiGameUI (desktop.DesktopUI):
         return super().imageCreation(imgName, super().getScreenH() / 20,  super().getScreenW() / 8, "/multigame")
             
     
-    def displaySimon(self, seq, timer):
+    def displaySimon(self, seq, timer, maxTimer):
 
-        if timer == 20:
+        if timer == maxTimer:
             
             label = desktop.Label(super().framelist[0], text = "Watch the sequence", font = super().setFontSize(super().getScreenH() / 20), bg = super().backgroundC, fg = "white")
             label.place (anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 10)
