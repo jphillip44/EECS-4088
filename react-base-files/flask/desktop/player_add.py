@@ -32,10 +32,10 @@ class PlayerUI (DesktopUI):
 
         IP = socket.gethostbyname(socket.gethostname())
 
-        label1 = Label(super().framelist[0], text="Go to http://" + str(IP) + ":3000 or scan the below code to enter the lobby", bg = super().framelist[0]['bg'], fg = "white", font = self.window.deffont)
+        label1 = Label(super().framelist[0], text="Go to http://" + str(IP) + ":5000 or scan the below code to enter the lobby", bg = super().framelist[0]['bg'], fg = "white", font = self.window.deffont)
         label1.place(x = self.window.screenW / 2, y = self.window.screenH / 20, anchor = 'center')
 
-        img = qrcode.make("http://" + str(IP) + ":3000")
+        img = qrcode.make("http://" + str(IP) + ":5000")
 
         resImg = ImageTk.PhotoImage(img)
 
