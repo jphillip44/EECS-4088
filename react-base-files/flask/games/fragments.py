@@ -15,6 +15,7 @@ class Fragments(Game):
         if self.socketio is not None:
             self.socketio.on_event('select', self.action)
         self.reset_state()
+        self.state['maxTimer'] = 15
 
     def reset_state(self):
         '''
@@ -24,7 +25,7 @@ class Fragments(Game):
         self.state['fragments'] = random.sample(self.__pool, 9)
         self.state['selection'] = random.choice(self.state['fragments'])
         self.state['display'] = re.sub(r"\.\d",'',self.state['selection'],)
-        self.state['timer'] = 30
+        self.state['timer'] = self.state['maxTimer']
 
     def display(self):
         '''
@@ -70,7 +71,7 @@ class Fragments(Game):
                 self.state['timer'] = timer
                 self.reset_state()
                 count += 1
-                if count == 5:
+                if count == 8:
                     self.end_game()
             super().run_game()
 

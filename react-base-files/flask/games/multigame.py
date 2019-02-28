@@ -13,6 +13,7 @@ class MultiGame(Game):
         It handles common default parameters for all the games.
         '''
         def __init__(self, game):
+            game.state['maxTimer'] = self.timer
             game.state['timer'] = self.timer
             game.state['valid'] = self.valid
             game.state['name'] = self.__class__.__name__
@@ -24,8 +25,8 @@ class MultiGame(Game):
             Sets up the games default parameters.
             '''
             choices = ['Red', 'Blue', 'Green', 'Yellow']
-            self.valid = list(np.random.choice(choices, level + 4))
-            self.timer = 20
+            self.valid = list(np.random.choice(choices, level + 3))
+            self.timer = max(15, 10 + (level // 2))
             super().__init__(game)
 
     class MultiTap(SubGame):
@@ -33,8 +34,8 @@ class MultiGame(Game):
             '''
             Sets up the games default parameters.
             '''
-            self.valid = np.random.randint(level + 2, 2*level + 4)
-            self.timer = 20
+            self.valid = np.random.randint(2*level + 2, 3*level + 4)
+            self.timer = max(15, 10 + (level // 2))
             super().__init__(game)
 
     class QuickMaff(SubGame):
@@ -45,13 +46,12 @@ class MultiGame(Game):
             ops = {
                 '+': operator.add, 
                 '-': operator.sub,
-                '*': operator.mul
             }
-            val1 = np.random.randint(1, 10)
-            val2 = np.random.randint(1, 10)
+            val1 = np.random.randint(1, 100)
+            val2 = np.random.randint(1, 100)
             op = list(ops.keys())[level % len(ops)]
             self.valid = ops.get(op)(val1, val2)
-            self.timer = max(20 - level, 5)
+            self.timer = max(4, 10 - (level // 2))
             game.state['formula'] = "{} {} {} = ?".format(val1, op, val2)
             print(game.state['formula'])
             super().__init__(game)
@@ -107,7 +107,7 @@ class MultiGame(Game):
                 if stats['hp'] != 'dead' and stats['hp'] <= 0:
                     stats['hp'] = 'dead'
                     self.remove_player()
-                    self.ranks.append(player)
+                    self.ranks.prepend(player)
 
         def check_alive():
             '''
@@ -122,7 +122,7 @@ class MultiGame(Game):
         alive = list(check_alive())
         if len(alive) < 2 and self.active:
             for player in alive:
-                self.ranks.append(player)
+                self.ranks.prepend(player)
             self.end_game()
             
 

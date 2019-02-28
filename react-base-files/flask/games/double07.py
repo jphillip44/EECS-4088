@@ -43,9 +43,7 @@ class Double07(Game):
             self.__target(*self.__target_queue.get())
         while not self.__attack_queue.empty():
             self.__attack(*self.__attack_queue.get())
-        self.rank_players()
         self.display()
-
 
     def display(self):
         '''
@@ -75,6 +73,7 @@ class Double07(Game):
             self.end_round()
             self.state['timer'] -= 1
             self.display_game.update(self.deepcopy)
+            self.rank_players()
             self.state['timer'] = timer
             super().run_game()
 
@@ -130,7 +129,7 @@ class Double07(Game):
                     self.state['players'][player]['hp'] = 'dead'
                     self.remove_player()
             while not dead.empty():
-                self.ranks.append(dead.get()[1])
+                self.ranks.prepend(dead.get()[1])
 
         def check_alive():
             '''
@@ -145,7 +144,7 @@ class Double07(Game):
         alive = list(check_alive())
         if len(alive) < 2 and self.active:
             for player in alive:
-                self.ranks.append(player)
+                self.ranks.prepend(player)
             self.end_game()
 
 if __name__ == '__main__':

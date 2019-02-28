@@ -142,17 +142,15 @@ class Game(ABC):
         '''
         Decrements player count if a player drops from a game.
         '''
-        if self.check_alive(player):
-            self.__active_players -= 1
+        self.__active_players -= 1
         print("players left: " + str(self.__active_players))
 
     def add_player(self, player=None):
         '''
         Increments player if a player rejoins game.
         '''
-        if self.check_alive(player):
-            self.__active_players += 1
-        print("players left: " + str(self.__active_players))
+        self.__active_players += 1
+        print("players joined: " + str(self.__active_players))
 
     def check_alive(self, player):
         '''
