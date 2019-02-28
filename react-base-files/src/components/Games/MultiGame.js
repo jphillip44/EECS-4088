@@ -6,6 +6,7 @@ class MultiGame extends React.Component {
         this.state = {
             name: '',
             valid: '',
+            playerHealth: '',
             tapCount: 0,
             simonSequence: [],
             mathAnswer: 0,
@@ -15,14 +16,17 @@ class MultiGame extends React.Component {
 
     componentDidMount() {
         this.props.socket.on('state', (data) => {
+            let user = this.props.userState.username;
             this.setState({
                 name: data.name,
                 valid: data.valid,
+                playerHealth: data.players[user].hp,
                 tapCount: 0,
                 simonSequence: [],
                 mathAnswer: 0
             });
             console.log(data);
+            console.log("Player Health: " + this.state.playerHealth);
         });
 
         this.props.socket.on('timerExpired', (data) => {
@@ -145,6 +149,14 @@ class MultiGame extends React.Component {
                                     </div>                                                                
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div className={this.state.playerHealth === "dead" ? "modal is-active" : "modal"}>
+                        <div className="modal-background"></div>
+                        <div className="modal-content">
+                            <div className="box has-text-centered">
+                                <h5 className="title is-5">You Are Dead</h5>
+                            </div>     
                         </div>
                     </div>
                 </div>  
