@@ -41,7 +41,7 @@ class MatchingUI(desktop.DesktopUI):
 
         bottomFrame = desktop.Frame(height = super().getScreenH() / 10, width = super().getScreenW(), bg = super().backgroundC)
         bottomFrame.pack_propagate(False)
-        bottomFrame.place (y = super().getScreenH() * 9/10, x = 0)
+        bottomFrame.place (y = super().getScreenH() * 8/10, x = 0)
         super().addFrame(bottomFrame)
 
 

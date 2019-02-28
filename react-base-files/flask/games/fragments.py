@@ -14,8 +14,9 @@ class Fragments(Game):
         self.images = images
         if self.socketio is not None:
             self.socketio.on_event('select', self.action)
-        self.reset_state()
         self.state['maxTimer'] = 15
+        self.reset_state()
+        
 
     def reset_state(self):
         '''

@@ -84,7 +84,7 @@ class DisplayGame():
         if not (isinstance(self.curScreen, desktop.FragmentsUI)):
             self.curScreen = desktop.FragmentsUI(self.screenSetup, obj.state)
         else:
-            if obj.state.get('timer') < obj.get('maxTimer'):
+            if obj.state.get('timer') < obj.state.get('maxTimer'):
                 self.curScreen.timer(obj.state.get('timer'))
             else: 
                 self.curScreen.__init__(self.screenSetup, obj.state)

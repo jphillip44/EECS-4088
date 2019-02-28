@@ -10,13 +10,13 @@ class FragmentsUI (desktop.DesktopUI):
         super().setscreen(self.window.screenW, self.window.screenH)
         super().setWindow(self.window.win)
         super().reset()
-        self.setup()
+        self.setup(obj.get('maxTimer'))
         self.display(obj.get('players'), obj.get('timer'), obj.get('display'))
     
-    def setup(self):
+    def setup(self, timer):
         super().setup()
 
-        self.timerLabel = desktop.Label(super().framelist[0], text = "Time Remaining: " , font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = 'white')
+        self.timerLabel = desktop.Label(super().framelist[0], text = "Time Remaining: " + str(timer) , font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = 'white')
         self.timerLabel.place(anchor = "n", x = super().getScreenW() / 2, y = super().getScreenH() / 20)
 
 
@@ -64,7 +64,10 @@ class FragmentsUI (desktop.DesktopUI):
         label5.place(anchor = "center", y = super().getScreenH() * (2 / 5), x = super().getScreenW() / 4)
 
     def timer (self, timer):
-        self.timerLabel.configure(text = "Time Remaining: " + str(round(timer)))
+        if timer >= 0:
+            self.timerLabel.configure(text = "Time Remaining: " + str(round(timer)))
+        else:
+            self.timerLabel.configure(text = "Time Remaining: 0")
 
     def standings(self, standings):
         super().standings(standings)
