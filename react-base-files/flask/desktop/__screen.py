@@ -118,7 +118,6 @@ class DesktopUI():
             self.addFrame(frame)
 
         self.win.update()
-        time.sleep(10) 
 
     @property
     def screen(self):

@@ -82,6 +82,7 @@ def check_thread():
     Used to check if the game thread has died and alerts the GUI.
     '''
     THREAD.join()
+    SOCKETIO.sleep(10)
     DISPLAY.update(Players())
 
 def display():
