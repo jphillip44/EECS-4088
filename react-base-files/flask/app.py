@@ -3,13 +3,16 @@ try:
     from eventlet import monkey_patch
     monkey_patch()
     print("Running Eventlet Server")
+    ASYNC_MODE="eventlet"
 except ModuleNotFoundError:
     try:
         from gevent import monkey
         monkey.patch_all()
         print("Running Gevent Server")
+        ASYNC_MODE="gevent"
     except ModuleNotFoundError:
-        print("Running Flask Server")
+        print("Running Flask non-production Server")
+        ASYNC_MODE="threading"
 
 import threading
 import flask
@@ -23,7 +26,7 @@ from instructions import Instructions
 # initialize Flask
 
 APP = flask.Flask(__name__)
-SOCKETIO = sio.SocketIO(APP)
+SOCKETIO = sio.SocketIO(APP, async_mode=ASYNC_MODE)
 
 USERS = {}
 GAME = None
