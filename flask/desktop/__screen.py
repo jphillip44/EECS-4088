@@ -82,7 +82,7 @@ class DesktopUI():
         self.win = window
 
     def imageCreation (self, filename, height, width, folder = ""):
-        path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../../public/images/' + str(folder))
+        path = os.path.join(os.path.relpath(os.path.dirname(__file__)),  '../static/images/' + str(folder))
         imageFolder = Path(path)
 
         imgFile2 = os.path.join(imageFolder, filename)
