@@ -26,7 +26,7 @@ from instructions import Instructions
 # initialize Flask
 
 APP = flask.Flask(__name__)
-SOCKETIO = sio.SocketIO(APP, async_mode=ASYNC_MODE)
+SOCKETIO = sio.SocketIO(APP)
 
 USERS = {}
 GAME = None
@@ -154,4 +154,4 @@ class Players():
         return self.players
 
 if __name__ == '__main__':
-    SOCKETIO.run(APP, host="0.0.0.0", debug=True)
+    SOCKETIO.run(APP, host="0.0.0.0", debug=False)
