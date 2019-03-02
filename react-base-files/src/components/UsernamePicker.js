@@ -44,7 +44,7 @@ class UsernamePicker extends React.Component {
                 <div className="hero-body">
                     <div className="container has-text-centered">
                     <h1 className="landing title is-1 has-text-white">UI Tester</h1>
-                    <h5 className="subtitle is-5 has-text-light">Where dreams go to die</h5>
+                    <h5 className="subtitle is-5 has-text-light">Experimental UI Design</h5>
                         <div className="columns is-centered">
                             <div className="column is-4">
                                 <div className="box">

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Display users that are currently connected
 class UserList extends React.Component {
     render() {
         return (

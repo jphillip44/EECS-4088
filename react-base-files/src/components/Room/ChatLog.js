@@ -1,11 +1,12 @@
 import React from 'react';
 
+// Allow users to submit message and display chat log to users
 class ChatLog extends React.Component {
     constructor(props) {
         super(props);
         this.chatInput = React.createRef();
     }
-
+    // Send text in input to server
     sendMessage = (event) => {
         event.preventDefault();
         this.props.sendMessage(this.chatInput.current.value);
@@ -14,6 +15,7 @@ class ChatLog extends React.Component {
     }
 
     render() {
+        // Create an list of chat messages
         let userChat = (
             <ul className="userChatLog has-text-left">
                 {this.props.chatLog.map((item, index) => (
@@ -27,7 +29,6 @@ class ChatLog extends React.Component {
                 <h1 className="title">Chat</h1>
                 <div className="content">
                     {userChat}
-                    <div id="endOfChat"></div>
                 </div>
                 <form onSubmit={this.sendMessage}>
                     <div className="field is-grouped">

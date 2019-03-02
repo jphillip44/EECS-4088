@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Display all available games to user
 class GameList extends React.Component {    
     render() {
         let sessionGames;

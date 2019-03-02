@@ -128,11 +128,11 @@ class Match extends React.Component {
                                     <div className={this.state.flip === true ? "flip-container flip" : "flip-container"}>
                                         <div className="flipper">
                                             <div className="front">
-                                                <img src={"/images/match/cards/card_back.png"} alt="Card Back" />
+                                                <img src={"/static/images/match/cards/card_back.png"} alt="Card Back" />
                                             </div>
                                             <div className="back">
                                                 <img
-                                                    src={`/images/match/cards/card_${this.state.cardValue}.png`}
+                                                    src={`/static/images/match/cards/card_${this.state.cardValue}.png`}
                                                     alt={`Card ${this.state.cardValue}`}
                                                 />
                                             </div>
@@ -153,7 +153,7 @@ class Match extends React.Component {
                                                 disabled={this.state.playersTurn === false}
                                                 onClick={() => this.submitDirection("up")}
                                             >
-                                                <img src="/images/match/up_chevron.png" alt="UP" />
+                                                <img src="/static/images/match/up_chevron.png" alt="UP" />
                                             </button>
                                         </div>
                                         <div className="control">
@@ -167,7 +167,7 @@ class Match extends React.Component {
                                                 disabled={this.state.playersTurn === false}
                                                 onClick={() => this.submitDirection("left")}
                                             >
-                                                <img src="/images/match/left_chevron.png" alt="LEFT" />
+                                                <img src="/static/images/match/left_chevron.png" alt="LEFT" />
                                             </button>
                                         </div>
                                         <div className="control">
@@ -176,7 +176,7 @@ class Match extends React.Component {
                                                 disabled={this.state.playersTurn === false || this.state.disableSubmit === true}
                                                 onClick={this.selectCard}
                                             >
-                                                <img src="/images/match/dot_and_circle.png" alt="SUBMIT" />
+                                                <img src="/static/images/match/dot_and_circle.png" alt="SUBMIT" />
                                             </button>
                                         </div>
                                         <div className="control">
@@ -185,7 +185,7 @@ class Match extends React.Component {
                                                 disabled={this.state.playersTurn === false}
                                                 onClick={() => this.submitDirection("right")}
                                             >
-                                                <img src="/images/match/right_chevron.png" alt="RIGHT" />
+                                                <img src="/static/images/match/right_chevron.png" alt="RIGHT" />
                                             </button>
                                         </div>
                                     </div>
@@ -199,7 +199,7 @@ class Match extends React.Component {
                                                 disabled={this.state.playersTurn === false}
                                                 onClick={() => this.submitDirection("down")}
                                             >
-                                                <img src="/images/match/down_chevron.png" alt="DOWN" />
+                                                <img src="/static/images/match/down_chevron.png" alt="DOWN" />
                                             </button>
                                         </div>
                                         <div className="control">

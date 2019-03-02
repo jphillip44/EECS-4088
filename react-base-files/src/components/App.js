@@ -19,8 +19,8 @@ class App extends Component {
             socket: '',
             gameList: []
         };
-
-        this.socket = io('http://localhost:5000');
+        // Initialize socket
+        this.socket = io();
     }
 
     updateUsername = (username) => {

@@ -28,7 +28,7 @@ class MultiGame extends React.Component {
             console.log(data);
             console.log("Player Health: " + this.state.playerHealth);
         });
-
+        // Submit relevant data of the current game to the server on expiration of timer
         this.props.socket.on('timerExpired', (data) => {
             console.log('timerExpired');
             let answer;
@@ -56,18 +56,18 @@ class MultiGame extends React.Component {
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
-
+    // Counts the number of taps in Tap Counter
     submitTap = () => {
         this.setState({ tapCount: this.state.tapCount + 1 });
     }
-
+    // Record order of colour selection in Simon Says
     submitSimon = (data) => {
         let temp = [];
         temp = this.state.simonSequence;
         temp.push(data);
         this.setState({ simonSequence: temp });
     }
-
+    // Logic behind digit display in QuickMaff
     submitMaff = (data) => {
         if (data === "delete") {
             this.setState({ mathAnswer: Math.trunc(this.state.mathAnswer / 10) });       

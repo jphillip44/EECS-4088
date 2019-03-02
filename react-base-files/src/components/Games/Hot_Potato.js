@@ -9,7 +9,7 @@ class Hot_Potato extends React.Component {
             potatoHolder: '',
             userTurn: false,
             explode: false,
-            handImage: '/images/hand.png'
+            handImage: '/static/images/hand.png'
         };
     }
     
@@ -26,7 +26,7 @@ class Hot_Potato extends React.Component {
                     userTurn: true,
                     timer: 0,
                     explode: false,
-                    handImage: '/images/hand_with_potato.png'
+                    handImage: '/static/images/hand_with_potato.png'
                  }, () => {
                     this.interval = setInterval(() => this.updateTimer(), 1000);    
                 });                
@@ -53,7 +53,7 @@ class Hot_Potato extends React.Component {
     componentWillUnmount() {
         this.props.socket.removeAllListeners();
     }
-
+    // Updates timer to match length of time potato is held by user
     updateTimer = () => {
         this.setState({ timer: this.state.timer + 1 });
     }
@@ -68,7 +68,7 @@ class Hot_Potato extends React.Component {
             // Reset hand image to empty on end of users 
             this.setState({
                 userTurn: false,
-                handImage: '/images/hand.png'
+                handImage: '/static/images/hand.png'
             });
             clearInterval(this.interval);
         }        
@@ -93,7 +93,7 @@ class Hot_Potato extends React.Component {
                                 <div className="box">
                                     <img
                                         id="swipePotato" 
-                                        src={this.state.explode === true ? "/images/hand_with_explosion.png" : this.state.handImage}
+                                        src={this.state.explode === true ? "/static/images/hand_with_explosion.png" : this.state.handImage}
                                         alt="Pass Potato"
                                     />
                                     <h6 className={this.state.userTurn === true ? "title is-6" : "is-hidden"}>

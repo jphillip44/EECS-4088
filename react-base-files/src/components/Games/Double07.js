@@ -170,9 +170,9 @@ class Double07 extends React.Component {
                                     <div className="level">
                                         <div className="level-item">
                                             <span className="button is-white">HP: {this.state.player.hp}</span>
-                                            {this.state.player.hp > 0 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /> </span>}
-                                            {this.state.player.hp > 1 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /> </span>}
-                                            {this.state.player.hp > 2 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>}
+                                            {this.state.player.hp > 0 && <span className="level-item"><img src="/static/images/double07/heart.png" alt="Heart" /> </span>}
+                                            {this.state.player.hp > 1 && <span className="level-item"><img src="/static/images/double07/heart.png" alt="Heart" /> </span>}
+                                            {this.state.player.hp > 2 && <span className="level-item"><img src="/static/images/double07/heart.png" alt="Heart" /></span>}
                                         </div>
                                         <div className="level-item">
                                             <button className="button is-white">Action Points: {this.state.player.ap}</button>
@@ -230,9 +230,9 @@ class Double07 extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="level-right">
-                                                {user.hp > 0 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>}
-                                                {user.hp > 1 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>}
-                                                {user.hp > 2 && <span className="level-item"><img src="/images/double07/heart.png" alt="Heart" /></span>} 
+                                                {user.hp > 0 && <span className="level-item"><img src="/static/images/double07/heart.png" alt="Heart" /></span>}
+                                                {user.hp > 1 && <span className="level-item"><img src="/static/images/double07/heart.png" alt="Heart" /></span>}
+                                                {user.hp > 2 && <span className="level-item"><img src="/static/images/double07/heart.png" alt="Heart" /></span>} 
                                             </div>                                           
                                         </div>
                                     ))}
