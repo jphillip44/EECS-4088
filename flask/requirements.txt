@@ -4,3 +4,4 @@ pillow
 gevent
 gevent-websocket
 qrcode
+numpy
