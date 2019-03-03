@@ -2,9 +2,13 @@ import desktop
 
 class Double07UI(desktop.DesktopUI):
     window = 0 
-    topFrameLabel = ""
+    topFrameLabel = "" # needed for timer to display properly, without text overlapping
 
     def __init__(self, ui, obj):
+        '''
+        Default setup, completed on first call
+        '''
+
         self.window = ui
         super().setWindow(self.window.win)
         super().setscreen(self.window.screenW, self.window.screenH)
@@ -19,6 +23,9 @@ class Double07UI(desktop.DesktopUI):
         
 
     def display(self, players, timer):
+        '''
+        Prints out all the players, their current HP and their previous action
+        '''
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -66,7 +73,9 @@ class Double07UI(desktop.DesktopUI):
             label3.place(anchor = "e", y = yPosP + yPosHA, x = xPosA)             
 
     def actions(self, act):
-         
+        '''
+        Finds the appropriate image based on the action taken
+        ''' 
         if act == 'none':
             imgName = "Reload.png"
         elif act == 'all':
@@ -77,6 +86,9 @@ class Double07UI(desktop.DesktopUI):
         return super().imageCreation(imgName, super().getScreenH() / 10,  super().getScreenW() / 15)
 
     def timer (self, timer, players = []):
+        '''
+        Updates the main label with the current time remaining in the round
+        '''
         if timer > 0:
             self.topFrameLabel.config(text = "Time Remaining to select an action: " + str(timer))
         elif timer <= 0:
@@ -86,8 +98,10 @@ class Double07UI(desktop.DesktopUI):
 
 
     def heartDisplay(self, number):
-
-        if number == 0 or number == 'dead':
+        '''
+        Gets the appropriate image based on the HP of the player
+        '''
+        if number == 'dead' or number <= 0:
             imgName ="0Heart3.png"
         elif number == 1:
             imgName ="1Heart3.png"
@@ -99,7 +113,10 @@ class Double07UI(desktop.DesktopUI):
         return super().imageCreation(imgName, super().getScreenH() / 20,  super().getScreenW() / 15, "/double07")
 
     def eventlog(self, players):
-        playerActed = []
+        '''
+        Prints out a log of all the actions taken in the previous round so players know what is actually happening
+        '''
+        playerActed = [] # used to ensure there is no double counting of actions
         
         act = 0
         result = 0
@@ -109,25 +126,25 @@ class Double07UI(desktop.DesktopUI):
         textColour = "white"
 
         for player in players:
-            if players[player].get('hp') != "dead" or players[player].get('defend') != 'none':
+            if players[player].get('hp') != "dead": # i.e. if the players are alive 
 
                 curPlayerAction = players[player].get('defend')
 
-                if not(curPlayerAction == "none" or curPlayerAction == "all" or (player in playerActed)):
+                if not(curPlayerAction == "none" or curPlayerAction == "all" or (player in playerActed)): # i.e. if the players actually attacked and haven't already been shown 
                 
                     oppAct = players[curPlayerAction].get('defend')
                     playerActed.append(player)
 
-                    if oppAct == 'all':
+                    if oppAct == 'all': # attack into a block
                         playerActed.append(curPlayerAction)
                         act = "Attack.png"
                         result = "Defend.png"
                         
-                    elif oppAct == 'none' or oppAct != player:
+                    elif oppAct == 'none' or oppAct != player: # attack into a player attacking a different player
                         act = "Attack.png"
                         result = "Heart.png"
 
-                    else:
+                    else: # players attacking one another
                         playerActed.append(curPlayerAction)
                         act = "CAttack.png"
                         result = "none"
@@ -146,7 +163,7 @@ class Double07UI(desktop.DesktopUI):
                     label3 = desktop.Label(super().framelist[3], text = curPlayerAction, font = ELFont, bg = super().framelist[3]['bg'], fg = textColour)
                     label3.place(anchor = "ne", y = posY, x = 35.5/40 * super().getScreenW() / 2)
 
-                    if result != 'none':
+                    if result != 'none': # shows the result of the attackers attack (i.e. took HP or was blocked)
                         resImg = super().imageCreation(result, int(super().getScreenH() / 20), int(super().getScreenW() / 30))
 
                         label4 = desktop.Label(super().framelist[3], image = resImg, bg = super().framelist[3]['bg']) 
@@ -155,13 +172,13 @@ class Double07UI(desktop.DesktopUI):
 
                     posCounter += 1
                     self.window.win.update()   
-                    desktop.time.sleep(2)
+                    desktop.time.sleep(2) # done so eventlog appears one entry at a time
 
-            else:
+            else: # if the player is dead, we dont need to deal with them
                 playerActed.append(player)
 
-        for player in players:
-            act = 0
+        for player in players: # this is done so that attacks show first, then defends that blocked nothing and reloads
+            act = ""
 
             if not (player in playerActed):
                 playerAct = players[player].get('defend')
@@ -189,4 +206,7 @@ class Double07UI(desktop.DesktopUI):
         desktop.time.sleep(1)  
     
     def standings(self, standings):
+        '''
+        Displays the end results
+        '''
         super().standings(standings)

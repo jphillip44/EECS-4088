@@ -8,15 +8,15 @@ class Instructions():
 
     def double07(self):
         self.string = """
-            007
-Each player starts with 3 life points and 2 action points
+Each player starts with 3 life points and 1 action point
 Defending and attacking cost 1 action point
 Reloading grants 1 action point
-Attacking a player that is reloading or attacking a player that is attacking another player results in them losing 1 life point and the attacker gaining 1 action point
-Defending against an attack from another player will grant the player defending 1 action point
+Successfully attack hitting an attack on a player grants 1 action point
+An attack is successful if the target is reloading or attacking a different players
+If the attack is not blocked, the target loses 1 HP
+Defending against an attack from another player will grant the player defending 1 action point for each block
 Once a player loses all of their life points they are eliminated
-The goal is to be the last player with life points
-
+The goal is to be the last player alive
         """
 
     def hot_potato(self):
@@ -24,39 +24,40 @@ The goal is to be the last player with life points
 The objective the game is to to be the first player to equal or exceed the point total
 When the potato is in your possession swipe the potato away to pass it to another player.
 For each second you hold the potato without it exploding you will earn 1 point.
-If the potato explodes in your possession the seconds you held the potato will be deducted from your point total.
+If the potato explodes in your possession you will lose points equal to the total number of seconds the current potato has been in play
         """
 
     def match(self):
         self.string = """
-Users will be split into teams of 2.
-One player at a time will be tasked with picking a card from the board of cards displayed on the main computer screen by navigating with the directional pad on their mobile device.
-A selected card will be turned face up on their mobile device.
-Once the user picks a card their partner will attempt to find that cards matching pair by navigating through the board and selecting another card.
-If the team member does not find the matching card both cards are turned face down and that teams turn ends.
-If the team member finds the matching card then those 2 cards are removed from the board and that team is awarded a point. 
-The team with the most points once the board has been cleared is the winner.
+One at a time, the current player will be tasked with picking a card from the board of cards displayed on the main computer screen by navigating with the directional pad on their mobile device.
+A selected card will be turned appear face down on their mobile device.
+The next player attempts to find the matching pair to the card selected by the first player by navigating through the board and selecting another card.
+If there is not a match both cards are turned face down and returned to the board.
+If there is a match then those 2 cards are are returned to the board. 
+The standings at the end will show the players based on the number of matches they were a part of.
         """
 
     def fragments(self):
         self.string = """
 An image will be shown on the main computer screen. 
 Your task is to select the image on your mobile device that is part of the larger image on the computer screen. 
-Users who select the correct fragment will be awarded a point.
+Users who select the correct fragment will be awarded a points.
 The faster you select the correct image the more points you will be awarded.
-The user with the most points at the end of the round wins the game.
+If you are incorrect, they will lose points.
+The user with the most points at the end of all the rounds wins.
         """
 
     def multigame(self):
         self.string = """
-You will be asked to complete a series of tasks. Failure to complete the task correctly will result the offending player being deducted 1 point. Once the game ends users will be ranked based on who has the most points.
-		
+You will be asked to complete a series of tasks. Failure to complete the task correctly will result the offending player being deducted 1 life.
+Last player with lives remaining wins.
+
 Quicktap
-Your task is to tap the button on your screen as many times as is indicated on the computer screen.
+Your task is to tap the button on your screen as many times as is indicated on the computer screen in the time allotted.
 
 Simon
-A series of squares of varying colors are shown on the computer screen. Your task is to enter the combination of colors on your mobile device.
+A series of squares of varying colors are shown on the computer screen. Your task is to re-enter the combination of colors on your mobile device within the time allotted.
 
 Quick maffs
-A simple math equation will be shown on the computer screen. You will be prompted to enter the result on your handheld device.
+A math equation will be shown on the computer screen. You will be prompted to enter the result on your handheld device within the time allotted.
         """

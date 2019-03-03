@@ -1,19 +1,23 @@
 import desktop
 
 class FragmentsUI (desktop.DesktopUI):
-    window = 0
     timerLabel = ""
 
     def __init__(self, ui, obj):
-        self.window = ui
-
-        super().setscreen(self.window.screenW, self.window.screenH)
-        super().setWindow(self.window.win)
+        '''
+        Initial setup of the window
+        '''
+        super().setscreen(ui.screenW, ui.screenH)
+        super().setWindow(ui.win)
         super().reset()
         self.setup(obj.get('maxTimer'))
         self.display(obj.get('players'), obj.get('timer'), obj.get('display'))
     
     def setup(self, timer):
+        '''
+        Slight modification of the default setup
+        '''
+
         super().setup()
 
         self.timerLabel = desktop.Label(super().framelist[0], text = "Time Remaining: " + str(timer) , font = super().setFontSize(int((super().getScreenH() / 30))), bg = super().backgroundC, fg = 'white')
@@ -21,6 +25,10 @@ class FragmentsUI (desktop.DesktopUI):
 
 
     def display(self, players, timer, fragment):
+        '''
+        Displays all the players, their current score and the image they need a fragment from
+        '''
+
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -64,10 +72,17 @@ class FragmentsUI (desktop.DesktopUI):
         label5.place(anchor = "center", y = super().getScreenH() * (2 / 5), x = super().getScreenW() / 4)
 
     def timer (self, timer):
+        '''
+        Displays the amount of time left in the round
+        '''
+
         if timer >= 0:
             self.timerLabel.configure(text = "Time Remaining: " + str(round(timer)))
         else:
             self.timerLabel.configure(text = "Time Remaining: 0")
 
     def standings(self, standings):
+        '''
+        Displays the end results of the game
+        '''
         super().standings(standings)

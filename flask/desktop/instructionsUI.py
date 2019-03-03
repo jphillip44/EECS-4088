@@ -1,13 +1,14 @@
 import desktop
 
 class instructionsUI(desktop.DesktopUI):
-    
-    window = 0
 
     def __init__(self, ui, instructions):
+        '''
+        Will show the insturctions for the game the players are about to play
+        '''
         self.window = ui
-        super().setWindow(self.window)
-        super().setscreen(self.window.screenW, self.window.screenH)
+        super().setWindow(ui.win)
+        super().setscreen(ui.screenW, ui.screenH)
         super().reset()
 
         windowFrame = desktop.Frame(height = super().getScreenH(), width = super().getScreenW(), bg = self.backgroundC)

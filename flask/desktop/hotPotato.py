@@ -1,17 +1,22 @@
 import desktop
 
 class HotPotatoUI(desktop.DesktopUI):
-    window = 0
+
 
     def __init__(self, ui, obj):
-        self.window = ui
-        super().setWindow(self.window.win)
-        super().setscreen(self.window.screenW, self.window.screenH)
+        '''
+        Initial setup of the game
+        '''
+        super().setWindow(ui.win)
+        super().setscreen(ui.screenW, ui.screenH)
         super().reset()
         self.setup()
         self.display(obj.get('players'), obj.get('timer'), obj.get('current'), obj.get('next'),  obj.get('max'))
 
     def setup(self):
+        '''
+        Slight modification of the default layout to better suit this game
+        '''
         super().setup()
         
         super().framelist[3].destroy
@@ -26,6 +31,9 @@ class HotPotatoUI(desktop.DesktopUI):
         super().framelist[2].place(x = 2/3 * super().getScreenW(), y = super().getScreenH() / 10)
 
     def display(self, players, timer, currentP, nextP, max):
+        '''
+        Displays the players, their current score, the current holds of the potato and the next player to go 
+        '''
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -84,6 +92,9 @@ class HotPotatoUI(desktop.DesktopUI):
             desktop.time.sleep(3)
 
     def standings(self, standings):
+        '''
+        Displays final results
+        '''
         super().standings(standings)
  
     

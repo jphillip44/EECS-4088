@@ -1,10 +1,14 @@
 import desktop
 
 class MultiGameUI (desktop.DesktopUI):
+    window = ""    
     timerLabel = ""
     prevGame = ""
 
     def __init__(self, ui, obj):
+        '''
+        Initial setup for the game
+        '''
         self.window = ui
         super().setWindow(self.window.win)  
         super().setscreen(self.window.screenW, self.window.screenH)
@@ -19,11 +23,17 @@ class MultiGameUI (desktop.DesktopUI):
         self.display(obj.get('players'), obj.get('valid'), obj.get('name'), obj.get('timer'), formula, obj.get('maxTimer'))
 
     def setup(self):
+        '''
+        Slight modification to the initial display setup
+        '''
         super().setup()
         self.timerLabel = desktop.Label(super().framelist[3], text = "", fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 10))
         self.timerLabel.place(anchor = "center", x = super().getScreenW() / 4, y = super().getScreenH() * 2/5) 
 
     def display(self, players, valid, game, timer, formula, maxTimer):
+        '''
+        Places the players and their HP as well as any other features needed for each of the subgames
+        '''
         numPlay = len(players)
         leftPlay = desktop.math.ceil(numPlay / 2)
         rightPlay = desktop.math.floor(numPlay / 2)
@@ -83,6 +93,9 @@ class MultiGameUI (desktop.DesktopUI):
             self.displayTap(valid, timer)         
 
     def heartDisplay(self, lives):
+        '''
+        Translates HP into the appropriate heart image
+        '''
         if lives == 0 or lives == 'dead':
             imgName = "0Heart5.png"
         elif lives == 1:
@@ -100,7 +113,9 @@ class MultiGameUI (desktop.DesktopUI):
             
     
     def displaySimon(self, seq, timer, maxTimer):
-
+        '''
+        Setup for Simon
+        '''
         if timer == maxTimer:
             
             label = desktop.Label(super().framelist[0], text = "Watch the sequence", font = super().setFontSize(super().getScreenH() / 20), bg = super().backgroundC, fg = "white")
@@ -124,6 +139,9 @@ class MultiGameUI (desktop.DesktopUI):
         self.window.win.update()
 
     def displayQM(self, formula, timer):
+        '''
+        Setup for QuickMaff
+        '''
         label = desktop.Label(super().framelist[0], text = "Solve: " + str(formula), bg = super().backgroundC, fg = 'white', font = super().setFontSize(super().getScreenH() / 20))
         label.place(anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 10)
 
@@ -132,6 +150,9 @@ class MultiGameUI (desktop.DesktopUI):
 
     
     def displayTap(self, goal, timer):
+        '''
+        Setup for Tap
+        '''
         label = desktop.Label(super().framelist[0], text = "Tap the screen exactly " + str(goal) + " times", font = super().setFontSize(super().getScreenH() / 20), bg = super().backgroundC, fg = "white")
         label.place (anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 10)
         
@@ -139,12 +160,18 @@ class MultiGameUI (desktop.DesktopUI):
         self.window.win.update()
 
     def displayTimer(self, timer):
+        '''
+        Displays the timer as it ticks
+        '''
         timerHeader = desktop.Label(super().framelist[3], text = "Time Remaining: ", fg = 'white', bg = super().backgroundC, font = super().setFontSize(super().getScreenH() / 30))
         timerHeader.place(anchor = "s", x = super().getScreenW() / 4, y = super().getScreenH() * 1/5)
 
         self.timerLabel.configure(text = str(timer))
 
     def standings(self, standings):
+        '''
+        Shows the results when game is over
+        '''
         super().standings(standings)
 
 
