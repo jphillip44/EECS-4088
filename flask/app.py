@@ -90,7 +90,7 @@ def check_thread():
 
 def display():
     '''
-    Displayers user list to the console.
+    Displays user list to the console.
     '''
     if USERS:
         print(list(USERS.values()))

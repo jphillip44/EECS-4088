@@ -1,7 +1,5 @@
 flask
 flask_socketio
 pillow
-gevent
-gevent-websocket
-qrcode
-numpy
+eventlet
+qrcodenumpy

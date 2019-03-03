@@ -16,6 +16,11 @@ class PlayerUI (DesktopUI):
         self.setup()
 
     def setup(self):
+        def get_ip_address():
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            return s.getsockname()[0]
+
         super().setup()
 
         super().framelist[1] = Frame(height = (self.window.screenH / 10) * 8, width = self.window.screenW / 3, bg = self.window.backgroundC)
@@ -30,7 +35,8 @@ class PlayerUI (DesktopUI):
         super().framelist[3].pack_propagate(False)
         super().framelist[3].place(x = (self.window.screenW / 3), y = self.window.screenH / 10)
 
-        IP = socket.gethostbyname(socket.gethostname())
+        # IP = socket.gethostbyname(socket.gethostname())
+        IP = get_ip_address()
 
         label1 = Label(super().framelist[0], text="Go to http://" + str(IP) + ":5000 or scan the below code to enter the lobby", bg = super().framelist[0]['bg'], fg = "white", font = self.window.deffont)
         label1.place(x = self.window.screenW / 2, y = self.window.screenH / 20, anchor = 'center')

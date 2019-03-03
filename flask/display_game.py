@@ -13,6 +13,10 @@ class DisplayGame():
         self.screenSetup.win.update()
         
     def update(self, obj):
+        '''
+        A psuedo-visitor pattern construct, whenever update is called, it receives a copy of the object that needs to be updated.
+        It then calls a function by the same name and displays that item on the screen.
+        '''
         getattr(self, obj.__class__.__name__.casefold())(obj)
 
     def players(self, obj):
