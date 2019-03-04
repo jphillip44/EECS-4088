@@ -29,7 +29,7 @@ USERS = {}
 GAME = None
 THREAD = None
 DISPLAY = DisplayGame()
-
+INSTRUCTIONS = False
 # This is a catch-all route, this allow for react to do client-side
 # routing and stoping flasks routing
 @APP.route('/', defaults={'path': ''})
@@ -54,7 +54,8 @@ def join_server(data):
     global GAME
     display()
     global DISPLAY
-    if DISPLAY is not None and (GAME is None or not GAME.active):
+    global INSTRUCTIONS
+    if not INSTRUCTIONS and DISPLAY is not None and (GAME is None or not GAME.active):
         DISPLAY.update(Players())
 
 @SOCKETIO.on('createGame')
@@ -66,7 +67,11 @@ def create_game(data):
     print(USERS)
     if GAME is None or not GAME.active:
         print(data)
+        global INSTRUCTIONS
+        INSTRUCTIONS = True
         DISPLAY.update(Instructions().get(data))
+        SOCKETIO.sleep(25)
+        INSTRUCTIONS = False
         GAME = GameList.select_game(data, list(USERS.values()), \
             socketio=SOCKETIO, display_game=DISPLAY)
         sio.emit('gameStarted', GAME.__name__, broadcast=True)
@@ -103,7 +108,8 @@ def disconnect():
     else:
         return
     display()
-    if GAME is None or not GAME.active:
+    global INSTRUCTIONS
+    if not INSTRUCTIONS and GAME is None or not GAME.active:
         DISPLAY.update(Players())
     else:
         GAME.remove_player(user)

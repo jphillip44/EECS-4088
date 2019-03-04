@@ -137,7 +137,7 @@ class DisplayGame():
         print(obj.string)
         self.curScreen = desktop.instructionsUI(self.screenSetup, obj.string)
         self.screenSetup.win.update()
-        time.sleep(25)
+        # time.sleep(25)
 
 
 if __name__ == '__main__':
