@@ -121,10 +121,14 @@ class MultiGameUI (desktop.DesktopUI):
             label = desktop.Label(super().framelist[0], text = "Watch the sequence", font = super().setFontSize(super().getScreenH() / 20), bg = super().backgroundC, fg = "white")
             label.place (anchor = "s", x = super().getScreenW() / 2, y = super().getScreenH() / 10)
 
+            self.window.win.update()
+
+            desktop.time.sleep(1.5)
+
             for i in seq:
                 super().framelist[3]['bg'] = i.lower()
                 self.timerLabel['bg'] = i.lower()
-                desktop.time.sleep(1)
+                desktop.time.sleep(1.25)
                 self.window.win.update()
                 super().framelist[3]['bg'] = super().framelist[2]['bg']
                 self.timerLabel['bg'] = super().framelist[2]['bg']

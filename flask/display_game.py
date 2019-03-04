@@ -89,9 +89,10 @@ class DisplayGame():
             self.curScreen.updateCard("ZZ", obj.state.get('cursor'), True)
             self.screenSetup.win.update()
             time.sleep(5)
-            self.curScreen.cardTaken = False
-            self.curScreen.updateCard(obj.state.get('gameBoard')[self.curScreen.cardTakenPos[0], self.curScreen.cardTakenPos[1]], self.curScreen.cardTakenPos, False)
-            self.curScreen.updateCard(obj.state.get('gameBoard')[obj.state.get('cursor')[0], obj.state.get('cursor')[1]], obj.state.get('cursor'), True)
+            if not (list(obj.state.get('gameBoard').flatten()).count('XX') == 0): 
+                self.curScreen.cardTaken = False
+                self.curScreen.updateCard(obj.state.get('gameBoard')[self.curScreen.cardTakenPos[0], self.curScreen.cardTakenPos[1]], self.curScreen.cardTakenPos, False)
+                self.curScreen.updateCard(obj.state.get('gameBoard')[obj.state.get('cursor')[0], obj.state.get('cursor')[1]], obj.state.get('cursor'), True)
 
         self.screenSetup.win.update()
 
@@ -136,7 +137,7 @@ class DisplayGame():
         print(obj.string)
         self.curScreen = desktop.instructionsUI(self.screenSetup, obj.string)
         self.screenSetup.win.update()
-        time.sleep(20)
+        time.sleep(25)
 
 
 if __name__ == '__main__':
