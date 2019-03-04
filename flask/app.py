@@ -3,16 +3,13 @@ try:
     from eventlet import monkey_patch
     monkey_patch()
     print("Running Eventlet Server")
-    ASYNC_MODE="eventlet"
 except ModuleNotFoundError:
     try:
         from gevent import monkey
         monkey.patch_all()
         print("Running Gevent Server")
-        ASYNC_MODE="gevent"
     except ModuleNotFoundError:
         print("Running Flask non-production Server")
-        ASYNC_MODE="threading"
 
 import threading
 import flask
