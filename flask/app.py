@@ -109,7 +109,7 @@ def disconnect():
         return
     display()
     global INSTRUCTIONS
-    if not INSTRUCTIONS and GAME is None or not GAME.active:
+    if not INSTRUCTIONS and GAME is None and not GAME.active:
         DISPLAY.update(Players())
     else:
         GAME.remove_player(user)
