@@ -61,18 +61,22 @@ def join_server(data):
 @SOCKETIO.on('createGame')
 def create_game(data):
     '''
-    Launches a game in a seperate thread.
+    Launches a game if no game is active. 
     '''
     global GAME
     global THREAD
     print(USERS)
     if GAME is None or not GAME.active:
-        THREAD = threading.Thread(target=launch_game, args=[data]).start()
+        THREAD = threading.Thread(target=game_thread, args=[data]).start()
         SOCKETIO.sleep(25)
         sio.emit('gameStarted', data, broadcast=True)
 
 
-def launch_game(data):
+def game_thread(data):
+    '''
+    Used by create_game. It is the component of the function that is run in a seperate thread.
+    This is to prevent the controller from locking up.
+    '''
     print(data)
     global GAME
     global INSTRUCTIONS
