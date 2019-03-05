@@ -68,6 +68,7 @@ def create_game(data):
     print(USERS)
     if GAME is None or not GAME.active:
         THREAD = threading.Thread(target=launch_game, args=[data]).start()
+        SOCKETIO.sleep(25)
         sio.emit('gameStarted', data, broadcast=True)
 
 
