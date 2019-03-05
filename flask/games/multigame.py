@@ -26,7 +26,7 @@ class MultiGame(Game):
             '''
             choices = ['Red', 'Blue', 'Green', 'Yellow']
             self.valid = list(np.random.choice(choices, level + 3))
-            self.timer = max(15, 10 + (level // 2))
+            self.timer = min(15, 10 + (level // 2))
             super().__init__(game)
 
     class MultiTap(SubGame):
@@ -35,7 +35,7 @@ class MultiGame(Game):
             Sets up the games default parameters.
             '''
             self.valid = np.random.randint(2*level + 2, 3*level + 4)
-            self.timer = max(15, 10 + (level // 2))
+            self.timer = min(15, 10 + (level // 2))
             super().__init__(game)
 
     class QuickMaff(SubGame):
@@ -51,7 +51,7 @@ class MultiGame(Game):
             val2 = np.random.randint(1, 100)
             op = list(ops.keys())[level % len(ops)]
             self.valid = ops.get(op)(val1, val2)
-            self.timer = max(4, 10 - (level // 2))
+            self.timer = min(4, 10 - (level // 2))
             game.state['formula'] = "{} {} {} = ?".format(val1, op, val2)
             print(game.state['formula'])
             super().__init__(game)
