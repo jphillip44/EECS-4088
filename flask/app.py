@@ -64,22 +64,25 @@ def create_game(data):
     Launches a game in a seperate thread.
     '''
     global GAME
+    global THREAD
     print(USERS)
     if GAME is None or not GAME.active:
-        print(data)
-        global INSTRUCTIONS
-        INSTRUCTIONS = True
-        DISPLAY.update(Instructions().get(data))
-        SOCKETIO.sleep(25)
-        INSTRUCTIONS = False
-        GAME = GameList.select_game(data, list(USERS.values()), \
-            socketio=SOCKETIO, display_game=DISPLAY)
-        sio.emit('gameStarted', GAME.__name__, broadcast=True)
-        global THREAD
-        if THREAD is None or not THREAD.isAlive():
-            THREAD = threading.Thread(target=GAME.run_game)
-            THREAD.start()
-            threading.Thread(target=check_thread).start()
+        THREAD = threading.Thread(target=launch_game, args=[data]).start()
+        sio.emit('gameStarted', data, broadcast=True)
+
+
+def launch_game(data):
+    print(data)
+    global GAME
+    global INSTRUCTIONS
+    INSTRUCTIONS = True
+    DISPLAY.update(Instructions().get(data))
+    SOCKETIO.sleep(25)
+    INSTRUCTIONS = False
+    GAME = GameList.select_game(data, list(USERS.values()), \
+        socketio=SOCKETIO, display_game=DISPLAY)
+    GAME.run_game()
+    threading.Thread(target=check_thread).start()
         
 def check_thread():
     '''
