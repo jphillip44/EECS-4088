@@ -65,12 +65,10 @@ def create_game(data):
     '''
     global GAME
     global THREAD
+    global INSTRUCTIONS
     print(USERS)
-    if GAME is None or not GAME.active:
+    if not INSTRUCTIONS and (GAME is None or not GAME.active):
         THREAD = threading.Thread(target=game_thread, args=[data]).start()
-        SOCKETIO.sleep(25)
-        sio.emit('gameStarted', data, broadcast=True)
-
 
 def game_thread(data):
     '''
@@ -86,6 +84,7 @@ def game_thread(data):
     INSTRUCTIONS = False
     GAME = GameList.select_game(data, list(USERS.values()), \
         socketio=SOCKETIO, display_game=DISPLAY)
+    SOCKETIO.emit('gameStarted', data, broadcast=True)
     GAME.run_game()
     threading.Thread(target=check_thread).start()
         
