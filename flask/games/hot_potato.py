@@ -27,7 +27,7 @@ class Hot_Potato(Game):
         if self.active:
             print(data)
             self.__hold(data['player'], data.get('time'))
-            if self.state['players'][data['player']]['score'] > self.state['max']:
+            if self.state['players'][data['player']]['score'] >= self.state['max']:
                 self.__hold_potato = False
                 self.end_game()
             self.display()
