@@ -61,25 +61,32 @@ def join_server(data):
 @SOCKETIO.on('createGame')
 def create_game(data):
     '''
-    Launches a game in a seperate thread.
+    Launches a game if no game is active. 
     '''
     global GAME
+    global THREAD
+    global INSTRUCTIONS
     print(USERS)
-    if GAME is None or not GAME.active:
-        print(data)
-        global INSTRUCTIONS
-        INSTRUCTIONS = True
-        DISPLAY.update(Instructions().get(data))
-        SOCKETIO.sleep(25)
-        INSTRUCTIONS = False
-        GAME = GameList.select_game(data, list(USERS.values()), \
-            socketio=SOCKETIO, display_game=DISPLAY)
-        sio.emit('gameStarted', GAME.__name__, broadcast=True)
-        global THREAD
-        if THREAD is None or not THREAD.isAlive():
-            THREAD = threading.Thread(target=GAME.run_game)
-            THREAD.start()
-            threading.Thread(target=check_thread).start()
+    if not INSTRUCTIONS and (GAME is None or not GAME.active):
+        THREAD = threading.Thread(target=game_thread, args=[data]).start()
+
+def game_thread(data):
+    '''
+    Used by create_game. It is the component of the function that is run in a seperate thread.
+    This is to prevent the controller from locking up.
+    '''
+    print(data)
+    global GAME
+    global INSTRUCTIONS
+    INSTRUCTIONS = True
+    DISPLAY.update(Instructions().get(data))
+    SOCKETIO.sleep(25)
+    INSTRUCTIONS = False
+    GAME = GameList.select_game(data, list(USERS.values()), \
+        socketio=SOCKETIO, display_game=DISPLAY)
+    SOCKETIO.emit('gameStarted', data, broadcast=True)
+    GAME.run_game()
+    threading.Thread(target=check_thread).start()
         
 def check_thread():
     '''
@@ -109,7 +116,7 @@ def disconnect():
         return
     display()
     global INSTRUCTIONS
-    if not INSTRUCTIONS and GAME is None or not GAME.active:
+    if not INSTRUCTIONS and GAME is None:
         DISPLAY.update(Players())
     else:
         GAME.remove_player(user)
